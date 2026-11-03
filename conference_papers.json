@@ -1,0 +1,262 @@
+{
+  "generated_at": "Tue, 03 Nov 2026 14:00:01 +0000",
+  "generated_at_iso": "2026-11-03T14:00:01.942467+00:00",
+  "config_source": "file",
+  "data_kind": "conference",
+  "topics": [
+    {
+      "id": "gui_agents",
+      "name": "GUI Agent 与计算机操作",
+      "description": "第一优先：图形界面定位、截图理解、桌面/Web/移动端操作、动作规划、跨步记忆、长流程任务成功率和推理效率。区分 grounding 静态定位评测与完整交互任务；关注错误恢复、跨应用泛化及真实部署成本。普通网页开发、GUI设计和与操作任务无关的多模态工作不应判为高度相关。",
+      "keywords": [
+        "GUI agent",
+        "computer use",
+        "computer-use agent",
+        "GUI grounding",
+        "screen grounding",
+        "desktop agent",
+        "web navigation",
+        "mobile agent"
+      ],
+      "arxiv_categories": [
+        "cs.AI",
+        "cs.CV",
+        "cs.HC",
+        "cs.CL"
+      ],
+      "priority": 2.0,
+      "max_daily": 0
+    },
+    {
+      "id": "vlm_core",
+      "name": "VLM 与多模态理解",
+      "description": "关注视觉语言模型、图像/视频理解、视觉推理、空间理解和视觉语言对齐；优先可迁移到 GUI Agent 的机制、训练方法和评测。论文质量需结合可核验的方法与实验证据判断，不能仅因属于多模态方向就认为值得精读。",
+      "keywords": [
+        "vision-language model",
+        "vision language model",
+        "multimodal large language model",
+        "large multimodal model",
+        "visual reasoning",
+        "multimodal reasoning",
+        "video language model",
+        "visual instruction tuning"
+      ],
+      "arxiv_categories": [
+        "cs.CV",
+        "cs.CL",
+        "cs.AI"
+      ],
+      "priority": 1.6,
+      "max_daily": 0
+    },
+    {
+      "id": "vlm_efficiency",
+      "name": "多模态推理效率与视觉 Token 压缩",
+      "description": "重点关注视觉 token 裁剪、选择、合并、动态分辨率、多模态缓存及 VLM/GUI Agent 推理优化。分别记录准确率、端到端延迟、token/KV 规模和整卡显存；不能用 token 减少比例替代实际加速。优先控制模型、提示、分辨率等条件且报告质量与效率权衡的工作。",
+      "keywords": [
+        "visual token pruning",
+        "visual token compression",
+        "visual token selection",
+        "visual token merging",
+        "multimodal token compression",
+        "efficient vision-language",
+        "VLM acceleration",
+        "adaptive visual resolution"
+      ],
+      "arxiv_categories": [
+        "cs.CV",
+        "cs.CL",
+        "cs.LG"
+      ],
+      "priority": 1.8,
+      "max_daily": 0
+    },
+    {
+      "id": "context_kv",
+      "name": "上下文与 KV Cache 压缩",
+      "description": "关注 prompt/context 压缩、KV 缓存压缩/淘汰/量化、稀疏注意力和长上下文推理，兼顾 LLM 与 VLM。优先保持任务质量且有实际端到端延迟或内存证据的方法；区分输入压缩、缓存压缩和模型权重量化，不能混用其节省比例。",
+      "keywords": [
+        "KV cache compression",
+        "KV cache eviction",
+        "KV cache quantization",
+        "context compression",
+        "prompt compression",
+        "long context inference",
+        "sparse attention",
+        "token pruning"
+      ],
+      "arxiv_categories": [
+        "cs.CL",
+        "cs.LG",
+        "cs.AI"
+      ],
+      "priority": 1.6,
+      "max_daily": 0
+    },
+    {
+      "id": "agent_memory",
+      "name": "长任务压缩与 Agent 记忆",
+      "description": "关注长期任务中的历史摘要、交互轨迹压缩、工作记忆、长期记忆检索、状态维护与上下文管理。重点判断压缩是否丢失任务关键事实，以及对长任务成功率、恢复能力和推理成本的影响；优先 GUI/Web/计算机操作 Agent，也关注可迁移的通用 Agent 方法。",
+      "keywords": [
+        "agent memory",
+        "agentic memory",
+        "trajectory compression",
+        "history compression",
+        "memory consolidation",
+        "long-horizon agent",
+        "long horizon agent",
+        "context management"
+      ],
+      "arxiv_categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.LG"
+      ],
+      "priority": 1.6,
+      "max_daily": 0
+    },
+    {
+      "id": "ai_exploration",
+      "name": "跨领域 AI 探索",
+      "description": "少量关注主线之外的方法创新：推理模型、测试时计算、世界模型、扩散语言模型、专家混合和强化学习 Agent。优先证据明确、可复用或可能迁移到 VLM/GUI Agent/推理效率的工作。热度、模型规模、会议名称或摘要宣称不能直接证明质量；相关性与论文质量需分开判断。",
+      "keywords": [
+        "test-time scaling",
+        "reasoning model",
+        "world model",
+        "diffusion language model",
+        "mixture of experts",
+        "reinforcement learning agent",
+        "self-improving agent",
+        "foundation model"
+      ],
+      "arxiv_categories": [
+        "cs.AI",
+        "cs.LG",
+        "cs.CL",
+        "cs.CV"
+      ],
+      "priority": 0.65,
+      "max_daily": 2
+    },
+    {
+      "id": "degraded_navigation",
+      "name": "地下退化环境导航",
+      "description": "低优先级跟踪大创相关方向：地下、矿井、隧道等 GPS 拒止场景，以及弱光、粉尘/烟雾、重复/低纹理或几何退化环境中的鲁棒定位、SLAM、退化检测与 LiDAR/视觉/惯性多传感器融合。普通道路自动驾驶、正常光照的通用 SLAM 或泛机器人导航应降低相关性；关注真实退化条件和定位/导航成功率证据。",
+      "keywords": [
+        "subterranean navigation",
+        "underground navigation",
+        "degenerate SLAM",
+        "degeneracy-aware",
+        "perceptually degraded",
+        "LiDAR-inertial odometry",
+        "visual-inertial odometry",
+        "GPS-denied navigation"
+      ],
+      "arxiv_categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "priority": 0.25,
+      "max_daily": 1
+    }
+  ],
+  "papers": [],
+  "stats": {
+    "candidate_paper_count": 218,
+    "daily_candidate_paper_count": 218,
+    "conference_candidate_paper_count": 0,
+    "raw_daily_candidate_count": 339,
+    "daily_outside_cutoff_count": 115,
+    "future_filtered_count": 0,
+    "daily_new_candidate_count": 218,
+    "daily_known_candidate_count": 0,
+    "daily_backfill_days": 14,
+    "daily_backfill_candidate_count": 38,
+    "daily_backfill_added_count": 0,
+    "min_daily_papers": 0,
+    "filtered_low_relevance_count": 6,
+    "days": 7,
+    "collection_mode": "lookback",
+    "collection_cutoff_iso": "2026-10-27T14:00:01.942467+00:00",
+    "max_per_topic": 50,
+    "max_new_papers": 15,
+    "max_new_conference_papers": 50,
+    "sources": [
+      {
+        "type": "arxiv",
+        "name": "arXiv",
+        "url": "",
+        "enabled": true,
+        "headers_env": "",
+        "bearer_token_env": ""
+      }
+    ],
+    "conference_sources": [],
+    "source_stats": {
+      "arXiv": {
+        "type": "arxiv",
+        "successful_fetches": 7,
+        "failed_fetches": 0
+      }
+    },
+    "llm_enabled": true,
+    "llm_attempt_count": 15,
+    "llm_success_count": 15,
+    "llm_failure_count": 0,
+    "summary_cache_hit_count": 0,
+    "summary_fallback_count": 0,
+    "llm_concurrency": 2,
+    "recent_history_days": 60,
+    "successful_fetches": 7,
+    "failed_fetches": 0,
+    "successful_conference_fetches": 0,
+    "failed_conference_fetches": 0,
+    "skipped_cached_conference_years": 0,
+    "conference_source_count": 0,
+    "cached_conference_candidate_count": 0,
+    "clear_cache": false,
+    "conference_abstract_enrichment_attempted": 0,
+    "conference_abstract_enrichment_succeeded": 0,
+    "conference_abstract_enrichment_skipped": 0,
+    "conference_abstract_enrichment_sources": [
+      "arxiv",
+      "openalex",
+      "crossref"
+    ],
+    "conference_arxiv_enrichment_attempted": 0,
+    "conference_arxiv_enrichment_succeeded": 0,
+    "conference_arxiv_enrichment_skipped": 0,
+    "conference_arxiv_enrichment_last_error": "",
+    "budget": {
+      "budget_status": "ready",
+      "budget_halt_reason": "",
+      "budget_month": "2026-11",
+      "budget_timezone": "Asia/Shanghai",
+      "monthly_budget_cny": 20.0,
+      "accounted_cny": 0.081362,
+      "successful_calls_estimated_cny": 0.081362,
+      "uncertain_reserved_cny": 0.0,
+      "remaining_cny": 19.918638,
+      "daily_attempts": 15,
+      "daily_attempt_limit": 15,
+      "monthly_attempts": 15,
+      "price_basis": "configured peak uncached prices; cache/off-peak discounts ignored",
+      "model": "deepseek-flash"
+    },
+    "paper_count": 0,
+    "new_paper_count": 0,
+    "retained_paper_count": 0,
+    "retained_recent_low_count": 0,
+    "dropped_low_relevance_count": 0,
+    "max_stored_papers": 300,
+    "max_data_bytes": 8388608,
+    "data_bytes": 9175,
+    "storage_trimmed_count": 0,
+    "storage_trimmed_by_level": {
+      "high": 0,
+      "medium": 0,
+      "low": 0,
+      "unknown": 0
+    }
+  }
+}
