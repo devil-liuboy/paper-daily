@@ -1,4 +1,20 @@
 {
   "version": 1,
-  "months": {}
+  "months": {
+    "2026-11": [
+      {
+        "id": "7db4d182e9ab46f696261e7b83f947d6",
+        "day": "2026-11-03",
+        "started_at": "2026-11-03T22:01:54.976544+08:00",
+        "model": "deepseek-flash",
+        "status": "reserved",
+        "reserved_micros": 30106,
+        "charged_micros": 30106,
+        "input_token_bound": 7853,
+        "max_output_tokens": 1800,
+        "input_cny_per_million": "2",
+        "output_cny_per_million": "8"
+      }
+    ]
+  }
 }
