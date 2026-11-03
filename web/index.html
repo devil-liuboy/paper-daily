@@ -3,15 +3,16 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Paper Daily</title>
-    <link rel="stylesheet" href="./styles.css?v=20260530-split-sources" />
+    <title>博远的论文日报</title>
+    <link rel="stylesheet" href="./styles.css?v=20261103-personal" />
   </head>
   <body>
     <header class="topbar">
       <div class="brand">
         <span class="brand-mark">PD</span>
         <div>
-          <h1>Paper Daily</h1>
+          <h1>博远的论文日报</h1>
+          <p class="brand-subtitle">GUI Agent · VLM · Efficiency</p>
           <p id="updatedAt">正在读取数据</p>
         </div>
       </div>
@@ -30,8 +31,8 @@
             <span>护眼</span>
           </button>
         </div>
-        <a class="icon-link" href="https://github.com/Futuresxy/paper-daily/issues" target="_blank" rel="noreferrer" title="配置研究方向">⚙</a>
-        <a class="icon-link" href="https://github.com/Futuresxy/paper-daily/actions" target="_blank" rel="noreferrer" title="查看更新任务">↻</a>
+        <a class="icon-link" href="https://github.com/devil-liuboy/paper-daily/issues" target="_blank" rel="noreferrer" title="配置研究方向">⚙</a>
+        <a class="icon-link" href="https://github.com/devil-liuboy/paper-daily/actions" target="_blank" rel="noreferrer" title="查看更新任务">↻</a>
       </nav>
     </header>
 
@@ -64,7 +65,7 @@
       <section class="toolbar" aria-label="筛选">
         <div class="collection-tabs" role="tablist" aria-label="论文集合">
           <button class="collection-tab active" type="button" data-collection="daily">每日新论文</button>
-          <button class="collection-tab" type="button" data-collection="conference">顶会精品</button>
+          <button class="collection-tab" type="button" data-collection="conference" hidden>顶会精品</button>
         </div>
         <div class="tabs" role="tablist" aria-label="视图">
           <button class="tab" type="button" data-view="all">全部</button>
@@ -98,6 +99,9 @@
         </div>
       </section>
 
+      <p class="reading-note">优先关注 GUI Agent、VLM 与效率研究，少量探索其他 AI 和地下退化导航。中文分析仅基于标题与摘要；实验数字为作者报告，未经独立复现。匹配度表示与研究方向的相关程度，不是论文质量等级。</p>
+      <p id="runStatus" class="run-status" role="status" hidden></p>
+
       <section class="content">
         <div class="content-head">
           <div>
@@ -117,6 +121,7 @@
             <span class="match-badge"></span>
             <span class="paper-date"></span>
             <span class="paper-source"></span>
+            <span class="summary-status"></span>
           </div>
           <h3 class="paper-title"></h3>
           <p class="paper-authors"></p>
@@ -159,6 +164,6 @@
       </article>
     </template>
 
-    <script src="./app.js?v=20260530-split-sources"></script>
+    <script src="./app.js?v=20261103-personal"></script>
   </body>
 </html>

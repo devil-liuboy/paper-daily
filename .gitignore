@@ -4,3 +4,9 @@ __pycache__/
 *.pyc
 site/
 .DS_Store
+.paper-state/
+.paper-cache/
+.secrets/
+*.dpapi
+*.log
+work/

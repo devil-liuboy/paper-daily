@@ -8,8 +8,11 @@ import datetime as dt
 import difflib
 import email.utils
 import html
+import hashlib
 import http.client
+import ipaddress
 import json
+import math
 import os
 import re
 import sys
@@ -53,6 +56,8 @@ class Topic:
     description: str
     keywords: list[str]
     arxiv_categories: list[str]
+    priority: float = 1.0
+    max_daily: int = 0
 
 
 @dataclass(frozen=True)
@@ -127,6 +132,8 @@ def parse_topics(config: dict[str, Any]) -> list[Topic]:
                 description=item.get("description", ""),
                 keywords=[str(k) for k in item.get("keywords", [])],
                 arxiv_categories=[str(c) for c in item.get("arxiv_categories", [])],
+                priority=max(0.0, min(10.0, float(item.get("priority", 1.0)))),
+                max_daily=max(0, int(item.get("max_daily", 0) or 0)),
             )
         )
     if not topics:
@@ -289,11 +296,18 @@ def extract_json_block(markdown: str) -> dict[str, Any] | None:
 
 
 def load_issue_config(default_config: dict[str, Any]) -> dict[str, Any]:
+    # Public issues are untrusted. Configuration is opt-in and can only change
+    # topics; it can never redirect a credential-bearing source request.
+    if not env_flag("ENABLE_ISSUE_CONFIG", False):
+        return default_config
     token = os.getenv("GITHUB_TOKEN", "")
     repository = os.getenv("GITHUB_REPOSITORY", "")
     title = os.getenv("CONFIG_ISSUE_TITLE", "Research Interests")
     if not token or not repository:
         return default_config
+    allowed_authors = {repository.split("/", 1)[0].lower()}
+    allowed_authors.update(name.lower() for name in env_list("CONFIG_ISSUE_ALLOWED_USERS", []))
+    selected_number = env_int("CONFIG_ISSUE_NUMBER", 0)
 
     query = urllib.parse.urlencode({"state": "open", "per_page": "30"})
     url = f"https://api.github.com/repos/{repository}/issues?{query}"
@@ -306,6 +320,10 @@ def load_issue_config(default_config: dict[str, Any]) -> dict[str, Any]:
     for issue in issues:
         if "pull_request" in issue:
             continue
+        if str((issue.get("user") or {}).get("login", "")).lower() not in allowed_authors:
+            continue
+        if selected_number and issue.get("number") != selected_number:
+            continue
         if issue.get("title", "").strip().lower() == title.lower():
             body = issue.get("body") or ""
             try:
@@ -314,7 +332,7 @@ def load_issue_config(default_config: dict[str, Any]) -> dict[str, Any]:
                 print(f"Warning: config issue JSON is invalid, using config file: {exc}", file=sys.stderr)
                 return default_config
             if issue_config and issue_config.get("topics"):
-                return merge_config(default_config, issue_config)
+                return merge_config(default_config, {"topics": issue_config["topics"]})
     return default_config
 
 
@@ -404,6 +422,9 @@ def request_bytes(url: str, headers: dict[str, str] | None = None, timeout: floa
 
 def source_request_headers(source: SourceConfig) -> dict[str, str]:
     headers = {"User-Agent": "paper-daily-collector/1.0"}
+    for env_name in (source.headers_env, source.bearer_token_env):
+        if env_name and not re.fullmatch(r"CUSTOM_FEED_[A-Z0-9_]+", env_name):
+            raise ValueError("Feed credentials must use a CUSTOM_FEED_ environment variable")
     if source.headers_env:
         raw_headers = os.getenv(source.headers_env, "")
         if raw_headers:
@@ -492,6 +513,10 @@ def parse_arxiv_entries(xml_data: bytes, seed_topic: str = "") -> list[dict[str,
 
 
 def fetch_arxiv_query(search_query: str, max_results: int, sort_by: str, sort_order: str, label: str) -> list[dict[str, Any]]:
+    # submittedDate is an arXiv query field (lastUpdatedDate is only used here
+    # as a sort key). Also validate updated timestamps after parsing below.
+    upper_date = dt.datetime.now(dt.timezone.utc).strftime("%Y%m%d%H%M")
+    search_query = f"({search_query}) AND submittedDate:[199101010000 TO {upper_date}]"
     params = {
         "search_query": search_query,
         "start": "0",
@@ -1258,14 +1283,40 @@ def link_from_atom(entry: ET.Element) -> str:
     return alternate
 
 
+class NoFeedRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        raise ValueError("Feed redirects are disabled; configure the final HTTPS URL")
+
+
+def fetch_feed_bytes(source: SourceConfig) -> bytes:
+    parsed = urllib.parse.urlsplit(source.url)
+    host = (parsed.hostname or "").lower()
+    if parsed.scheme != "https" or not host or parsed.username or parsed.password or parsed.port not in (None, 443):
+        raise ValueError("Feed URL must be HTTPS without credentials or a custom port")
+    if host == "localhost" or host.endswith((".local", ".localhost", ".internal")):
+        raise ValueError("Local feed hosts are not allowed")
+    try:
+        address = ipaddress.ip_address(host)
+    except ValueError:
+        address = None
+    if address is not None and not address.is_global:
+        raise ValueError("Private feed addresses are not allowed")
+    if source.headers_env or source.bearer_token_env:
+        allowed = {h.lower() for h in env_list("FEED_ALLOWED_HOSTS", [])}
+        if host not in allowed:
+            raise ValueError("Credential-bearing feed host must be in FEED_ALLOWED_HOSTS")
+    req = urllib.request.Request(source.url, headers=source_request_headers(source))
+    opener = urllib.request.build_opener(NoFeedRedirect())
+    with opener.open(req, timeout=env_float("FEED_TIMEOUT_SECONDS", 60)) as resp:
+        return resp.read(5 * 1024 * 1024 + 1)
+
+
 def fetch_feed(source: SourceConfig, max_results: int) -> list[dict[str, Any]]:
     if not source.url:
         return []
-    xml_data = request_bytes(
-        source.url,
-        headers=source_request_headers(source),
-        timeout=float(os.getenv("FEED_TIMEOUT_SECONDS", "60")),
-    )
+    xml_data = fetch_feed_bytes(source)
+    if len(xml_data) > 5 * 1024 * 1024:
+        raise ValueError("Feed response exceeds 5 MiB")
     root = ET.fromstring(xml_data)
     papers = []
     atom_entries = root.findall("atom:entry", FEED_NAMESPACES)
@@ -1383,10 +1434,11 @@ def collection_cutoff(
 ) -> tuple[dt.datetime, str]:
     if incremental_since_last_run:
         previous_run = parse_datetime(
-            str(existing_payload.get("generated_at_iso") or existing_payload.get("generated_at") or "")
+            str(existing_payload.get("last_successful_collection_at") or existing_payload.get("generated_at_iso") or existing_payload.get("generated_at") or "")
         )
         if previous_run:
-            return previous_run, "incremental"
+            overlap = max(0, env_int("INCREMENTAL_OVERLAP_HOURS", 0))
+            return min(previous_run, now) - dt.timedelta(hours=overlap), "incremental"
     return now - dt.timedelta(days=max(0, days)), "lookback"
 
 
@@ -1447,6 +1499,8 @@ def score_paper(topic: Topic, paper: dict[str, Any]) -> dict[str, Any]:
         "level": match_level(base_score),
         "reason": "；".join(reason_parts),
         "keyword_hits": hits,
+        "priority": topic.priority,
+        "ranking_score": round(base_score * topic.priority, 6),
     }
 
 
@@ -1582,6 +1636,8 @@ def fallback_summary(paper: dict[str, Any], best_match: dict[str, Any]) -> dict[
 
 
 def llm_enabled() -> bool:
+    if os.getenv("LLM_PROVIDER", "").strip().lower() == "deepseek":
+        return bool(os.getenv("DEEPSEEK_API_KEY"))
     return bool(os.getenv("LLM_API_KEY") or os.getenv("OPENAI_API_KEY") or os.getenv("DEEPSEEK_API_KEY"))
 
 
@@ -1594,6 +1650,13 @@ def llm_headers(api_key: str) -> dict[str, str]:
 
 
 def call_openai_compatible(prompt: str) -> dict[str, Any]:
+    if os.getenv("LLM_PROVIDER", "").strip().lower() == "deepseek":
+        # This path deliberately cannot fall back to OpenAI or generic keys.
+        try:
+            from scripts.llm_budget import call_deepseek
+        except ModuleNotFoundError:
+            from llm_budget import call_deepseek
+        return call_deepseek(prompt)
     api_key = os.getenv("LLM_API_KEY") or os.getenv("OPENAI_API_KEY") or os.getenv("DEEPSEEK_API_KEY") or ""
     base_url = os.getenv("LLM_BASE_URL", "")
     if not base_url:
@@ -1666,14 +1729,27 @@ arXiv 分类：{", ".join(paper.get("categories", []))}
 
 def summarize_with_llm(topic: Topic, paper: dict[str, Any], base_match: dict[str, Any]) -> tuple[dict[str, str], dict[str, Any]]:
     if not llm_enabled():
+        paper["summary_status"] = "fallback"
         return fallback_summary(paper, base_match), base_match
 
     prompt = build_llm_prompt(topic, paper, base_match)
     try:
         data = call_openai_compatible(prompt)
+        required = ("problem", "method", "innovation", "evidence", "limitations", "why_relevant")
+        if not isinstance(data, dict) or any(not isinstance(data.get(k), str) or not data[k].strip() for k in required):
+            raise ValueError("Missing or invalid summary fields")
+        adjustment = float(data.get("match_score_adjustment", 0.0) or 0.0)
+        if not math.isfinite(adjustment):
+            raise ValueError("Invalid relevance adjustment")
+        adjustment = max(-0.15, min(0.15, adjustment))
     except Exception as exc:
-        print(f"Warning: LLM summary failed for {paper.get('id')}: {exc}", file=sys.stderr)
-        return fallback_summary(paper, base_match), base_match
+        # Exception messages from a provider or remote content may contain secrets.
+        print(f"Warning: LLM summary failed for {paper.get('id')}: {type(exc).__name__}", file=sys.stderr)
+        paper["summary_status"] = "failed"
+        summary = fallback_summary(paper, base_match)
+        summary["problem"] = "模型摘要生成失败或被预算限制，本篇保留来源摘要，等待后续重试。"
+        summary["innovation"] = "尚未生成模型创新点总结，请查看原文。"
+        return summary, base_match
 
     summary = {
         "problem": str(data.get("problem", "")),
@@ -1683,7 +1759,6 @@ def summarize_with_llm(topic: Topic, paper: dict[str, Any], base_match: dict[str
         "limitations": str(data.get("limitations", "")),
         "why_relevant": str(data.get("why_relevant", "")),
     }
-    adjustment = float(data.get("match_score_adjustment", 0.0) or 0.0)
     adjusted_score = max(0.0, min(1.0, base_match["score"] + adjustment))
     adjusted_level = str(data.get("match_level") or match_level(adjusted_score)).lower()
     if adjusted_level not in {"high", "medium", "low"}:
@@ -1692,6 +1767,8 @@ def summarize_with_llm(topic: Topic, paper: dict[str, Any], base_match: dict[str
     adjusted_match["score"] = round(adjusted_score, 3)
     adjusted_match["level"] = adjusted_level
     adjusted_match["llm_reason"] = summary["why_relevant"]
+    adjusted_match["ranking_score"] = round(adjusted_score * topic.priority, 6)
+    paper["summary_status"] = "llm"
     return summary, adjusted_match
 
 
@@ -1703,19 +1780,51 @@ def summarize_one(args: tuple[Topic, dict[str, Any]]) -> tuple[str, dict[str, st
 
 
 def dedupe_papers(papers: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    seen = set()
-    unique = []
+    unique = {}
     for paper in papers:
-        key = paper.get("id") or paper.get("paper_url")
-        if key in seen:
-            continue
-        seen.add(key)
-        unique.append(paper)
-    return unique
+        key = paper_key(paper)
+        if key not in unique or paper_activity_datetime(paper) > paper_activity_datetime(unique[key]):
+            unique[key] = paper
+    return list(unique.values())
 
 
 def paper_key(paper: dict[str, Any]) -> str:
-    return str(paper.get("id") or paper.get("paper_url") or "")
+    key = str(paper.get("id") or paper.get("paper_url") or "")
+    if paper.get("source") == "arXiv" or re.fullmatch(r"\d{4}\.\d{4,5}v\d+", key):
+        key = re.sub(r"v\d+$", "", key)
+    return key
+
+
+def summary_fingerprint(topic: Topic, paper: dict[str, Any]) -> str:
+    material = {
+        "title": normalize_space(str(paper.get("title", ""))),
+        "abstract": normalize_space(str(paper.get("summary", ""))),
+        "topic": topic.__dict__,
+        "provider": os.getenv("LLM_PROVIDER", "legacy"),
+        "model": os.getenv("LLM_MODEL", "deepseek-chat"),
+        "prompt_version": 2,
+    }
+    return hashlib.sha256(json.dumps(material, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()
+
+
+def ranking_key(paper: dict[str, Any]) -> tuple[float, dt.datetime]:
+    match = paper.get("best_match") or {}
+    return float(match.get("ranking_score", match.get("score", 0))), paper_activity_datetime(paper)
+
+
+def select_daily_papers(papers: list[dict[str, Any]], topics: list[Topic], limit: int) -> list[dict[str, Any]]:
+    caps = {topic.id: topic.max_daily for topic in topics}
+    counts: dict[str, int] = {}
+    selected = []
+    for paper in sorted(papers, key=ranking_key, reverse=True):
+        topic_id = paper["best_match"]["topic_id"]
+        if caps.get(topic_id, 0) and counts.get(topic_id, 0) >= caps[topic_id]:
+            continue
+        if limit > 0 and len(selected) >= limit:
+            break
+        counts[topic_id] = counts.get(topic_id, 0) + 1
+        selected.append(paper)
+    return selected
 
 
 def best_match_level(paper: dict[str, Any]) -> str:
@@ -1803,6 +1912,7 @@ def merge_with_retained_papers(
     active_conference_years_by_source: dict[str, set[int]] | None = None,
 ) -> tuple[list[dict[str, Any]], dict[str, int]]:
     existing_papers = existing_payload.get("papers", []) if isinstance(existing_payload, dict) else []
+    existing_by_key = {paper_key(p): p for p in existing_papers if isinstance(p, dict)}
     existing_generated_at = str(existing_payload.get("generated_at_iso") or existing_payload.get("generated_at") or now.isoformat())
     retained_by_key: dict[str, dict[str, Any]] = {}
     dropped_low = 0
@@ -1838,7 +1948,7 @@ def merge_with_retained_papers(
     now_iso = now.isoformat()
     for paper in current_papers:
         key = paper_key(paper)
-        previous = retained_by_key.get(key)
+        previous = existing_by_key.get(key)
         if previous:
             paper.setdefault("first_seen_at", previous.get("first_seen_at") or existing_generated_at)
         else:
@@ -1941,6 +2051,8 @@ def collect(
         existing_conference_payload = migrated_conference_payload
     cached_conference_years_by_source = cached_conference_years(existing_conference_payload)
     cutoff, collection_mode = collection_cutoff(existing_payload, now, days, incremental_since_last_run)
+    previous_daily_by_key = {paper_key(p): p for p in existing_payload.get("papers", [])}
+    previous_by_key = {**previous_daily_by_key, **{paper_key(p): p for p in existing_conference_payload.get("papers", [])}}
     all_candidates = []
     successful_fetches = 0
     failed_fetches = 0
@@ -2051,14 +2163,15 @@ def collect(
         all_candidates.append(copy.deepcopy(cached_paper))
         cached_conference_candidate_count += 1
 
-    if successful_fetches == 0 and failed_fetches > 0 and (existing_payload.get("papers") or existing_conference_payload.get("papers")):
-        print("All configured sources failed; preserving existing paper data.", file=sys.stderr)
+    if successful_fetches == 0 and failed_fetches > 0:
+        raise RuntimeError("All configured sources failed; previous data and collection watermark are unchanged")
 
     recent_papers = []
     daily_backfill_candidates = []
     filtered_low_relevance = 0
     raw_daily_candidate_count = 0
     daily_outside_cutoff_count = 0
+    future_filtered_count = 0
     backfill_days = max(days, env_int("DAILY_BACKFILL_DAYS", 14))
     daily_backfill_cutoff = now - dt.timedelta(days=max(0, backfill_days))
     for paper in dedupe_papers(all_candidates):
@@ -2066,6 +2179,9 @@ def collect(
         if not is_conference_paper:
             raw_daily_candidate_count += 1
         activity_at = paper_activity_datetime(paper)
+        if not is_conference_paper and activity_at > now:
+            future_filtered_count += 1
+            continue
         in_primary_window = is_conference_paper or activity_at >= cutoff
         in_backfill_window = (
             not is_conference_paper
@@ -2078,6 +2194,8 @@ def collect(
             continue
 
         matches = [score_paper(topic, paper) for topic in topics]
+        # Classify by relevance first. Interest priority orders papers, and must
+        # not turn a navigation paper into a GUI paper to bypass topic caps.
         matches.sort(key=lambda item: item["score"], reverse=True)
         best_match = matches[0]
         if not is_relevant_enough(paper, best_match):
@@ -2092,14 +2210,14 @@ def collect(
         else:
             recent_papers.append(paper)
 
-    recent_papers.sort(key=lambda p: (p["best_match"]["score"], paper_activity_datetime(p)), reverse=True)
+    recent_papers.sort(key=ranking_key, reverse=True)
     daily_recent_papers = [paper for paper in recent_papers if paper.get("source_type") != "conference"]
     conference_recent_papers = [paper for paper in recent_papers if paper.get("source_type") == "conference"]
     daily_backfill_added_count = 0
     min_daily_papers = max(0, env_int("MIN_DAILY_PAPERS", 8))
     if len(daily_recent_papers) < min_daily_papers and daily_backfill_candidates:
         daily_backfill_candidates.sort(
-            key=lambda p: (p["best_match"]["score"], paper_activity_datetime(p)),
+            key=ranking_key,
             reverse=True,
         )
         existing_daily_ids = {str(paper.get("id", "")) for paper in daily_recent_papers}
@@ -2115,8 +2233,12 @@ def collect(
     candidate_paper_count = len(daily_recent_papers) + len(conference_recent_papers)
     daily_candidate_paper_count = len(daily_recent_papers)
     conference_candidate_paper_count = len(conference_recent_papers)
-    if max_new_papers > 0:
-        daily_recent_papers = daily_recent_papers[:max_new_papers]
+    # The overlap window is for recovering missed entries and refreshing known
+    # papers. Known papers must not consume the daily *new* paper allocation.
+    daily_known_candidates = [p for p in daily_recent_papers if paper_key(p) in previous_daily_by_key]
+    daily_new_candidates = [p for p in daily_recent_papers if paper_key(p) not in previous_daily_by_key]
+    daily_new_papers = select_daily_papers(daily_new_candidates, topics, max_new_papers)
+    daily_recent_papers = [*daily_new_papers, *daily_known_candidates]
     if max_new_conference_papers > 0:
         conference_recent_papers = conference_recent_papers[:max_new_conference_papers]
     conference_enrichment_stats = enrich_conference_papers_from_arxiv(conference_recent_papers)
@@ -2126,19 +2248,30 @@ def collect(
             matches.sort(key=lambda item: item["score"], reverse=True)
             paper["matches"] = matches
             paper["best_match"] = matches[0]
-        conference_recent_papers.sort(key=lambda p: (p["best_match"]["score"], p.get("published", "")), reverse=True)
+        conference_recent_papers.sort(key=ranking_key, reverse=True)
     recent_papers = sorted(
         [*daily_recent_papers, *conference_recent_papers],
-        key=lambda p: (p["best_match"]["score"], paper_activity_datetime(p)),
+        key=ranking_key,
         reverse=True,
     )
     summaries_by_id: dict[str, tuple[dict[str, str], dict[str, Any]]] = {}
     llm_jobs = []
-    for paper in recent_papers[:max_summaries]:
+    # New entries get the finite paid-summary allocation first. Refreshes and
+    # incomplete historical summaries share whatever remains of that limit.
+    summary_candidates = sorted(recent_papers, key=lambda p: (paper_key(p) not in previous_by_key, ranking_key(p)), reverse=True)
+    for paper in summary_candidates:
+        paper["summary_status"] = "fallback"
         if not should_summarize_paper_with_llm(paper):
             continue
         best_topic = next(topic for topic in topics if topic.id == paper["best_match"]["topic_id"])
-        llm_jobs.append((best_topic, paper))
+        fingerprint = summary_fingerprint(best_topic, paper)
+        paper["summary_fingerprint"] = fingerprint
+        previous = previous_by_key.get(paper_key(paper), {})
+        if previous.get("summary_status") in {"llm", "cache"} and previous.get("summary_fingerprint") == fingerprint and previous.get("chinese_summary"):
+            paper["summary_status"] = "cache"
+            summaries_by_id[str(paper.get("id", ""))] = (copy.deepcopy(previous["chinese_summary"]), copy.deepcopy(previous["best_match"]))
+        elif len(llm_jobs) < max(0, max_summaries):
+            llm_jobs.append((best_topic, paper))
 
     if llm_enabled() and llm_jobs:
         concurrency = max(1, int(os.getenv("LLM_CONCURRENCY", "2")))
@@ -2156,13 +2289,16 @@ def collect(
 
     for index, paper in enumerate(recent_papers):
         paper_id = str(paper.get("id", ""))
-        if index < max_summaries and paper_id in summaries_by_id:
+        if paper_id in summaries_by_id:
             summary, adjusted_match = summaries_by_id[paper_id]
             paper["chinese_summary"] = summary
             paper["best_match"] = adjusted_match
             paper["matches"] = [adjusted_match if m["topic_id"] == adjusted_match["topic_id"] else m for m in paper["matches"]]
         else:
             paper["chinese_summary"] = fallback_summary(paper, paper["best_match"])
+            if llm_enabled() and should_summarize_paper_with_llm(paper):
+                paper["chinese_summary"]["problem"] = "本篇未进入本次模型摘要额度，保留来源摘要供阅读。"
+                paper["chinese_summary"]["innovation"] = "本次未调用模型提取创新点。"
 
     daily_recent_papers = [paper for paper in recent_papers if paper.get("source_type") != "conference"]
     conference_recent_papers = [paper for paper in recent_papers if paper.get("source_type") == "conference"]
@@ -2176,8 +2312,8 @@ def collect(
         recent_history_days,
         active_conference_years_by_source,
     )
-    daily_merged_papers.sort(key=lambda p: (p["best_match"]["score"], paper_activity_datetime(p)), reverse=True)
-    conference_merged_papers.sort(key=lambda p: (p["best_match"]["score"], paper_activity_datetime(p)), reverse=True)
+    daily_merged_papers.sort(key=ranking_key, reverse=True)
+    conference_merged_papers.sort(key=ranking_key, reverse=True)
 
     base_stats = {
         "candidate_paper_count": candidate_paper_count,
@@ -2185,6 +2321,9 @@ def collect(
         "conference_candidate_paper_count": conference_candidate_paper_count,
         "raw_daily_candidate_count": raw_daily_candidate_count,
         "daily_outside_cutoff_count": daily_outside_cutoff_count,
+        "future_filtered_count": future_filtered_count,
+        "daily_new_candidate_count": len(daily_new_candidates),
+        "daily_known_candidate_count": len(daily_known_candidates),
         "daily_backfill_days": backfill_days,
         "daily_backfill_candidate_count": len(daily_backfill_candidates),
         "daily_backfill_added_count": daily_backfill_added_count,
@@ -2200,6 +2339,11 @@ def collect(
         "conference_sources": [source.__dict__ for source in conference_sources],
         "source_stats": source_stats,
         "llm_enabled": llm_enabled(),
+        "llm_attempt_count": len(llm_jobs) if llm_enabled() else 0,
+        "llm_success_count": sum(p.get("summary_status") == "llm" for p in recent_papers),
+        "llm_failure_count": sum(p.get("summary_status") == "failed" for p in recent_papers),
+        "summary_cache_hit_count": sum(p.get("summary_status") == "cache" for p in recent_papers),
+        "summary_fallback_count": sum(p.get("summary_status") == "fallback" for p in recent_papers),
         "llm_concurrency": int(os.getenv("LLM_CONCURRENCY", "2")),
         "recent_history_days": recent_history_days,
         "successful_fetches": successful_fetches,
@@ -2212,10 +2356,17 @@ def collect(
         "clear_cache": clear_cache,
         **conference_enrichment_stats,
     }
+    if os.getenv("LLM_PROVIDER", "").strip().lower() == "deepseek":
+        try:
+            from scripts.llm_budget import get_budget_stats
+        except ModuleNotFoundError:
+            from llm_budget import get_budget_stats
+        base_stats["budget"] = get_budget_stats()
 
     payload = {
         "generated_at": email.utils.format_datetime(now),
         "generated_at_iso": now.isoformat(),
+        "last_successful_collection_at": now.isoformat() if failed_fetches == failed_conference_fetches else existing_payload.get("last_successful_collection_at", existing_payload.get("generated_at_iso", cutoff.isoformat())),
         "config_source": "issue" if config is not default_config else "file",
         "data_kind": "daily",
         "topics": [topic.__dict__ for topic in topics],
@@ -2223,12 +2374,13 @@ def collect(
         "stats": {
             **base_stats,
             "paper_count": len(daily_merged_papers),
-            "new_paper_count": len(daily_recent_papers),
+            "new_paper_count": len(daily_new_papers),
+            "refreshed_paper_count": len(daily_known_candidates),
             **daily_retention_stats,
         },
     }
     trimmed_papers, storage_stats = trim_papers_for_storage(payload, max_stored_papers, max_data_bytes)
-    trimmed_papers.sort(key=lambda p: (p["best_match"]["score"], p.get("published", "")), reverse=True)
+    trimmed_papers.sort(key=ranking_key, reverse=True)
     payload["papers"] = trimmed_papers
     payload["stats"].update(storage_stats)
     payload["stats"]["paper_count"] = len(trimmed_papers)
@@ -2254,7 +2406,7 @@ def collect(
         max_stored_conference_papers,
         max_data_bytes,
     )
-    conference_trimmed_papers.sort(key=lambda p: (p["best_match"]["score"], p.get("published", "")), reverse=True)
+    conference_trimmed_papers.sort(key=ranking_key, reverse=True)
     conference_payload["papers"] = conference_trimmed_papers
     conference_payload["stats"].update(conference_storage_stats)
     conference_payload["stats"]["paper_count"] = len(conference_trimmed_papers)

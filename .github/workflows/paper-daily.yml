@@ -1,143 +1,109 @@
 name: Paper Daily
 
 on:
-  push:
-    branches: [main]
   schedule:
-    - cron: "0 22 * * *"
+    - cron: "0 1 * * *" # Beijing 09:00; GitHub may delay scheduled jobs.
   workflow_dispatch:
     inputs:
       lookback_days:
-        description: "首次初始化要回看最近几天的论文"
-        required: false
-        default: "7"
-      clear_cache:
-        description: "是否清空历史缓存后重新生成论文列表"
-        required: false
-        default: "false"
+        description: "回看天数（首次建议 7）"
+        default: "2"
+        required: true
+        type: choice
+        options: ["2", "7", "14"]
+      max_summaries:
+        description: "摘要上限；首次连通验收选 1"
+        default: "15"
+        type: choice
+        options: ["1", "15"]
+      initialize_budget:
+        description: "仅首次创建预算账本；已有账本不会重置"
+        default: false
+        type: boolean
   issues:
     types: [opened, edited, reopened]
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
   issues: read
 
 concurrency:
-  group: pages
+  group: personal-paper-daily
   cancel-in-progress: false
 
 jobs:
   collect-and-deploy:
-    if: github.event_name != 'issues' || github.event.issue.title == 'Research Interests'
+    if: github.event_name != 'issues' || (github.event.issue.title == 'Research Interests' && github.event.issue.user.login == github.repository_owner && github.actor == github.repository_owner)
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    env:
+      PYTHONUTF8: "1"
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           ref: main
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
+          persist-credentials: false
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
-      - name: Restore paper data cache
-        uses: actions/cache/restore@v4
-        with:
-          path: .paper-cache
-          key: paper-data-${{ github.run_id }}-${{ github.run_attempt }}
-          restore-keys: |
-            paper-data-
-
-      - name: Hydrate cached paper data
-        run: |
-          mkdir -p web/data
-          if [ -f .paper-cache/papers.json ]; then
-            cp .paper-cache/papers.json web/data/papers.json
-          fi
-          if [ -f .paper-cache/conference_papers.json ]; then
-            cp .paper-cache/conference_papers.json web/data/conference_papers.json
-          fi
-
-      - name: Collect papers
+      - name: Offline verification
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BUDGET_PERSIST_GITHUB: "false"
+          ENABLE_ISSUE_CONFIG: "false"
+        run: python -m unittest discover -s tests -v
+      - name: Restore durable state
+        env:
+          BUDGET_ALLOW_INIT: ${{ github.event_name == 'workflow_dispatch' && inputs.initialize_budget && 'true' || 'false' }}
+        run: python -m scripts.state_store hydrate
+      - name: Collect and summarize
+        env:
+          ENABLE_ISSUE_CONFIG: "true"
           CONFIG_ISSUE_TITLE: Research Interests
-          LOOKBACK_DAYS: ${{ github.event_name == 'workflow_dispatch' && inputs.lookback_days || vars.LOOKBACK_DAYS || '1' }}
-          MAX_PER_TOPIC: ${{ vars.MAX_PER_TOPIC || '10' }}
-          MAX_SUMMARIES: ${{ vars.MAX_SUMMARIES || '20' }}
-          MAX_NEW_PAPERS: ${{ vars.MAX_NEW_PAPERS || '50' }}
-          MAX_STORED_PAPERS: ${{ vars.MAX_STORED_PAPERS || '50' }}
-          MAX_NEW_CONFERENCE_PAPERS: ${{ vars.MAX_NEW_CONFERENCE_PAPERS || '50' }}
-          MAX_STORED_CONFERENCE_PAPERS: ${{ vars.MAX_STORED_CONFERENCE_PAPERS || '300' }}
-          MAX_DATA_BYTES: ${{ vars.MAX_DATA_BYTES || '8388608' }}
-          RECENT_HISTORY_DAYS: ${{ vars.RECENT_HISTORY_DAYS || '45' }}
-          PAPER_SOURCES: ${{ vars.PAPER_SOURCES || '' }}
-          CONTACT_EMAIL: ${{ vars.CONTACT_EMAIL || '' }}
-          CROSSREF_EMAIL: ${{ vars.CROSSREF_EMAIL || '' }}
-          OPENALEX_EMAIL: ${{ vars.OPENALEX_EMAIL || '' }}
-          SOURCE_DELAY_SECONDS: ${{ vars.SOURCE_DELAY_SECONDS || '3' }}
-          DBLP_DELAY_SECONDS: ${{ vars.DBLP_DELAY_SECONDS || '5' }}
-          DBLP_PATTERN_DELAY_SECONDS: ${{ vars.DBLP_PATTERN_DELAY_SECONDS || '3' }}
-          DBLP_RETRIES: ${{ vars.DBLP_RETRIES || '3' }}
-          MAX_PER_CONFERENCE: ${{ vars.MAX_PER_CONFERENCE || '1000' }}
-          ARXIV_QUERY_MODE: ${{ vars.ARXIV_QUERY_MODE || 'keyword' }}
-          ARXIV_SORT_BY: ${{ vars.ARXIV_SORT_BY || 'lastUpdatedDate' }}
-          ARXIV_EXPAND_CATEGORY_SEARCH: ${{ vars.ARXIV_EXPAND_CATEGORY_SEARCH || 'false' }}
-          ARXIV_CATEGORY_MAX_RESULTS: ${{ vars.ARXIV_CATEGORY_MAX_RESULTS || vars.MAX_PER_TOPIC || '10' }}
-          ARXIV_IN_TOPIC_DELAY_SECONDS: ${{ vars.ARXIV_IN_TOPIC_DELAY_SECONDS || '3' }}
-          MIN_DAILY_PAPERS: ${{ vars.MIN_DAILY_PAPERS || '8' }}
-          DAILY_BACKFILL_DAYS: ${{ vars.DAILY_BACKFILL_DAYS || '14' }}
-          MAX_CONFERENCE_ABSTRACT_ENRICHMENTS: ${{ vars.MAX_CONFERENCE_ABSTRACT_ENRICHMENTS || vars.MAX_CONFERENCE_ARXIV_ENRICHMENTS || '50' }}
-          CONFERENCE_ABSTRACT_SOURCES: ${{ vars.CONFERENCE_ABSTRACT_SOURCES || 'arxiv,openalex,crossref' }}
-          CONFERENCE_ABSTRACT_DELAY_SECONDS: ${{ vars.CONFERENCE_ABSTRACT_DELAY_SECONDS || vars.CONFERENCE_ARXIV_DELAY_SECONDS || '3' }}
-          CONFERENCE_ABSTRACT_SEARCH_RESULTS: ${{ vars.CONFERENCE_ABSTRACT_SEARCH_RESULTS || vars.CONFERENCE_ARXIV_SEARCH_RESULTS || '5' }}
-          MAX_CONFERENCE_ARXIV_ENRICHMENTS: ${{ vars.MAX_CONFERENCE_ARXIV_ENRICHMENTS || '50' }}
-          CONFERENCE_ARXIV_DELAY_SECONDS: ${{ vars.CONFERENCE_ARXIV_DELAY_SECONDS || '3' }}
-          CONFERENCE_ARXIV_SEARCH_RESULTS: ${{ vars.CONFERENCE_ARXIV_SEARCH_RESULTS || '5' }}
-          ENABLE_SEMANTIC_SCHOLAR: ${{ vars.ENABLE_SEMANTIC_SCHOLAR || 'false' }}
-          SEMANTIC_SCHOLAR_API_KEY: ${{ secrets.SEMANTIC_SCHOLAR_API_KEY }}
-          SERPAPI_API_KEY: ${{ secrets.SERPAPI_API_KEY }}
-          CUSTOM_FEED_HEADERS: ${{ secrets.CUSTOM_FEED_HEADERS }}
-          CUSTOM_FEED_BEARER_TOKEN: ${{ secrets.CUSTOM_FEED_BEARER_TOKEN }}
-          CLEAR_PAPER_CACHE: ${{ github.event_name == 'workflow_dispatch' && inputs.clear_cache || vars.CLEAR_PAPER_CACHE || 'false' }}
-          INCREMENTAL_SINCE_LAST_RUN: ${{ github.event_name == 'schedule' && 'true' || vars.INCREMENTAL_SINCE_LAST_RUN || 'false' }}
-          LLM_CONCURRENCY: ${{ vars.LLM_CONCURRENCY || '2' }}
-          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
-          LLM_BASE_URL: ${{ vars.LLM_BASE_URL || secrets.LLM_BASE_URL }}
-          LLM_MODEL: ${{ vars.LLM_MODEL || secrets.LLM_MODEL }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          LLM_PROVIDER: deepseek
+          LLM_BASE_URL: https://api.deepseek.com/v1
+          LLM_MODEL: deepseek-flash
+          LLM_CONCURRENCY: "2"
+          LLM_MONTHLY_BUDGET_CNY: "20"
+          LLM_DAILY_ATTEMPT_LIMIT: "15"
+          LLM_MAX_OUTPUT_TOKENS: "1800"
+          LLM_MAX_PROMPT_BYTES: "16000"
+          DEEPSEEK_INPUT_CNY_PER_MILLION: "2"
+          DEEPSEEK_OUTPUT_CNY_PER_MILLION: "8"
+          LLM_BUDGET_PATH: .paper-state/usage.json
+          BUDGET_PERSIST_GITHUB: "true"
+          BUDGET_ALLOW_INIT: ${{ github.event_name == 'workflow_dispatch' && inputs.initialize_budget && 'true' || 'false' }}
+          MAX_PER_TOPIC: "50"
+          MAX_SUMMARIES: ${{ inputs.max_summaries || '15' }}
+          MAX_NEW_PAPERS: "15"
+          MAX_STORED_PAPERS: "900"
+          RECENT_HISTORY_DAYS: "60"
+          MIN_DAILY_PAPERS: "0"
+          ARXIV_QUERY_MODE: keyword
+          ARXIV_DELAY_SECONDS: "15"
+          ARXIV_RETRY_THROTTLED: "false"
+          LOOKBACK_DAYS: ${{ inputs.lookback_days || '2' }}
+          INCREMENTAL_SINCE_LAST_RUN: ${{ github.event_name == 'schedule' && 'true' || 'false' }}
+          INCREMENTAL_OVERLAP_HOURS: "24"
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-        run: python scripts/collect_papers.py
-
-      - name: Stage paper data cache
         run: |
-          mkdir -p .paper-cache
-          cp web/data/papers.json .paper-cache/papers.json
-          if [ -f web/data/conference_papers.json ]; then
-            cp web/data/conference_papers.json .paper-cache/conference_papers.json
-          fi
-
-      - name: Save paper data cache
-        uses: actions/cache/save@v4
-        with:
-          path: .paper-cache
-          key: paper-data-${{ github.run_id }}-${{ github.run_attempt }}
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+          python -c "import os; assert os.getenv('DEEPSEEK_API_KEY'), 'DEEPSEEK_API_KEY secret is missing'"
+          python -m scripts.collect_papers
+      - name: Save durable paper history
+        run: python -m scripts.state_store snapshot
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: web
-
-      - name: Deploy to GitHub Pages
+      - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
+      - name: Report summary failures
+        run: |
+          python -c "import json; s=json.load(open('web/data/papers.json',encoding='utf-8'))['stats']; print('Fetch failures:',s.get('failed_fetches',0),'LLM failures:',s.get('llm_failure_count',0)); assert s.get('llm_failure_count',0)==0, 'Page published with summary failures; inspect status and budget'"

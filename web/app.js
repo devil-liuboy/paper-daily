@@ -1,5 +1,6 @@
 const THEME_STORAGE_KEY = "paper-daily-theme";
 const THEMES = new Set(["dark", "light", "eye"]);
+const CONFERENCE_ENABLED = false;
 
 const state = {
   datasets: {
@@ -7,6 +8,7 @@ const state = {
     conference: null,
   },
   theme: "dark",
+  loadError: "",
   filters: {
     query: "",
     topic: "all",
@@ -19,6 +21,7 @@ const state = {
 
 const nodes = {
   updatedAt: document.querySelector("#updatedAt"),
+  runStatus: document.querySelector("#runStatus"),
   paperCount: document.querySelector("#paperCount"),
   weekCount: document.querySelector("#weekCount"),
   monthCount: document.querySelector("#monthCount"),
@@ -88,7 +91,7 @@ function dateKey(value) {
 }
 
 function collectionTime(paper) {
-  return paper.last_seen_at || paper.first_seen_at || paper.published || paper.updated || "";
+  return paper.first_seen_at || paper.last_seen_at || paper.published || paper.updated || "";
 }
 
 function startOfDay(date) {
@@ -126,11 +129,22 @@ function selectedDate() {
 }
 
 function scoreOf(paper) {
-  return Number(paper.best_match?.score || 0);
+  const score = Number(paper.best_match?.score || 0);
+  return Number.isFinite(score) ? score : 0;
+}
+
+function selectionScoreOf(paper) {
+  const best = paper.best_match || {};
+  const stored = paper.selection_score ?? best.selection_score ?? best.ranking_score;
+  if (stored !== undefined && stored !== null && Number.isFinite(Number(stored))) return Number(stored);
+  const topic = (activeData().topics || []).find((item) => item.id === best.topic_id);
+  const priority = Number(best.priority ?? topic?.priority ?? 1);
+  return scoreOf(paper) * (Number.isFinite(priority) ? priority : 1);
 }
 
 function levelOf(paper) {
-  return String(paper.best_match?.level || "low").toLowerCase();
+  const level = String(paper.best_match?.level || "low").toLowerCase();
+  return ["high", "medium", "low"].includes(level) ? level : "low";
 }
 
 function textIncludes(paper, query) {
@@ -174,7 +188,7 @@ function matchesView(paper) {
 function filteredPapers() {
   return (activeData().papers || [])
     .filter((paper) => matchesBaseFilters(paper) && matchesView(paper))
-    .sort((a, b) => scoreOf(b) - scoreOf(a) || String(b.published || "").localeCompare(String(a.published || "")));
+    .sort((a, b) => selectionScoreOf(b) - selectionScoreOf(a) || String(b.published || "").localeCompare(String(a.published || "")));
 }
 
 function setText(parent, selector, text) {
@@ -190,6 +204,29 @@ function safeFilename(paper) {
   return `${title || "paper"}.pdf`;
 }
 
+function safeHttpUrl(value) {
+  if (typeof value !== "string" || !value.trim()) return "";
+  try {
+    const url = new URL(value);
+    if (!["https:", "http:"].includes(url.protocol) || url.username || url.password) return "";
+    return url.href;
+  } catch {
+    return "";
+  }
+}
+
+function setPaperLink(node, value) {
+  const url = safeHttpUrl(value);
+  node.hidden = !url;
+  if (url) node.href = url;
+  else node.removeAttribute("href");
+}
+
+function summaryStatusOf(paper) {
+  const status = String(paper.summary_status || "unknown").toLowerCase();
+  return ["llm", "cache", "fallback", "failed"].includes(status) ? status : "unknown";
+}
+
 function renderPaper(paper) {
   const node = nodes.template.content.firstElementChild.cloneNode(true);
   const best = paper.best_match || {};
@@ -199,6 +236,19 @@ function renderPaper(paper) {
 
   badge.textContent = `${level} ${scoreOf(paper).toFixed(2)}`;
   badge.classList.add(level);
+  badge.title = "研究方向匹配度；不是论文质量评分";
+
+  const summaryStatus = summaryStatusOf(paper);
+  const summaryStatusNode = node.querySelector(".summary-status");
+  const summaryLabels = {
+    llm: "LLM · DeepSeek 分析",
+    cache: "Cache · 复用已有分析",
+    fallback: "Fallback · 基础信息，未生成模型分析",
+    failed: "Failed · 模型分析失败，显示基础信息",
+    unknown: "摘要状态未提供",
+  };
+  summaryStatusNode.textContent = summaryLabels[summaryStatus];
+  summaryStatusNode.dataset.status = summaryStatus;
 
   setText(node, ".paper-date", `发布 ${formatDate(paper.published)} · 收录 ${formatDate(collectionTime(paper))}`);
   setText(node, ".paper-source", paper.source || "paper");
@@ -223,10 +273,9 @@ function renderPaper(paper) {
   const absLink = node.querySelector(".abs-link");
   const pdfLink = node.querySelector(".pdf-link");
   const downloadLink = node.querySelector(".download-link");
-  const pdfUrl = paper.pdf_url || paper.paper_url || "#";
-  absLink.href = paper.paper_url || "#";
-  pdfLink.href = pdfUrl;
-  downloadLink.href = pdfUrl;
+  setPaperLink(absLink, paper.paper_url);
+  setPaperLink(pdfLink, paper.pdf_url);
+  setPaperLink(downloadLink, paper.pdf_url);
   downloadLink.setAttribute("download", safeFilename(paper));
   downloadLink.setAttribute("target", "_blank");
   downloadLink.setAttribute("rel", "noreferrer");
@@ -266,7 +315,7 @@ function render() {
   if (!papers.length) {
     const empty = document.createElement("div");
     empty.className = "empty-state";
-    empty.textContent = "当前筛选条件下没有论文。";
+    empty.textContent = state.loadError ? "论文数据读取失败，请查看页面上方提示或更新任务。" : "当前筛选条件下没有论文。";
     nodes.paperList.appendChild(empty);
     return;
   }
@@ -332,7 +381,9 @@ function bindEvents() {
     render();
   });
   for (const tab of nodes.collectionTabs) {
+    if (tab.dataset.collection === "conference") tab.hidden = !CONFERENCE_ENABLED;
     tab.addEventListener("click", () => {
+      if (tab.dataset.collection === "conference" && !CONFERENCE_ENABLED) return;
       state.filters.collection = tab.dataset.collection;
       state.filters.view = state.filters.collection === "conference" ? "all" : "daily";
       state.filters.topic = "all";
@@ -372,15 +423,34 @@ async function loadOptionalData(path) {
 }
 
 function updateUpdatedAt(message = "") {
-  if (message) {
-    nodes.updatedAt.textContent = message;
+  if (message || state.loadError) {
+    nodes.updatedAt.textContent = message || state.loadError;
+    nodes.runStatus.textContent = message || state.loadError;
+    nodes.runStatus.hidden = false;
     return;
   }
   const data = activeData();
   const stats = data.stats || {};
   const mode = stats.collection_mode === "incremental" ? "增量" : "初始化";
   const kind = state.filters.collection === "conference" ? "顶会精品" : "每日新论文";
-  nodes.updatedAt.textContent = `${kind} · 更新于 ${formatDate(data.generated_at_iso)} · ${mode} · ${stats.llm_enabled ? "LLM" : "基础"}`;
+  const papers = data.papers || [];
+  const llmCount = Number(stats.llm_success_count ?? papers.filter((paper) => summaryStatusOf(paper) === "llm").length);
+  const cachedCount = Number(stats.summary_cache_hit_count ?? papers.filter((paper) => summaryStatusOf(paper) === "cache").length);
+  const failedCount = Number(stats.llm_failure_count ?? papers.filter((paper) => summaryStatusOf(paper) === "failed").length);
+  const fallbackCount = Number(stats.summary_fallback_count ?? papers.filter((paper) => summaryStatusOf(paper) === "fallback").length);
+  const summaryMode = llmCount + cachedCount > 0 ? `模型分析 ${llmCount} · 缓存复用 ${cachedCount}` : "本次暂无成功模型分析";
+  nodes.updatedAt.textContent = `${kind} · 更新于 ${formatDate(data.generated_at_iso)} · ${mode} · ${summaryMode}`;
+
+  const notices = [];
+  const failedSources = Object.entries(stats.source_stats || {}).filter(([, source]) => Number(source.failed_fetches) > 0);
+  if (failedSources.length) {
+    const sourceDetails = failedSources.map(([name, source]) => `${name}（${Number(source.failed_fetches)} 次请求失败）`).join("、");
+    notices.push(`采集不完整：${sourceDetails}；当前列表可能缺少新论文。`);
+  }
+  if (failedCount > 0) notices.push(`本次 ${failedCount} 篇模型分析失败，相关卡片显示基础信息。`);
+  if (fallbackCount > 0) notices.push(`本次 ${fallbackCount} 篇仅有基础信息，未生成模型分析。`);
+  nodes.runStatus.textContent = notices.join(" ");
+  nodes.runStatus.hidden = !notices.length;
 }
 
 async function main() {
@@ -388,7 +458,7 @@ async function main() {
   bindEvents();
   try {
     state.datasets.daily = await loadData();
-    state.datasets.conference = await loadOptionalData("./data/conference_papers.json");
+    if (CONFERENCE_ENABLED) state.datasets.conference = await loadOptionalData("./data/conference_papers.json");
   } catch (error) {
     state.datasets.daily = {
       generated_at_iso: new Date().toISOString(),
@@ -402,7 +472,7 @@ async function main() {
       papers: [],
       stats: { llm_enabled: false },
     };
-    updateUpdatedAt(`数据读取失败：${error.message}`);
+    state.loadError = `数据读取失败：${error.message}`;
   }
 
   updateUpdatedAt();
