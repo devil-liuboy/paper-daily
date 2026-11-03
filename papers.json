@@ -277,7 +277,7 @@
         "llm_reason": "论文直接面向 computer-use agent 的接口设计与桌面操作任务，涉及 GUI 视觉通道与 AX 语义通道的协同、动作批量执行与状态一致性（对应错误恢复与跨步状态管理），并在 OSWorld 2.0 上评测完整交互任务成功率与效率，与研究方向中的 desktop agent、computer use、GUI grounding（视觉通道）及长流程任务成功率、推理效率高度契合。"
       },
       "summary_status": "llm",
-      "summary_fingerprint": "60e8bb988ea9c96096ac87695d7a960ec0da0e4c5d0352900793a9284a371abb",
+      "summary_fingerprint": "0427dd8aecf2fdb8002e3ebd7f26125d29de6eb2b8c9aeccdf868d5ff76938f5",
       "chinese_summary": {
         "problem": "现有 computer-use agent 主要依赖截图和鼠标键盘动作，迫使模型反复解释屏幕，且未充分利用计算机的语义（可访问性树）与程序化（代码/命令行）能力，导致交互效率与长流程任务表现受限。",
         "method": "提出 Hybrid Computer Use（HCU）统一接口，同时暴露三条互补通道：代码与命令行工具的程序化交互、基于可访问性（AX）的语义交互、基于 GUI 的视觉交互；模型可自行选择与组合通道。配套 HCU skill 指导通道选择与协调，并设计 AX 工具返回紧凑观测、批量执行动作、以 AX diff 报告效果，同时在通道切换时防止过期状态动作。",
@@ -288,7 +288,14 @@
       },
       "first_seen_at": "2026-11-03T14:00:01.942467+00:00",
       "last_seen_at": "2026-11-03T14:00:01.942467+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": false,
+      "summary_review": {
+        "reviewed_at": "2026-11-03T22:07:51.079149+08:00",
+        "scope": "标题与摘要对照；关键数字检查，不是全文审查或实验复现",
+        "generator": "deepseek-flash",
+        "original_fingerprint": "60e8bb988ea9c96096ac87695d7a960ec0da0e4c5d0352900793a9284a371abb",
+        "edits": []
+      }
     },
     {
       "id": "2611.02284v1",
@@ -392,28 +399,38 @@
         "topic_id": "vlm_efficiency",
         "topic_name": "多模态推理效率与视觉 Token 压缩",
         "score": 0.558,
-        "level": "medium",
+        "level": "high",
         "reason": "关键词命中：visual token pruning；arXiv 分类重合：cs.CV",
         "keyword_hits": [
           "visual token pruning"
         ],
         "priority": 1.8,
         "ranking_score": 1.0044,
-        "llm_reason": "直接命中 visual token pruning、visual token selection、visual token compression、VLM acceleration 等关键词，且报告了端到端加速和 FLOPs，而非仅 token 减少比例，与研究方向高度一致；但基础匹配分为 low，且摘要缺少准确率、显存和条件控制细节，需人工复核实验设置与质量-效率权衡。"
+        "llm_reason": "直接研究视觉 token 裁剪、全局信息驱动的 token 选择与极端压缩，与多模态推理效率方向密切相关；摘要报告了端到端加速和 FLOPs，而不只是 token 减少比例。准确率权衡、显存和实验条件仍需查阅全文核对。",
+        "review_note": "方向相关性与实验细节完整性分开；高匹配不代表论文质量验证"
       },
       "summary_status": "llm",
-      "summary_fingerprint": "273583a9f79afd3f16e421e3e587c602f90d65184b35440bb83f45c412811f89",
+      "summary_fingerprint": "44216c9fac928db54e80b8e70f981a148fcff8feb13832b0db842b9e4720d06b",
       "chinese_summary": {
         "problem": "视觉语言模型（VLM）和视觉语言动作模型（VLA）处理数百个视觉 token，视觉表示成为主要计算瓶颈；论文要解决的是在极端压缩下如何选择视觉 token，以保留视觉表示的主要信息。",
         "method": "提出 SVD-Prune，一种无需训练的框架：对视觉表示做奇异值分解（SVD），用统计杠杆分数（leverage scores）进行全局信息驱动的 token 选择，而不是逐个评估 token 重要性。方法架构无关，可放在编码器侧、解码器侧或混合配置。",
         "innovation": "1）把视觉 token 剪枝重新表述为保留视觉表示的主导低秩谱结构，而非识别单个重要 token；2）用 SVD 加杠杆分数实现全局信息 token 选择，且无需训练；3）架构无关，可部署在多模态流水线不同阶段（编码器/解码器/混合）。",
         "evidence": "摘要报告：视觉 token 预算最多削减 99.3%；在 16 token 预算下，编码器侧剪枝降低推理 FLOPs 82.4%，并实现 4.18 倍端到端加速（含剪枝开销）。但摘要未给出具体数据集、基线、准确率下降幅度或显存数据，需读全文核验。",
         "limitations": "摘要未说明准确率与效率的权衡细节、压缩到 16 token 时质量损失、不同 VLM/VLA 架构上的泛化性、SVD 计算开销随序列长度的变化，以及是否报告整卡显存和 KV 规模；99.3% 压缩率下的实际可用性需全文确认。",
-        "why_relevant": "直接命中 visual token pruning、visual token selection、visual token compression、VLM acceleration 等关键词，且报告了端到端加速和 FLOPs，而非仅 token 减少比例，与研究方向高度一致；但基础匹配分为 low，且摘要缺少准确率、显存和条件控制细节，需人工复核实验设置与质量-效率权衡。"
+        "why_relevant": "直接研究视觉 token 裁剪、全局信息驱动的 token 选择与极端压缩，与多模态推理效率方向密切相关；摘要报告了端到端加速和 FLOPs，而不只是 token 减少比例。准确率权衡、显存和实验条件仍需查阅全文核对。"
       },
       "first_seen_at": "2026-11-03T14:00:01.942467+00:00",
       "last_seen_at": "2026-11-03T14:00:01.942467+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": false,
+      "summary_review": {
+        "reviewed_at": "2026-11-03T22:07:51.079149+08:00",
+        "scope": "标题与摘要对照；关键数字检查，不是全文审查或实验复现",
+        "generator": "deepseek-flash",
+        "original_fingerprint": "273583a9f79afd3f16e421e3e587c602f90d65184b35440bb83f45c412811f89",
+        "edits": [
+          "去除初筛等级对相关性判断的干扰，方向匹配校正为high"
+        ]
+      }
     },
     {
       "id": "2610.40747v1",
@@ -544,7 +561,7 @@
         "llm_reason": "论文直接面向 computer-use agent 与 computer use 场景，覆盖桌面与 Web 操作任务、GUI 交互与终端/代码混合执行、训练数据合成与推理效率，与研究方向中桌面/Web 操作、动作规划、长流程任务成功率和真实部署成本高度对应；但其核心贡献在训练配方与数据合成基础设施，而非 GUI grounding 静态定位评测或交互式定位方法本身，故相关性需结合全文的实验设置人工复核。"
       },
       "summary_status": "llm",
-      "summary_fingerprint": "1e28e58d761e4e4b621e0354baba16c29a627f9fd3cd9d6ca7ef029dd1604318",
+      "summary_fingerprint": "c9140858658ca8ae7482278bb7b3bf3c54d0b93183566911a7f1b53e4ebf80c1",
       "chinese_summary": {
         "problem": "现有计算机使用智能体（CUA）通常将视觉 GUI 交互与代码/终端执行割裂，缺少在单一策略中无缝融合两类操作的能力；同时，大规模构造高质量 CUA 训练任务与轨迹的成本很高。",
         "method": "作者提出 Mage-VL-Cowork：从通用多模态对齐检查点出发，经中训练、SFT 和 RL 的端到端五阶段渐进式课程，训练 4B 混合 CUA。配套 Mage-CUA-Forge 用可复用的、以技能为条件的生成工作流和应用专用 preparer 合成 293,806 个桌面与 Web 任务（覆盖 6,915 项技能），并演化教师 harness、实例化专用 CUA harness 来产出高质量轨迹与分阶段监督。",
@@ -555,7 +572,14 @@
       },
       "first_seen_at": "2026-11-03T14:00:01.942467+00:00",
       "last_seen_at": "2026-11-03T14:00:01.942467+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": false,
+      "summary_review": {
+        "reviewed_at": "2026-11-03T22:07:51.079149+08:00",
+        "scope": "标题与摘要对照；关键数字检查，不是全文审查或实验复现",
+        "generator": "deepseek-flash",
+        "original_fingerprint": "1e28e58d761e4e4b621e0354baba16c29a627f9fd3cd9d6ca7ef029dd1604318",
+        "edits": []
+      }
     },
     {
       "id": "2606.08239v2",
@@ -669,18 +693,27 @@
         "llm_reason": "直接匹配研究方向中的 multimodal large language model 与视频理解/视觉推理：论文诊断 MLLM 在视频时序推理中的可靠性缺陷，并提出缺失答案检测这一可迁移到 GUI Agent 的评测视角（Agent 在无可行操作时能否拒绝而非幻觉选择），其诊断协议与提示缓解实验对多模态评测方法有参考价值。"
       },
       "summary_status": "llm",
-      "summary_fingerprint": "fa86ccbb29f545b79ad4827984d205868e36cc6725ce308ec561c59d48303f0a",
+      "summary_fingerprint": "6c47d67d158d654e59fa0d18a3d016fe340f39ae720336ca44401152d4d07677",
       "chinese_summary": {
         "problem": "论文研究多模态大语言模型（MLLM）在视频理解中的可靠性问题：当候选答案中故意不包含正确答案时，模型是否能识别出“无有效选项”，即进行缺失答案检测（absent answer detection）。",
         "method": "作者开展诊断性研究，在三种设置下评估缺失答案检测行为：带“None of the Above”选项的多选题、带检测指令的开放式生成、以及无任何引导的标准评测；覆盖多种模型与基准，并额外尝试用思维链（chain-of-thought）提示作为缓解策略。",
-        "innovation": "首次系统性地将“缺失答案检测”作为视频理解中 MLLM 可靠性的诊断维度，并在多设置、多模型、多基准下刻画该失败模式；发现该失败在时序推理任务中更严重、且随帧采样密度增加而恶化；同时验证了思维链提示虽能提升检测率但不足以根本解决。",
+        "innovation": "系统性地将“缺失答案检测”作为视频理解中 MLLM 可靠性的诊断维度，并在多设置、多模型、多基准下刻画该失败模式；发现该失败在时序推理任务中更严重、且随帧采样密度增加而恶化；同时验证了思维链提示虽能提升检测率但不足以根本解决。",
         "evidence": "摘要报告了跨多种模型与基准的实证结果：MLLM 绝大多数情况下选择看似合理的干扰项而非检测缺失答案；失败在时序推理任务中更明显，并随帧采样更密集而加重；思维链提示显著提升检测率但仍不理想。未给出具体数值、模型清单或基准名称，需阅读全文核验。",
         "limitations": "摘要未披露具体模型规模、基准数据集、评测指标定义与统计显著性；帧采样密度影响的具体机制未解释；思维链提示的提升幅度与剩余差距缺乏量化；是否覆盖开源与闭源模型、是否有人工标注验证均需全文确认。",
         "why_relevant": "直接匹配研究方向中的 multimodal large language model 与视频理解/视觉推理：论文诊断 MLLM 在视频时序推理中的可靠性缺陷，并提出缺失答案检测这一可迁移到 GUI Agent 的评测视角（Agent 在无可行操作时能否拒绝而非幻觉选择），其诊断协议与提示缓解实验对多模态评测方法有参考价值。"
       },
       "first_seen_at": "2026-11-03T14:00:01.942467+00:00",
       "last_seen_at": "2026-11-03T14:00:01.942467+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": false,
+      "summary_review": {
+        "reviewed_at": "2026-11-03T22:07:51.079149+08:00",
+        "scope": "标题与摘要对照；关键数字检查，不是全文审查或实验复现",
+        "generator": "deepseek-flash",
+        "original_fingerprint": "fa86ccbb29f545b79ad4827984d205868e36cc6725ce308ec561c59d48303f0a",
+        "edits": [
+          "删除原摘要未声称的首次主张"
+        ]
+      }
     },
     {
       "id": "2605.18421v3",
@@ -798,18 +831,27 @@
         "llm_reason": "直接命中 agent memory 关键词，且记忆范围（in-episode vs. cross-episode）与记忆内容（知识 vs. 执行）的划分与长任务压缩、工作记忆、长期记忆检索、状态维护和上下文管理高度对应；其对长上下文基线与记忆方法在上下文不足时收益的对比，可帮助判断压缩/记忆机制在长任务中的实际价值。但摘要未明确涉及轨迹压缩或 GUI/Web Agent，需人工复核其任务场景与压缩相关指标。"
       },
       "summary_status": "llm",
-      "summary_fingerprint": "953fa575b7ad918f3f8d50e864c7adeb9b286b16bc4f1954655c6d8acefa18fb",
+      "summary_fingerprint": "eb8431015dc69ebb3e83653124fc9148c28b9a37822244cef051f38b856174d5",
       "chinese_summary": {
         "problem": "现有 LLM Agent 基准主要评估推理、规划和执行，缺少系统化评估 Agent 记忆机制（跨时间存储、更新、检索信息）的统一方法，导致记忆能力长期未被充分评测。",
         "method": "论文从自演化视角提出 EvoMemBench 统一基准，沿两个维度组织任务：记忆范围（episode 内 vs. 跨 episode）和记忆内容（知识导向 vs. 执行导向）。在标准化协议下对比 15 种代表性记忆方法与强长上下文基线，分析不同记忆形式在各设置下的表现。",
-        "innovation": "首次以自演化视角构建覆盖记忆范围与记忆内容两维度的统一 Agent 记忆基准；系统对比 15 种记忆方法与长上下文基线，揭示长上下文基线仍具竞争力、记忆在上下文不足或任务困难时收益最大、无单一记忆形式通用等结论；区分检索式方法适合知识密集场景、程序性与长期记忆方法适合执行导向任务。",
+        "innovation": "以自演化视角构建覆盖记忆范围与记忆内容两维度的统一 Agent 记忆基准；系统对比 15 种记忆方法与长上下文基线，揭示长上下文基线仍具竞争力、记忆在上下文不足或任务困难时收益最大、无单一记忆形式通用等结论；区分检索式方法适合知识密集场景、程序性与长期记忆方法适合执行导向任务。",
         "evidence": "摘要报告了 15 种记忆方法与强长上下文基线在标准化协议下的对比结果，并给出若干经验性结论（长上下文基线竞争力强、记忆收益依赖上下文充分性与任务难度、不同记忆形式适用场景不同）。但摘要未给出具体数据集规模、指标数值或统计显著性，需阅读全文核验。",
         "limitations": "摘要未说明基准任务是否覆盖 GUI/Web/计算机操作 Agent 场景，也未给出轨迹压缩、历史摘要质量或压缩信息损失的细粒度指标；记忆方法对比的具体任务分布、评测指标和数值结果需全文确认；自演化视角的具体操作化定义不明确。",
         "why_relevant": "直接命中 agent memory 关键词，且记忆范围（in-episode vs. cross-episode）与记忆内容（知识 vs. 执行）的划分与长任务压缩、工作记忆、长期记忆检索、状态维护和上下文管理高度对应；其对长上下文基线与记忆方法在上下文不足时收益的对比，可帮助判断压缩/记忆机制在长任务中的实际价值。但摘要未明确涉及轨迹压缩或 GUI/Web Agent，需人工复核其任务场景与压缩相关指标。"
       },
       "first_seen_at": "2026-11-03T14:00:01.942467+00:00",
       "last_seen_at": "2026-11-03T14:00:01.942467+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": false,
+      "summary_review": {
+        "reviewed_at": "2026-11-03T22:07:51.079149+08:00",
+        "scope": "标题与摘要对照；关键数字检查，不是全文审查或实验复现",
+        "generator": "deepseek-flash",
+        "original_fingerprint": "953fa575b7ad918f3f8d50e864c7adeb9b286b16bc4f1954655c6d8acefa18fb",
+        "edits": [
+          "删除原摘要未声称的首次主张"
+        ]
+      }
     },
     {
       "id": "2610.41291v1",
@@ -925,7 +967,7 @@
         "llm_reason": "直接命中 context compression 与长上下文推理关键词，且涉及 KV 缓存复用这一缓存压缩相关机制；其以 Attention Pairs 衡量端到端计算节省，符合你偏好有实际效率证据的方法。但需注意：它属于模型内部表示层面的上下文压缩（soft token 携带已吸收信息），并非 KV cache 淘汰/量化或 prompt 压缩，节省比例不能与 KV 缓存压缩的节省混用；且依赖特定混合架构，需人工复核其效率证据是否包含延迟与内存。"
       },
       "summary_status": "llm",
-      "summary_fingerprint": "cc7c12076b5d3ca3dad3bd6adf3489202ff44b20f0417e0ee4dea5a824c96fab",
+      "summary_fingerprint": "d0fb5b23b4b2fbabf5fa1e9833d6d2ae8867af0148915c3a70e480d01e24d46b",
       "chinese_summary": {
         "problem": "长程 LLM 智能体在持续交互中累积的上下文会带来高昂计算成本，并淹没关键决策证据；现有外部压缩器或上下文管理智能体把上下文改写为更短的硬 token 序列，但这种外部选择与模型不断演化的表示不一致，且必然有损。",
         "method": "提出 Agentic Soft-Token Compression（ASTC），一种无需训练的压缩方法：利用模型原生的循环动态（基于常用的混合 Gated Delta Network 与注意力结构）判断已被吸收的信息，将其作为 agentic soft tokens 向前携带，同时保留精确值作为 hard tokens；得到的紧凑序列减少后续层计算，并产生可复用的 KV 缓存，使节省沿智能体轨迹延续。",
@@ -936,7 +978,14 @@
       },
       "first_seen_at": "2026-11-03T14:00:01.942467+00:00",
       "last_seen_at": "2026-11-03T14:00:01.942467+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": false,
+      "summary_review": {
+        "reviewed_at": "2026-11-03T22:07:51.079149+08:00",
+        "scope": "标题与摘要对照；关键数字检查，不是全文审查或实验复现",
+        "generator": "deepseek-flash",
+        "original_fingerprint": "cc7c12076b5d3ca3dad3bd6adf3489202ff44b20f0417e0ee4dea5a824c96fab",
+        "edits": []
+      }
     },
     {
       "id": "2611.02780v1",
@@ -1049,7 +1098,7 @@
         "llm_reason": "论文直接面向多模态大模型的视觉推理，核心是推理过程中动态引入视觉证据并做视觉-语言对齐，与关键词 visual reasoning、multimodal reasoning、multimodal large language model 高度对应；其“按推理意图重聚焦视觉证据”的机制可迁移到 GUI Agent 的多步屏幕理解与证据选取，但摘要未涉及 GUI 场景或视觉指令微调，需人工复核实验设置与可迁移性。"
       },
       "summary_status": "llm",
-      "summary_fingerprint": "8fd7d75df02f0f38de73518de8c721329e5fc1a8774689eafa74f099d03a5fdf",
+      "summary_fingerprint": "835fc95dbe6cf5679b1a52cc0eebd00ceee4beba947dbbe895515f620595d84b",
       "chinese_summary": {
         "problem": "交错式多模态思维链推理中，现有方法主要从历史上下文中选取视觉证据；当推理焦点转移时，历史引导的证据仍停留在先前区域，无法覆盖下一步所需的视觉信息，作者将这种视觉证据滞后于后续推理需求的现象称为“时间证据近视”。",
         "method": "提出免训练、仅在测试时使用的框架 LPAVR。它把多令牌预测（MTP）从解码加速机制改造为前瞻信号：MTP 草稿头生成多个未来 token，目标模型并行验证并保留与其解码轨迹一致的最长前缀；该前缀包含近期未来语义，LPAVR 用它构造前瞻引导的视觉证据，并评估历史引导证据是否覆盖所指区域，覆盖足够则保留历史证据，否则切换为前瞻引导证据。",
@@ -1060,7 +1109,14 @@
       },
       "first_seen_at": "2026-11-03T14:00:01.942467+00:00",
       "last_seen_at": "2026-11-03T14:00:01.942467+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": false,
+      "summary_review": {
+        "reviewed_at": "2026-11-03T22:07:51.079149+08:00",
+        "scope": "标题与摘要对照；关键数字检查，不是全文审查或实验复现",
+        "generator": "deepseek-flash",
+        "original_fingerprint": "8fd7d75df02f0f38de73518de8c721329e5fc1a8774689eafa74f099d03a5fdf",
+        "edits": []
+      }
     },
     {
       "id": "2610.40943v1",
@@ -1171,7 +1227,7 @@
         "llm_reason": "直接命中 KV cache compression 与 context compression 关键词，且针对长上下文推理的注意力二次瓶颈；方法属于缓存侧压缩（插值选择 KV 节点），与输入 prompt 压缩和模型权重量化不同，符合你区分压缩类型的关注点。但摘要缺少端到端延迟/内存证据，且 LongBench-E 仅为初步结果，需人工复核其压缩率与质量权衡是否达到你要求的实际系统证据标准。"
       },
       "summary_status": "llm",
-      "summary_fingerprint": "e5b3c4aba67b331c8f0b2c3a2a2adad4804770f312636ae2444b0d4ef4ae7da6",
+      "summary_fingerprint": "f7cdf49aab61f7e812daf2ad589cec666e6a9e7a97d8774219d35bd7c5fd3443",
       "chinese_summary": {
         "problem": "注意力机制在上下文长度上具有二次复杂度，KV-cache 压缩是缓解该瓶颈的关键；论文要解决的是如何在保持注意力输出质量的前提下，对上下文/KV-cache 做有理论依据的压缩。",
         "method": "把注意力放到其核对应的 Hilbert 空间中，将注意力表示为两个线性映射之比，从而可对线性映射本身做插值；据此提出 GAIM（基于 Generalized Empirical Interpolation Method）和 Q-DAIM（基于 Q-Discrete Empirical Interpolation Method）两种 KV-cache 压缩方法。由于原始方法对上下文长度是二次代价，作者用 Taylor 展开、Performer 和 Random Fourier Features 构造代理模型以实现线性时间压缩，并扩展到流式注意力：按已插值上下文惩罚插值节点选择，并用新信息更新已有插值。",
@@ -1182,7 +1238,14 @@
       },
       "first_seen_at": "2026-11-03T14:00:01.942467+00:00",
       "last_seen_at": "2026-11-03T14:00:01.942467+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": false,
+      "summary_review": {
+        "reviewed_at": "2026-11-03T22:07:51.079149+08:00",
+        "scope": "标题与摘要对照；关键数字检查，不是全文审查或实验复现",
+        "generator": "deepseek-flash",
+        "original_fingerprint": "e5b3c4aba67b331c8f0b2c3a2a2adad4804770f312636ae2444b0d4ef4ae7da6",
+        "edits": []
+      }
     },
     {
       "id": "2605.04503v2",
@@ -1299,7 +1362,7 @@
         "llm_reason": "论文直接涉及多模态大模型（MLLM）的细粒度视觉变化感知、跨模态推理与幻觉评估，命中关键词multimodal large language model，并与视觉语言对齐和视觉推理评测相关；其LLM-as-a-Judge评测协议和差异描述任务对GUI Agent中界面变化检测、状态差异描述与评测设计有可迁移价值。但论文核心是基准与评测而非训练机制，且摘要缺少可核验的实验细节，需人工复核其方法严谨性与对GUI场景的迁移性。"
       },
       "summary_status": "llm",
-      "summary_fingerprint": "2d5be3ec8d88e2a53885f5e7d8441d5b2537729a82fb271913bfb197994aa8a0",
+      "summary_fingerprint": "36f14e6a2b0d6b2e7d6e4c45277d31b32bba346b76584eb016d8d0a950e3272a",
       "chinese_summary": {
         "problem": "现有图像差异描述（IDC）基准缺乏多样性和组合复杂度，且BLEU、METEOR等词重叠指标无法衡量语义一致性或惩罚幻觉，导致无法全面稳健地评估多模态大模型在细粒度变化感知与跨模态推理上的能力。",
         "method": "作者构建DiffCap-Bench基准，覆盖十类差异以确保多样性与组合复杂度；并提出基于人工验证差异列表（Difference Lists）的LLM-as-a-Judge评测协议，用大模型裁判判断模型是否既捕获又正确描述视觉变化，并对当前先进MLLM进行广泛评测。",
@@ -1310,7 +1373,14 @@
       },
       "first_seen_at": "2026-11-03T14:00:01.942467+00:00",
       "last_seen_at": "2026-11-03T14:00:01.942467+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": false,
+      "summary_review": {
+        "reviewed_at": "2026-11-03T22:07:51.079149+08:00",
+        "scope": "标题与摘要对照；关键数字检查，不是全文审查或实验复现",
+        "generator": "deepseek-flash",
+        "original_fingerprint": "2d5be3ec8d88e2a53885f5e7d8441d5b2537729a82fb271913bfb197994aa8a0",
+        "edits": []
+      }
     },
     {
       "id": "2611.01864v1",
@@ -1422,7 +1492,7 @@
         "llm_reason": "论文直接讨论循环状态量化与 KV cache 量化的数值差异，命中 KV cache quantization 关键词，并涉及解码阶段缓存/状态的压缩与精度分配，属于缓存压缩而非输入压缩或权重量化。其端到端 vLLM 解码加速证据符合你偏好实际延迟证据的要求。但对象是线性循环模型的固定状态，不是 softmax 注意力的 KV cache 淘汰或稀疏注意力，因此与你的核心场景只是部分重叠，需要人工复核其方法能否迁移到 KV cache 量化。"
       },
       "summary_status": "llm",
-      "summary_fingerprint": "f44daff49c446059d1e8ceba01cba337f196acab29f9c394435dc1746fa093aa",
+      "summary_fingerprint": "ba58004b1507643739e3ac54d845b6256dc5137162a8652ba0034c82fcb8e29e",
       "chinese_summary": {
         "problem": "线性循环语言模型用固定大小的循环状态替代 softmax 注意力不断增长的 KV cache，但现有量化方法主要针对 softmax Transformer 设计，其数值特性和推理状态与循环模型不同，因此需要弄清循环模型量化的设计空间。",
         "method": "论文把量化目标分为两类：extra-state quantization 针对循环状态之外的权重和激活，intra-state quantization 针对解码时被反复更新的循环状态本身。作者提出 LoReS 状态量化流程，包含按 value 轴分组缩放以匹配输出通道幅度、基于衰减的混合精度以保护衰减慢的头或通道、以及随机舍入以抑制重复重量化下的误差累积，并在 vLLM 中实现。",
@@ -1433,7 +1503,14 @@
       },
       "first_seen_at": "2026-11-03T14:00:01.942467+00:00",
       "last_seen_at": "2026-11-03T14:00:01.942467+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": false,
+      "summary_review": {
+        "reviewed_at": "2026-11-03T22:07:51.079149+08:00",
+        "scope": "标题与摘要对照；关键数字检查，不是全文审查或实验复现",
+        "generator": "deepseek-flash",
+        "original_fingerprint": "f44daff49c446059d1e8ceba01cba337f196acab29f9c394435dc1746fa093aa",
+        "edits": []
+      }
     },
     {
       "id": "2611.03007v1",
@@ -1546,7 +1623,7 @@
         "llm_reason": "论文属于多模态大模型在细粒度视觉质量推理上的应用，命中 multimodal large language model 关键词，其“全局-局部证据推理+指令微调数据构建”机制与视觉推理、视觉语言对齐和视觉指令调优有方法层面的关联，可迁移思路包括证据驱动的细粒度视觉推理训练与评测设计；但应用场景为直播相机调优，与 GUI Agent 的界面理解、空间定位和操作决策不直接对应，需人工复核其推理机制与数据构造是否可迁移。"
       },
       "summary_status": "llm",
-      "summary_fingerprint": "689f2c0f9b887ed7dd3d60997dd6028d6aa6b75fcf35c8ea9ae7447ffed7c68d",
+      "summary_fingerprint": "48bded14023d8730d29599e3db710e8ccb96b6cd6aed301b54935099c39ccf75",
       "chinese_summary": {
         "problem": "直播相机调优中，现有图像质量评估（IQA）方法难以识别图像间细微的质量差异，也缺乏对细粒度差异的解释能力和相机参数调整建议。",
         "method": "构建 FGLive-Comments 指令微调数据集，包含细粒度图像对偏好标注以及基于全局和局部视觉证据的质量推理与参数调整建议；在此基础上训练多模态大模型 Q-CamTuning，采用渐进式“感知-证据-引导”框架，学习质量感知视觉表示、利用全局-局部证据增强细粒度推理，并将质量问题映射到相机参数调整方向。",
@@ -1557,7 +1634,14 @@
       },
       "first_seen_at": "2026-11-03T14:00:01.942467+00:00",
       "last_seen_at": "2026-11-03T14:00:01.942467+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": false,
+      "summary_review": {
+        "reviewed_at": "2026-11-03T22:07:51.079149+08:00",
+        "scope": "标题与摘要对照；关键数字检查，不是全文审查或实验复现",
+        "generator": "deepseek-flash",
+        "original_fingerprint": "689f2c0f9b887ed7dd3d60997dd6028d6aa6b75fcf35c8ea9ae7447ffed7c68d",
+        "edits": []
+      }
     },
     {
       "id": "2611.02306v1",
@@ -1676,7 +1760,7 @@
         "llm_reason": "论文属于多模态大模型与视觉语言模型方向，涉及视觉语言对齐和3D空间理解，其视角鲁棒性机制与空间推理评测可迁移到GUI Agent中跨截图/跨视角的界面理解与空间定位问题；但任务域是3D多视角场景而非2D GUI或通用图像/视频理解，关键词命中偏泛，需人工复核其方法对GUI场景的迁移价值。"
       },
       "summary_status": "llm",
-      "summary_fingerprint": "214f9fcef05b207c80e06f85701f3a2b30eac96acab0c7f432d89060f12f2038",
+      "summary_fingerprint": "d612a832c47062dea195d27bc86b21bc454287fccbe9571ce720ff32a1f0e491",
       "chinese_summary": {
         "problem": "多模态大模型从多视角RGB观测理解3D场景时，同一物体和查询在不同相机视角下会产生不一致的目标相关回答，作者称之为视角诱导的语义漂移。",
         "method": "提出LieVLM，一种基于李群路由的框架：用VGGT提取几何token，预测局部旋转参数和通道级路由系数；在学习到的三维子空间内对投影视觉特征施加局部SO(3)变换，经闭式Padé–Cayley映射得到相对恒等变换的修正量，再投影回并门控融入原始视觉与几何特征，从而在保留预训练语义和直接空间上下文的同时学习视角相关的特征调整。",
@@ -1687,7 +1771,14 @@
       },
       "first_seen_at": "2026-11-03T14:00:01.942467+00:00",
       "last_seen_at": "2026-11-03T14:00:01.942467+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": false,
+      "summary_review": {
+        "reviewed_at": "2026-11-03T22:07:51.079149+08:00",
+        "scope": "标题与摘要对照；关键数字检查，不是全文审查或实验复现",
+        "generator": "deepseek-flash",
+        "original_fingerprint": "214f9fcef05b207c80e06f85701f3a2b30eac96acab0c7f432d89060f12f2038",
+        "edits": []
+      }
     },
     {
       "id": "2611.03377v1",
@@ -1799,18 +1890,27 @@
         "llm_reason": "论文直接研究视觉语言模型在多选题基准上的评测可靠性，涉及VLM输出解析、评分规则和基准审计，与多模态理解评测方法相关；但它不提出新的VLM机制、训练方法或GUI Agent可迁移能力，主要价值在评测方法论，需人工复核是否与你的GUI Agent评测需求直接相关。"
       },
       "summary_status": "llm",
-      "summary_fingerprint": "2837d0590fbd43758ffc25b87281a8ff02df4f0e867bd1b1167e3bb1c46e77f5",
+      "summary_fingerprint": "b4bd764a7d86c8a727bbaf5f9e785dbe5e4052704667d901e62250381e73b7db",
       "chinese_summary": {
         "problem": "多模态大模型多选题基准的评分规则通常埋在代码中、未经论证，却直接决定公布的准确率；论文要审计这些评分器在模型输出非规范自由文本时造成的评分偏差。",
         "method": "复现八个同行评审基准的官方评分器，在五个可单卡16GB GPU运行的开放视觉语言模型上测试；引入盲审的人评加LLM裁判裁决流程（Cohen's kappa=0.956）还原模型实际答案，并对比不同评分规则（正则匹配、就近选项、弃权、似然打分）对准确率的影响。",
-        "innovation": "首次系统审计多模态LLM基准评分器本身而非数据集；量化同一输出下评分规则可造成最高22个百分点的准确率差异，并指出伤害主要来自fallback而非模型啰嗦；提出基准应报告非合规率和至少两种评分规则。",
+        "innovation": "系统审计多模态LLM基准评分器本身而非数据集；量化同一输出下评分规则可造成最高22个百分点的准确率差异，并指出伤害主要来自fallback而非模型啰嗦；提出基准应报告非合规率和至少两种评分规则。",
         "evidence": "摘要给出可核验证据：八个基准、五个VLM、单卡16GB；评分规则单独造成最高22点差异；非合规率最高的基准因评分器弃权而伪影为零；非合规率0.000的推理模型仍因正则匹配不同而摆动9.5点；人评加LLM裁判一致性kappa=0.956。",
         "limitations": "摘要未说明八个基准的具体名称、五个VLM的规模与类型、22点差异对应的具体基准和模型组合，也未给出各评分规则的系统性对比表格；需阅读全文确认复现细节和统计显著性。",
         "why_relevant": "论文直接研究视觉语言模型在多选题基准上的评测可靠性，涉及VLM输出解析、评分规则和基准审计，与多模态理解评测方法相关；但它不提出新的VLM机制、训练方法或GUI Agent可迁移能力，主要价值在评测方法论，需人工复核是否与你的GUI Agent评测需求直接相关。"
       },
       "first_seen_at": "2026-11-03T14:00:01.942467+00:00",
       "last_seen_at": "2026-11-03T14:00:01.942467+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": false,
+      "summary_review": {
+        "reviewed_at": "2026-11-03T22:07:51.079149+08:00",
+        "scope": "标题与摘要对照；关键数字检查，不是全文审查或实验复现",
+        "generator": "deepseek-flash",
+        "original_fingerprint": "2837d0590fbd43758ffc25b87281a8ff02df4f0e867bd1b1167e3bb1c46e77f5",
+        "edits": [
+          "删除原摘要未声称的首次主张"
+        ]
+      }
     },
     {
       "id": "2609.15334v2",
@@ -1926,7 +2026,7 @@
         "llm_reason": "论文涉及多模态大模型与视觉语言对齐，且概念瓶颈加空间定位的机制可能迁移到需要可解释中间表征的视觉推理或 GUI Agent 场景；但任务为医学报告生成，非 GUI 或通用视觉推理，关键词仅命中 multimodal large language model，需人工复核其机制可迁移性。"
       },
       "summary_status": "llm",
-      "summary_fingerprint": "e5cb89ee672b8ef79039420b59ff8f4367d09648ae6405f1160d4ebfe79f4f8b",
+      "summary_fingerprint": "a1cde8f35df493bd5ced6d8814ec5c7a4d26514a872fb9c227ecd1858a78ae10",
       "chinese_summary": {
         "problem": "现有医学多模态大模型生成结构化报告时多采用端到端融合，未显式建模临床定义的中间属性，导致视觉定位与可解释性不足。",
         "method": "提出 CORAL 框架：先用提示驱动的医学分割模型定位病灶，再通过概念瓶颈模块预测多类临床属性，得到文本概念 token；这些 token 与掩码调制的视觉特征在 MLLM 中融合，用于结构化报告生成与诊断预测。",
@@ -1937,7 +2037,14 @@
       },
       "first_seen_at": "2026-11-03T14:00:01.942467+00:00",
       "last_seen_at": "2026-11-03T14:00:01.942467+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": false,
+      "summary_review": {
+        "reviewed_at": "2026-11-03T22:07:51.079149+08:00",
+        "scope": "标题与摘要对照；关键数字检查，不是全文审查或实验复现",
+        "generator": "deepseek-flash",
+        "original_fingerprint": "e5cb89ee672b8ef79039420b59ff8f4367d09648ae6405f1160d4ebfe79f4f8b",
+        "edits": []
+      }
     },
     {
       "id": "2611.02581v1",
@@ -1984,7 +2091,9 @@
             "vision-language model"
           ],
           "priority": 1.6,
-          "ranking_score": 0.5968
+          "ranking_score": 0.5968,
+          "llm_reason": "属于 VLM 在临床超声理解与结构化报告生成中的应用，涉及多智能体分工和共识聚合；可作为多模态应用参考。摘要不涉及 GUI 操作、视觉 token 裁剪或 KV 压缩，对主要效率研究方向的关联较弱。",
+          "review_note": "依据摘要和关键词重新归类；分数来自本地匹配规则"
         },
         {
           "topic_id": "ai_exploration",
@@ -2038,29 +2147,42 @@
         }
       ],
       "best_match": {
-        "topic_id": "vlm_efficiency",
-        "topic_name": "多模态推理效率与视觉 Token 压缩",
-        "score": 0.306,
+        "topic_id": "vlm_core",
+        "topic_name": "VLM 与多模态理解",
+        "score": 0.373,
         "level": "low",
-        "reason": "arXiv 分类重合：cs.CL、cs.CV、cs.LG",
-        "keyword_hits": [],
-        "priority": 1.8,
-        "ranking_score": 0.5508,
-        "llm_reason": "该论文属于多模态临床 VLM 应用，与研究方向仅在“多模态/VLM”层面泛化相关；它不涉及视觉 token 裁剪、选择、合并、动态分辨率、多模态缓存或 GUI Agent 推理优化，也未报告准确率与端到端延迟、token/KV 规模、整卡显存的权衡。其多智能体加 judge 的多次 VLM 调用反而可能构成推理效率瓶颈，可作为效率优化工作的对照或动机引用，但需人工复核是否值得精读。"
+        "reason": "关键词命中：vision-language model；arXiv 分类重合：cs.CL、cs.CV",
+        "keyword_hits": [
+          "vision-language model"
+        ],
+        "priority": 1.6,
+        "ranking_score": 0.5968,
+        "llm_reason": "属于 VLM 在临床超声理解与结构化报告生成中的应用，涉及多智能体分工和共识聚合；可作为多模态应用参考。摘要不涉及 GUI 操作、视觉 token 裁剪或 KV 压缩，对主要效率研究方向的关联较弱。",
+        "review_note": "依据摘要和关键词重新归类；分数来自本地匹配规则"
       },
       "summary_status": "llm",
-      "summary_fingerprint": "1f7bc1eb443633c3e8a9acf804015a9050bfa6b459c9a27c51d8855930b0b33a",
+      "summary_fingerprint": "0ffc5b26b817bd760d084cc10ab2c0a91d240cd167484e602e29d4f382cfb456",
       "chinese_summary": {
         "problem": "论文要解决肝脏超声报告生成中，现有生成式视觉语言模型仅依赖单一推理路径、直接把超声外观映射为文本描述，难以应对细微视觉证据、异质病变模式和配对监督有限的问题。",
         "method": "提出 SMILE 结构化多智能体临床推理框架：由图像解读智能体做形态描述、临床分期推理智能体做病程推理、VQA 智能体做定向问答，三个专家智能体分别输出后，再由一个 judge VLM 通过共识过滤提示进行汇总与审查，生成统一且临床连贯的报告。",
-        "innovation": "将单一 VLM 推理路径替换为多专家智能体分工加 judge 引导的共识聚合机制；针对肝脏超声的细微视觉证据与异质病变模式设计互补的形态、临床分期与 VQA 三类推理角色；面向配对监督稀缺场景，以推理阶段的多智能体协作而非额外标注提升输出质量。",
+        "innovation": "将单一 VLM 推理路径替换为多专家智能体分工加 judge 引导的共识聚合机制；针对肝脏超声的细微视觉证据与异质病变模式设计互补的形态、临床分期与 VQA 三类推理角色；面向配对监督稀缺场景，以推理阶段的多智能体协作提升输出质量。",
         "evidence": "在公开肝脏超声数据集和内部临床数据集上，SMILE 相比 SOTA VLM 最高提升 ROUGE-1 19.0%、临床 F1 18.8%，VQA F1 在公开与内部数据集分别为 0.82 和 0.65；摘要未报告推理延迟、token/KV 规模或显存等效率指标。",
-        "limitations": "多智能体加 judge 的流程会显著增加推理调用次数与端到端延迟，但摘要未给出任何效率或成本数据；共识机制依赖 judge VLM 的可靠性，缺乏消融与失败案例分析；内部数据集规模与统计显著性未说明；未涉及视觉 token 压缩或动态分辨率等效率手段。",
-        "why_relevant": "该论文属于多模态临床 VLM 应用，与研究方向仅在“多模态/VLM”层面泛化相关；它不涉及视觉 token 裁剪、选择、合并、动态分辨率、多模态缓存或 GUI Agent 推理优化，也未报告准确率与端到端延迟、token/KV 规模、整卡显存的权衡。其多智能体加 judge 的多次 VLM 调用反而可能构成推理效率瓶颈，可作为效率优化工作的对照或动机引用，但需人工复核是否值得精读。"
+        "limitations": "多智能体加 judge 的流程可能增加调用次数、推理延迟或成本，需实测；摘要未报告这些效率数据，也未说明共识机制的消融、失败案例、内部数据集规模和统计显著性。摘要不涉及视觉 token 压缩或动态分辨率。",
+        "why_relevant": "属于 VLM 在临床超声理解与结构化报告生成中的应用，涉及多智能体分工和共识聚合；可作为多模态应用参考。摘要不涉及 GUI 操作、视觉 token 裁剪或 KV 压缩，对主要效率研究方向的关联较弱。"
       },
       "first_seen_at": "2026-11-03T14:00:01.942467+00:00",
       "last_seen_at": "2026-11-03T14:00:01.942467+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": false,
+      "summary_review": {
+        "reviewed_at": "2026-11-03T22:07:51.079149+08:00",
+        "scope": "标题与摘要对照；关键数字检查，不是全文审查或实验复现",
+        "generator": "deepseek-flash",
+        "original_fingerprint": "1f7bc1eb443633c3e8a9acf804015a9050bfa6b459c9a27c51d8855930b0b33a",
+        "edits": [
+          "效率分类改为VLM应用",
+          "删除无依据标注对比，并把未测延迟改为待验证推测"
+        ]
+      }
     }
   ],
   "stats": {
@@ -2153,13 +2275,15 @@
     "dropped_low_relevance_count": 0,
     "max_stored_papers": 900,
     "max_data_bytes": 8388608,
-    "data_bytes": 134801,
+    "data_bytes": 140513,
     "storage_trimmed_count": 0,
     "storage_trimmed_by_level": {
       "high": 0,
       "medium": 0,
       "low": 0,
       "unknown": 0
-    }
-  }
+    },
+    "editorial_review_count": 5
+  },
+  "reviewed_at_iso": "2026-11-03T22:07:51.079149+08:00"
 }
