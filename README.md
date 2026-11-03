@@ -1,4 +1,4 @@
-# 博远的论文日报
+# boy的论文日报
 
 基于 [Futuresxy/paper-daily](https://github.com/Futuresxy/paper-daily) 定制：自动检索 arXiv，用 DeepSeek 生成中文技术分析，再由 GitHub Pages 展示。
 
