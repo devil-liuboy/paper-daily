@@ -20,6 +20,10 @@ on:
         description: "仅首次创建预算账本；已有账本不会重置"
         default: false
         type: boolean
+      refresh_only:
+        description: "仅重新发布已有日报，不抓取论文、不调用模型"
+        default: false
+        type: boolean
   issues:
     types: [opened, edited, reopened]
 
@@ -63,6 +67,7 @@ jobs:
           BUDGET_ALLOW_INIT: ${{ github.event_name == 'workflow_dispatch' && inputs.initialize_budget && 'true' || 'false' }}
         run: python -m scripts.state_store hydrate
       - name: Collect and summarize
+        if: ${{ !inputs.refresh_only }}
         env:
           ENABLE_ISSUE_CONFIG: "true"
           CONFIG_ISSUE_TITLE: Research Interests
@@ -96,6 +101,7 @@ jobs:
           python -c "import os; assert os.getenv('DEEPSEEK_API_KEY'), 'DEEPSEEK_API_KEY secret is missing'"
           python -m scripts.collect_papers
       - name: Save durable paper history
+        if: ${{ !inputs.refresh_only }}
         run: python -m scripts.state_store snapshot
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

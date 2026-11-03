@@ -4,7 +4,7 @@
 
 本说明对应个人定制版。上游原始说明保留在 [UPSTREAM_README.md](UPSTREAM_README.md)，其中的默认模型、运行时间和会议来源不适用于本版。
 
-部署后的预期网址为 <https://devil-liuboy.github.io/paper-daily/>。**实际是否上线，以仓库 Settings → Pages 给出的地址及成功部署记录为准；本说明不代表云端验收已完成。**
+已部署网址为 <https://devil-liuboy.github.io/paper-daily/>。[首次真实运行](https://github.com/devil-liuboy/paper-daily/actions/runs/41649361953)已成功完成采集、15篇 DeepSeek 摘要及发布；实际后续状态请查看仓库 Actions。
 
 ## 日常怎么看
 
@@ -44,6 +44,7 @@
 - 定时运行使用上次成功记录，并保留 24 小时重叠窗口；手动运行按所选回看天数查询。重叠论文不占新稿名额，摘要按内容指纹复用。
 - 存储上限为 900 篇，保留策略使用最近 60 天窗口，旧的高/中匹配论文可能继续保留；这不是完整论文数据库。
 - 之后手动运行通常选择 `lookback_days=2`、`max_summaries=15`、`initialize_budget=false`。
+- 只想重新发布已有日报（例如改了页面样式），选择 `refresh_only=true`；这不会抓取新论文或调用模型。
 - 暂停自动更新：打开 **Actions → Paper Daily → 右侧菜单 → Disable workflow**。恢复时选择 Enable workflow。禁用后原网页仍可访问，只是不再更新。
 
 ## 修改研究方向

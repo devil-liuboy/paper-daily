@@ -1693,9 +1693,12 @@ def build_llm_prompt(topic: Topic, paper: dict[str, Any], base_match: dict[str, 
 请根据论文标题、摘要、分类和我的研究方向，输出精确中文分析。目标不是逐句翻译，而是综合整篇摘要快速判断这篇论文是否值得阅读。
 要求：
 1. 先识别论文真正解决的问题、核心机制、实验或系统证据，再翻译成自然中文。
-2. 不要夸大摘要中没有的信息；如果证据不足，请明确说明。
-3. 相关性判断要严格，说明它具体匹配哪些关键词、场景或系统瓶颈。
-4. 如果论文只是泛泛相关，请把 match_level 降为 medium 或 low，并在 why_relevant 里说明需要人工复核。
+2. 不要夸大摘要中没有的信息；实验数字和结论须写明为作者报告，缺少实验细节或数据时明确写证据不足。
+3. 证据充分程度与研究方向相关性分开判断：缺少实验数字不等于方向不相关，方向相关也不等于结论可靠。
+4. 相关性只根据论文研究的问题、方法、场景与我的研究方向判断；说明具体联系，不得引用初筛分数、初筛等级或检索排名作为理由。
+5. 如果论文只是泛泛相关，请把 match_level 设为 medium 或 low，并在 why_relevant 里说明具体不匹配或需要人工复核之处。
+6. 不得擅自添加“首次”“首个”“领先”等优先性或比较性断言；只有摘要明确这样声称时才能转述，并标注“作者声称”，不能作为已验证事实。
+7. 延迟、吞吐、显存、计算量及任务成功率等效果，只有摘要明确报告测量结果时才能写成已观察到的收益；未测量的推断只能写“可能”或“需验证”，不能用 token 减少比例替代实际加速或显存收益。
 
 我的研究方向：
 名称：{topic.name}
@@ -1708,17 +1711,12 @@ def build_llm_prompt(topic: Topic, paper: dict[str, Any], base_match: dict[str, 
 arXiv 分类：{", ".join(paper.get("categories", []))}
 {abstract_label}：{paper.get("summary", "")}
 
-基础匹配信息：
-分数：{base_match.get("score")}
-等级：{base_match.get("level")}
-原因：{base_match.get("reason")}
-
 请输出 JSON，字段必须为：
 {{
   "problem": "论文要解决的问题，中文，1-2句，避免空泛背景",
   "method": "核心方法，中文，2-3句，包含关键技术组件或系统流程",
   "innovation": "相对已有工作的具体创新点，中文，2-3点合并成一段",
-  "evidence": "摘要中可核验的实验、理论或系统证据；没有则写证据不足",
+  "evidence": "摘要中作者报告的实验、理论或系统证据，区分作者报告与独立验证；没有则写证据不足",
   "limitations": "可能局限或需要阅读全文确认的点",
   "why_relevant": "为什么匹配我的研究方向",
   "match_score_adjustment": 0.0,
@@ -1802,7 +1800,7 @@ def summary_fingerprint(topic: Topic, paper: dict[str, Any]) -> str:
         "topic": topic.__dict__,
         "provider": os.getenv("LLM_PROVIDER", "legacy"),
         "model": os.getenv("LLM_MODEL", "deepseek-chat"),
-        "prompt_version": 2,
+        "prompt_version": 3,
     }
     return hashlib.sha256(json.dumps(material, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()
 
@@ -2194,9 +2192,9 @@ def collect(
             continue
 
         matches = [score_paper(topic, paper) for topic in topics]
-        # Classify by relevance first. Interest priority orders papers, and must
-        # not turn a navigation paper into a GUI paper to bypass topic caps.
-        matches.sort(key=lambda item: item["score"], reverse=True)
+        # Explicit keyword evidence beats broad category overlap. Priority
+        # orders papers later and never changes their relevance score/topic.
+        matches.sort(key=lambda item: (bool(item["keyword_hits"]), item["score"]), reverse=True)
         best_match = matches[0]
         if not is_relevant_enough(paper, best_match):
             filtered_low_relevance += 1
@@ -2245,7 +2243,7 @@ def collect(
     if conference_enrichment_stats["conference_arxiv_enrichment_succeeded"]:
         for paper in conference_recent_papers:
             matches = [score_paper(topic, paper) for topic in topics]
-            matches.sort(key=lambda item: item["score"], reverse=True)
+            matches.sort(key=lambda item: (bool(item["keyword_hits"]), item["score"]), reverse=True)
             paper["matches"] = matches
             paper["best_match"] = matches[0]
         conference_recent_papers.sort(key=ranking_key, reverse=True)
@@ -2269,6 +2267,8 @@ def collect(
         previous = previous_by_key.get(paper_key(paper), {})
         if previous.get("summary_status") in {"llm", "cache"} and previous.get("summary_fingerprint") == fingerprint and previous.get("chinese_summary"):
             paper["summary_status"] = "cache"
+            if previous.get("summary_review"):
+                paper["summary_review"] = copy.deepcopy(previous["summary_review"])
             summaries_by_id[str(paper.get("id", ""))] = (copy.deepcopy(previous["chinese_summary"]), copy.deepcopy(previous["best_match"]))
         elif len(llm_jobs) < max(0, max_summaries):
             llm_jobs.append((best_topic, paper))

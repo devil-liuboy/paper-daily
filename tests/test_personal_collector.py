@@ -103,6 +103,28 @@ class PersonalCollectorTest(unittest.TestCase):
         self.assertEqual(high_match["score"], low_match["score"])
         self.assertGreater(high_match["ranking_score"], low_match["ranking_score"])
 
+    def test_vlm_keyword_match_beats_higher_category_only_efficiency_score(self):
+        vlm = c.Topic("vlm_core", "VLM", "", [
+            "vision-language model", "visual reasoning", "multimodal reasoning", "image understanding",
+            "video understanding", "instruction tuning", "spatial understanding", "visual question answering",
+        ], ["cs.CV", "cs.CL", "cs.AI", "cs.HC"], 1.6)
+        efficiency = c.Topic("vlm_efficiency", "Efficiency", "", [
+            "visual token pruning", "visual token compression", "visual token selection", "visual token merging",
+            "multimodal token compression", "efficient vision-language", "VLM acceleration", "adaptive visual resolution",
+        ], ["cs.CV", "cs.CL", "cs.LG"], 1.8)
+        self.config["topics"] = [efficiency.__dict__, vlm.__dict__]
+        paper = self.paper("SMILE: General recognition")
+        paper["summary"] = "The vision-language model aligns images and captions for general recognition. " * 5
+        paper["categories"] = ["cs.CV", "cs.CL", "cs.LG"]
+        vlm_match, efficiency_match = c.score_paper(vlm, paper), c.score_paper(efficiency, paper)
+        self.assertGreater(efficiency_match["score"], vlm_match["score"])
+        self.assertFalse(efficiency_match["keyword_hits"])
+        self.assertEqual(vlm_match["keyword_hits"], ["vision-language model"])
+        result, _ = self.run_collect([paper], max_summaries=0)
+        best = result["papers"][0]["best_match"]
+        self.assertEqual(best["topic_id"], "vlm_core")
+        self.assertEqual(best["score"], vlm_match["score"])
+
     def test_daily_topic_caps_and_priority(self):
         nav = c.Topic("nav", "Navigation", "", [], [], .25, 1)
         papers = []

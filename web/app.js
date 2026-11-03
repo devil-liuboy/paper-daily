@@ -250,7 +250,9 @@ function renderPaper(paper) {
   summaryStatusNode.textContent = summaryLabels[summaryStatus];
   summaryStatusNode.dataset.status = summaryStatus;
 
-  setText(node, ".paper-date", `发布 ${formatDate(paper.published)} · 收录 ${formatDate(collectionTime(paper))}`);
+  const revised = dateKey(paper.updated) && dateKey(paper.updated) !== dateKey(paper.published)
+    ? ` · 修订 ${formatDate(paper.updated)}` : "";
+  setText(node, ".paper-date", `初发 ${formatDate(paper.published)}${revised} · 收录 ${formatDate(collectionTime(paper))}`);
   setText(node, ".paper-source", paper.source || "paper");
   setText(node, ".paper-title", paper.title);
   setText(node, ".paper-authors", (paper.authors || []).slice(0, 8).join(", "));
