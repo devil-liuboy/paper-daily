@@ -568,13 +568,17 @@
         "day": "2026-11-05",
         "started_at": "2026-11-05T15:50:57.353921+08:00",
         "model": "deepseek-flash",
-        "status": "reserved",
+        "status": "completed",
         "reserved_micros": 31914,
-        "charged_micros": 31914,
+        "charged_micros": 6730,
         "input_token_bound": 8757,
         "max_output_tokens": 1800,
         "input_cny_per_million": "2",
-        "output_cny_per_million": "8"
+        "output_cny_per_million": "8",
+        "finished_at": "2026-11-05T15:51:05.201126+08:00",
+        "outcome": "success",
+        "prompt_tokens": 1009,
+        "completion_tokens": 589
       },
       {
         "id": "b6899cb7d9414b428c0e28901f1bdc34",
