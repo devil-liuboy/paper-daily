@@ -766,6 +766,19 @@
         "outcome": "success",
         "prompt_tokens": 1043,
         "completion_tokens": 589
+      },
+      {
+        "id": "73f9707471cb4beba82e7c0fb79bdfcc",
+        "day": "2026-11-06",
+        "started_at": "2026-11-06T15:50:55.262182+08:00",
+        "model": "deepseek-flash",
+        "status": "reserved",
+        "reserved_micros": 32464,
+        "charged_micros": 32464,
+        "input_token_bound": 9032,
+        "max_output_tokens": 1800,
+        "input_cny_per_million": "2",
+        "output_cny_per_million": "8"
       }
     ]
   }
