@@ -40,7 +40,7 @@
       <section class="overview" aria-label="概览">
         <div class="overview-title">
           <p>Research Radar</p>
-          <h2 id="viewTitle">最新论文</h2>
+          <h2 id="viewTitle">每日论文推荐</h2>
         </div>
         <div class="metric-grid">
           <div class="metric">
@@ -64,7 +64,7 @@
 
       <section class="toolbar" aria-label="筛选">
         <div class="collection-tabs" role="tablist" aria-label="论文集合">
-          <button class="collection-tab active" type="button" data-collection="daily">每日新论文</button>
+          <button class="collection-tab active" type="button" data-collection="daily">每日论文推荐</button>
           <button class="collection-tab" type="button" data-collection="conference" hidden>顶会精品</button>
         </div>
         <div class="tabs" role="tablist" aria-label="视图">
@@ -99,7 +99,7 @@
         </div>
       </section>
 
-      <p class="reading-note">优先关注 GUI Agent、VLM 与效率研究，少量探索其他 AI 和地下退化导航。按 arXiv 最近更新时间检索，包含新发与修订论文。中文分析仅基于标题与摘要；实验数字为作者报告，未经独立复现。匹配度表示与研究方向的相关程度，不是论文质量等级。</p>
+      <p class="reading-note">每天最多新增 10 篇，目标为 6 篇近期＋4 篇历史，数量不足时相互补位。优先关注 GUI Agent、VLM 与效率研究，少量探索其他 AI 和地下退化导航；历史部分轮换检索近 5 年论文，初发超过 30 天标为历史论文。当日按收录日期展示，不代表当天发表。北京时间 09:00 调度，可能延迟；DeepSeek 程序月预算 10 元。中文分析仅基于标题与摘要；实验数字为作者报告，未经独立复现。匹配度表示研究相关性，不是论文质量等级。</p>
       <p id="runStatus" class="run-status" role="status" hidden></p>
 
       <section class="content">
@@ -164,6 +164,6 @@
       </article>
     </template>
 
-    <script src="./app.js?v=20261103-reviewed"></script>
+    <script src="./app.js?v=20261110-mixed"></script>
   </body>
 </html>

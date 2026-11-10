@@ -576,6 +576,30 @@ def fetch_arxiv(topic: Topic, max_results: int) -> list[dict[str, Any]]:
     return papers
 
 
+def historical_window(now: dt.datetime) -> tuple[dt.datetime, dt.datetime]:
+    """Rotate across five rolling annual windows, using the Beijing date."""
+    years = max(1, min(20, env_int("HISTORICAL_YEARS", 5)))
+    day = now.astimezone(dt.timezone(dt.timedelta(hours=8))).date()
+    bucket = day.toordinal() % years
+    end = now - dt.timedelta(days=30 + 365 * bucket)
+    return end - dt.timedelta(days=365), end
+
+
+def fetch_historical_arxiv(topic: Topic, max_results: int, now: dt.datetime) -> list[dict[str, Any]]:
+    start, end = historical_window(now)
+    query = (f"({arxiv_query_for_topic(topic)}) AND "
+             f"submittedDate:[{start:%Y%m%d%H%M} TO {end:%Y%m%d%H%M}]")
+    papers = fetch_arxiv_query(query, max_results, "relevance", "descending", f"{topic.name} history")
+    for paper in papers:
+        paper["seed_topic"] = topic.id
+    return papers
+
+
+def is_historical_paper(paper: dict[str, Any], now: dt.datetime) -> bool:
+    published = parse_datetime(str(paper.get("published", "")))
+    return bool(published and published < now - dt.timedelta(days=30))
+
+
 def title_match_key(title: str) -> str:
     text = html.unescape(title).lower()
     text = re.sub(r"\barxiv:\d{4}\.\d+(v\d+)?\b", " ", text)
@@ -1825,6 +1849,52 @@ def select_daily_papers(papers: list[dict[str, Any]], topics: list[Topic], limit
     return selected
 
 
+def select_mixed_daily_papers(
+    papers: list[dict[str, Any]], topics: list[Topic], limit: int,
+    historical_target: int, already_today: list[dict[str, Any]], now: dt.datetime,
+) -> list[dict[str, Any]]:
+    """Share the daily total and topic caps across runs; fill unused slots."""
+    remaining = max(0, limit - len(already_today))
+    if not remaining:
+        return []
+    caps = {topic.id: topic.max_daily for topic in topics}
+    counts: dict[str, int] = {}
+    for paper in already_today:
+        topic_id = (paper.get("best_match") or {}).get("topic_id", "")
+        counts[topic_id] = counts.get(topic_id, 0) + 1
+    historical_count = sum(is_historical_paper(p, now) for p in already_today)
+    targets = {
+        "historical": max(0, min(limit, historical_target) - historical_count),
+        "recent": max(0, limit - historical_target - (len(already_today) - historical_count)),
+    }
+    ranked = sorted(papers, key=ranking_key, reverse=True)
+    selected: list[dict[str, Any]] = []
+    keys: set[str] = set()
+
+    def take(paper: dict[str, Any]) -> bool:
+        key = paper_key(paper)
+        topic_id = paper["best_match"]["topic_id"]
+        if len(selected) >= remaining or key in keys:
+            return False
+        if caps.get(topic_id, 0) and counts.get(topic_id, 0) >= caps[topic_id]:
+            return False
+        selected.append(paper)
+        keys.add(key)
+        counts[topic_id] = counts.get(topic_id, 0) + 1
+        return True
+
+    for kind in ("recent", "historical"):
+        taken = 0
+        for paper in ranked:
+            if taken >= targets[kind]:
+                break
+            if paper.get("recommendation_kind") == kind and take(paper):
+                taken += 1
+    for paper in ranked:
+        take(paper)
+    return selected
+
+
 def best_match_level(paper: dict[str, Any]) -> str:
     return str((paper.get("best_match") or {}).get("level") or "low").lower()
 
@@ -2050,6 +2120,17 @@ def collect(
     cached_conference_years_by_source = cached_conference_years(existing_conference_payload)
     cutoff, collection_mode = collection_cutoff(existing_payload, now, days, incremental_since_last_run)
     previous_daily_by_key = {paper_key(p): p for p in existing_payload.get("papers", [])}
+    seen_daily_keys = set(existing_payload.get("seen_paper_keys", [])) | set(previous_daily_by_key)
+    historical_target = max(0, env_int("HISTORICAL_DAILY_TARGET", 0))
+    historical_enabled = historical_target > 0
+    beijing = dt.timezone(dt.timedelta(hours=8))
+    today = now.astimezone(beijing).date()
+    already_today = [p for p in previous_daily_by_key.values()
+                     if (seen_at := parse_datetime(str(p.get("first_seen_at") or existing_payload.get("generated_at_iso", ""))))
+                     and seen_at.astimezone(beijing).date() == today]
+    saved_selection = existing_payload.get("daily_selection", {})
+    if saved_selection.get("date") == today.isoformat():
+        already_today = list({paper_key(p): p for p in [*saved_selection.get("papers", []), *already_today]}.values())
     previous_by_key = {**previous_daily_by_key, **{paper_key(p): p for p in existing_conference_payload.get("papers", [])}}
     all_candidates = []
     successful_fetches = 0
@@ -2113,6 +2194,27 @@ def collect(
                         )
                     break
 
+    # A separate older submission-date query is necessary: widening the local
+    # cutoff alone still retrieves only the newest 50 hits for busy topics.
+    if historical_enabled and any(s.enabled and s.type == "arxiv" for s in sources):
+        history_stats = {"type": "arxiv", "successful_fetches": 0, "failed_fetches": 0}
+        source_stats["arXiv history"] = history_stats
+        for index, topic in enumerate(topics):
+            time.sleep(float(os.getenv("ARXIV_DELAY_SECONDS", "15")))
+            print(f"Fetching historical arXiv papers for topic: {topic.name}", flush=True)
+            try:
+                all_candidates.extend(fetch_historical_arxiv(topic, max_per_topic, now))
+                successful_fetches += 1
+                history_stats["successful_fetches"] += 1
+            except Exception as exc:
+                skipped = len(topics) - index if should_stop_arxiv_fetches(exc) else 1
+                failed_fetches += skipped
+                history_stats["failed_fetches"] += skipped
+                history_stats["last_error"] = str(exc)
+                print(f"Warning: historical arXiv request failed for {topic.name}: {exc}", file=sys.stderr)
+                if should_stop_arxiv_fetches(exc):
+                    break
+
     max_per_conference = int(os.getenv("MAX_PER_CONFERENCE", "1000"))
     conference_delay_seconds = float(os.getenv("DBLP_DELAY_SECONDS", "5"))
     for index, source in enumerate(conference_sources):
@@ -2172,12 +2274,14 @@ def collect(
     future_filtered_count = 0
     backfill_days = max(days, env_int("DAILY_BACKFILL_DAYS", 14))
     daily_backfill_cutoff = now - dt.timedelta(days=max(0, backfill_days))
+    history_floor = now - dt.timedelta(days=30 + 365 * max(1, min(20, env_int("HISTORICAL_YEARS", 5))))
     for paper in dedupe_papers(all_candidates):
         is_conference_paper = paper.get("source_type") == "conference"
         if not is_conference_paper:
             raw_daily_candidate_count += 1
         activity_at = paper_activity_datetime(paper)
-        if not is_conference_paper and activity_at > now:
+        published_at = parse_datetime(str(paper.get("published", "")))
+        if not is_conference_paper and (activity_at > now or (published_at and published_at > now)):
             future_filtered_count += 1
             continue
         in_primary_window = is_conference_paper or activity_at >= cutoff
@@ -2186,7 +2290,9 @@ def collect(
             and not in_primary_window
             and activity_at >= daily_backfill_cutoff
         )
-        if not in_primary_window and not in_backfill_window:
+        in_history_window = (historical_enabled and not is_conference_paper
+                             and is_historical_paper(paper, now) and published_at >= history_floor)
+        if not in_primary_window and not in_backfill_window and not in_history_window:
             if not is_conference_paper:
                 daily_outside_cutoff_count += 1
             continue
@@ -2199,9 +2305,15 @@ def collect(
         if not is_relevant_enough(paper, best_match):
             filtered_low_relevance += 1
             continue
+        if in_history_window and (not best_match.get("keyword_hits") or not has_meaningful_summary(paper)):
+            filtered_low_relevance += 1
+            continue
         paper["matches"] = matches
         paper["best_match"] = best_match
-        if in_backfill_window:
+        if historical_enabled and not is_conference_paper:
+            paper["recommendation_kind"] = "historical" if is_historical_paper(paper, now) else "recent"
+            recent_papers.append(paper)
+        elif in_backfill_window:
             paper["backfilled_from_recent_arxiv"] = True
             daily_outside_cutoff_count += 1
             daily_backfill_candidates.append(paper)
@@ -2234,8 +2346,12 @@ def collect(
     # The overlap window is for recovering missed entries and refreshing known
     # papers. Known papers must not consume the daily *new* paper allocation.
     daily_known_candidates = [p for p in daily_recent_papers if paper_key(p) in previous_daily_by_key]
-    daily_new_candidates = [p for p in daily_recent_papers if paper_key(p) not in previous_daily_by_key]
-    daily_new_papers = select_daily_papers(daily_new_candidates, topics, max_new_papers)
+    daily_new_candidates = [p for p in daily_recent_papers if paper_key(p) not in seen_daily_keys]
+    if historical_enabled:
+        daily_new_papers = select_mixed_daily_papers(
+            daily_new_candidates, topics, max_new_papers, historical_target, already_today, now)
+    else:
+        daily_new_papers = select_daily_papers(daily_new_candidates, topics, max_new_papers)
     daily_recent_papers = [*daily_new_papers, *daily_known_candidates]
     if max_new_conference_papers > 0:
         conference_recent_papers = conference_recent_papers[:max_new_conference_papers]
@@ -2334,6 +2450,11 @@ def collect(
         "collection_cutoff_iso": cutoff.isoformat(),
         "max_per_topic": max_per_topic,
         "max_new_papers": max_new_papers,
+        "historical_daily_target": historical_target,
+        "historical_new_count": sum(p.get("recommendation_kind") == "historical" for p in daily_new_papers),
+        "recent_new_count": sum(p.get("recommendation_kind") != "historical" for p in daily_new_papers),
+        "already_collected_today": len(already_today),
+        "historical_query_window": [value.isoformat() for value in historical_window(now)] if historical_enabled else [],
         "max_new_conference_papers": max_new_conference_papers,
         "sources": [source.__dict__ for source in sources],
         "conference_sources": [source.__dict__ for source in conference_sources],
@@ -2369,6 +2490,13 @@ def collect(
         "last_successful_collection_at": now.isoformat() if failed_fetches == failed_conference_fetches else existing_payload.get("last_successful_collection_at", existing_payload.get("generated_at_iso", cutoff.isoformat())),
         "config_source": "issue" if config is not default_config else "file",
         "data_kind": "daily",
+        "seen_paper_keys": sorted(seen_daily_keys | {paper_key(p) for p in daily_new_papers}),
+        "daily_selection": {
+            "date": today.isoformat(),
+            "papers": [{"id": paper_key(p), "published": p.get("published", ""),
+                        "best_match": {"topic_id": (p.get("best_match") or {}).get("topic_id", "")}}
+                       for p in [*already_today, *daily_new_papers]],
+        },
         "topics": [topic.__dict__ for topic in topics],
         "papers": daily_merged_papers,
         "stats": {

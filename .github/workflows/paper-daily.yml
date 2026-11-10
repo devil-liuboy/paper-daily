@@ -13,9 +13,9 @@ on:
         options: ["2", "7", "14"]
       max_summaries:
         description: "摘要上限；首次连通验收选 1"
-        default: "15"
+        default: "10"
         type: choice
-        options: ["1", "15"]
+        options: ["1", "10"]
       initialize_budget:
         description: "仅首次创建预算账本；已有账本不会重置"
         default: false
@@ -75,8 +75,8 @@ jobs:
           LLM_BASE_URL: https://api.deepseek.com/v1
           LLM_MODEL: deepseek-flash
           LLM_CONCURRENCY: "2"
-          LLM_MONTHLY_BUDGET_CNY: "20"
-          LLM_DAILY_ATTEMPT_LIMIT: "15"
+          LLM_MONTHLY_BUDGET_CNY: "10"
+          LLM_DAILY_ATTEMPT_LIMIT: "10"
           LLM_MAX_OUTPUT_TOKENS: "1800"
           LLM_MAX_PROMPT_BYTES: "16000"
           DEEPSEEK_INPUT_CNY_PER_MILLION: "2"
@@ -85,8 +85,10 @@ jobs:
           BUDGET_PERSIST_GITHUB: "true"
           BUDGET_ALLOW_INIT: ${{ github.event_name == 'workflow_dispatch' && inputs.initialize_budget && 'true' || 'false' }}
           MAX_PER_TOPIC: "50"
-          MAX_SUMMARIES: ${{ inputs.max_summaries || '15' }}
-          MAX_NEW_PAPERS: "15"
+          MAX_SUMMARIES: ${{ inputs.max_summaries || '10' }}
+          MAX_NEW_PAPERS: "10"
+          HISTORICAL_DAILY_TARGET: "4"
+          HISTORICAL_YEARS: "5"
           MAX_STORED_PAPERS: "900"
           RECENT_HISTORY_DAYS: "60"
           MIN_DAILY_PAPERS: "0"

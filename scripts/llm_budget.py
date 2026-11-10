@@ -83,9 +83,9 @@ def _config() -> dict[str, Any]:
         raise BudgetError("This deployment only permits DeepSeek.")
     return {
         "path": Path(os.getenv("LLM_BUDGET_PATH", ".paper-state/usage.json")),
-        "monthly_micros": _micros(_positive_decimal("LLM_MONTHLY_BUDGET_CNY", "20")),
+        "monthly_micros": _micros(_positive_decimal("LLM_MONTHLY_BUDGET_CNY", "10")),
         "max_call_micros": _micros(_positive_decimal("LLM_MAX_CALL_CNY", "0.50")),
-        "daily_limit": _positive_int("LLM_DAILY_ATTEMPT_LIMIT", 15, 100),
+        "daily_limit": _positive_int("LLM_DAILY_ATTEMPT_LIMIT", 10, 100),
         "max_tokens": _positive_int("LLM_MAX_OUTPUT_TOKENS", 1800, 8192),
         "max_prompt_bytes": _positive_int("LLM_MAX_PROMPT_BYTES", 16000, 65536),
         "input_price": _positive_decimal("DEEPSEEK_INPUT_CNY_PER_MILLION"),

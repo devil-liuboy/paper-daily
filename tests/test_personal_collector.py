@@ -30,10 +30,11 @@ class PersonalCollectorTest(unittest.TestCase):
                 "published": now.isoformat(), "updated": now.isoformat(),
                 "authors": ["Test Author"], "categories": ["cs.AI"]}
 
-    def run_collect(self, fetched=None, previous=None, failure=None, max_summaries=10, max_new_papers=15):
+    def run_collect(self, fetched=None, previous=None, failure=None, max_summaries=10, max_new_papers=15, historical=None, history_failure=None):
         with mock.patch.object(c, "load_json", return_value=self.config), \
              mock.patch.object(c, "load_existing_payload", side_effect=[previous or {}, {}]), \
              mock.patch.object(c, "fetch_source_topic", return_value=fetched or [], side_effect=failure), \
+             mock.patch.object(c, "fetch_historical_arxiv", return_value=historical or [], side_effect=history_failure), \
              mock.patch.object(c.time, "sleep"), \
              mock.patch.object(c, "write_json") as writer:
             self.last_writer = writer
@@ -227,6 +228,93 @@ class PersonalCollectorTest(unittest.TestCase):
         updated.pop("first_seen_at")
         result, _ = c.merge_with_retained_papers([updated], {"papers": [original]}, dt.datetime.now(dt.timezone.utc), 45)
         self.assertEqual(result[0]["first_seen_at"], original["first_seen_at"])
+
+    def mixed_papers(self, count, old=False):
+        result = []
+        for index in range(count):
+            paper = self.paper(f"GUI agent {'history' if old else 'recent'} study {index}")
+            paper["id"] = f"{'2401' if old else '2611'}.{index:05d}v1"
+            if old:
+                paper["published"] = paper["updated"] = (dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=700)).isoformat()
+            result.append(paper)
+        return result
+
+    def test_mixed_daily_selection_six_recent_four_old(self):
+        os.environ["HISTORICAL_DAILY_TARGET"] = "4"
+        result, _ = self.run_collect(self.mixed_papers(20), historical=self.mixed_papers(20, True), max_new_papers=10, max_summaries=0)
+        self.assertEqual(result["stats"]["new_paper_count"], 10)
+        self.assertEqual(result["stats"]["historical_new_count"], 4)
+        self.assertEqual(result["stats"]["recent_new_count"], 6)
+        self.assertEqual(len(result["seen_paper_keys"]), 10)
+
+    def test_history_fills_missing_recent_slots(self):
+        os.environ["HISTORICAL_DAILY_TARGET"] = "4"
+        result, _ = self.run_collect(self.mixed_papers(2), historical=self.mixed_papers(20, True), max_new_papers=10, max_summaries=0)
+        self.assertEqual(result["stats"]["new_paper_count"], 10)
+        self.assertEqual(result["stats"]["historical_new_count"], 8)
+
+    def test_recent_fills_missing_history_slots(self):
+        os.environ["HISTORICAL_DAILY_TARGET"] = "4"
+        result, _ = self.run_collect(self.mixed_papers(20), max_new_papers=10, max_summaries=0)
+        self.assertEqual(result["stats"]["new_paper_count"], 10)
+        self.assertEqual(result["stats"]["historical_new_count"], 0)
+
+    def test_mixed_rerun_shares_daily_limit_even_after_display_cache_trim(self):
+        os.environ["HISTORICAL_DAILY_TARGET"] = "4"
+        recent, old = self.mixed_papers(20), self.mixed_papers(20, True)
+        first, _ = self.run_collect(recent[:3], historical=old[:2], max_new_papers=10, max_summaries=0)
+        self.assertEqual(first["stats"]["new_paper_count"], 5)
+        first["papers"] = []  # The durable quota and seen index survive trimming.
+        second, _ = self.run_collect(recent, historical=old, previous=first, max_new_papers=10, max_summaries=0)
+        self.assertEqual(second["stats"]["new_paper_count"], 5)
+        self.assertEqual(len(second["daily_selection"]["papers"]), 10)
+        third, _ = self.run_collect(recent, historical=old, previous=second, max_new_papers=10, max_summaries=0)
+        self.assertEqual(third["stats"]["new_paper_count"], 0)
+
+    def test_seen_history_revision_is_not_recommended_again(self):
+        os.environ["HISTORICAL_DAILY_TARGET"] = "4"
+        old = self.mixed_papers(1, True)[0]
+        previous = {"seen_paper_keys": [c.paper_key(old)], "papers": []}
+        old["id"] = old["id"].replace("v1", "v2")
+        old["updated"] = dt.datetime.now(dt.timezone.utc).isoformat()
+        result, _ = self.run_collect([old], previous=previous, max_new_papers=10, max_summaries=0)
+        self.assertEqual(result["stats"]["new_paper_count"], 0)
+
+    def test_mixed_quota_resets_next_beijing_day_but_seen_ids_do_not(self):
+        os.environ["HISTORICAL_DAILY_TARGET"] = "4"
+        first, _ = self.run_collect(self.mixed_papers(20), historical=self.mixed_papers(20, True), max_new_papers=10, max_summaries=0)
+        first["daily_selection"]["date"] = "2000-01-01"
+        for paper in first["papers"]:
+            paper["first_seen_at"] = "2000-01-01T00:00:00+00:00"
+        second, _ = self.run_collect(self.mixed_papers(20), historical=self.mixed_papers(20, True), previous=first, max_new_papers=10, max_summaries=0)
+        self.assertEqual(second["stats"]["new_paper_count"], 10)
+        self.assertEqual(len(second["seen_paper_keys"]), 20)
+
+    def test_mixed_caps_apply_across_recent_history_and_reruns(self):
+        now = dt.datetime.now(dt.timezone.utc)
+        nav = c.Topic("nav", "Navigation", "", [], [], 0.25, 1)
+        papers = self.mixed_papers(5) + self.mixed_papers(5, True)
+        for paper in papers:
+            paper["best_match"] = {"topic_id": "nav", "ranking_score": 1}
+            paper["recommendation_kind"] = "historical" if c.is_historical_paper(paper, now) else "recent"
+        self.assertEqual(len(c.select_mixed_daily_papers(papers, [nav], 10, 4, [], now)), 1)
+        self.assertEqual(c.select_mixed_daily_papers(papers, [nav], 10, 4, [papers[0]], now), [])
+
+    def test_history_fetch_uses_older_date_window_and_rotates(self):
+        now = dt.datetime(2026, 11, 10, tzinfo=dt.timezone.utc)
+        windows = [c.historical_window(now + dt.timedelta(days=i)) for i in range(5)]
+        self.assertEqual(len({round((now - end).days / 365) for _, end in windows}), 5)
+        with mock.patch.object(c, "fetch_arxiv_query", return_value=[]) as fetch:
+            c.fetch_historical_arxiv(self.topic, 50, now)
+        start, end = windows[0]
+        self.assertIn(f"submittedDate:[{start:%Y%m%d%H%M} TO {end:%Y%m%d%H%M}]", fetch.call_args.args[0])
+        self.assertEqual(fetch.call_args.args[2], "relevance")
+
+    def test_history_failure_visible_and_does_not_erase_existing_data(self):
+        os.environ["HISTORICAL_DAILY_TARGET"] = "4"
+        result, _ = self.run_collect(self.mixed_papers(2), history_failure=RuntimeError("offline"), max_new_papers=10, max_summaries=0)
+        self.assertEqual(result["stats"]["source_stats"]["arXiv history"]["failed_fetches"], 1)
+        self.assertEqual(result["stats"]["new_paper_count"], 2)
 
 
 if __name__ == "__main__":

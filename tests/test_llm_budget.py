@@ -153,8 +153,35 @@ class BudgetTests(unittest.TestCase):
         stats = budget.get_budget_stats()
         self.assertEqual(stats["daily_attempts"], 1)
         self.assertEqual(stats["accounted_cny"], 0.006)
-        self.assertEqual(stats["remaining_cny"], 19.994)
+        self.assertEqual(stats["remaining_cny"], 9.994)
         self.assertNotIn("private", json.dumps(stats))
+
+    def test_lower_monthly_budget_keeps_existing_spend_and_blocks_before_network(self):
+        os.environ["LLM_MONTHLY_BUDGET_CNY"] = "20"
+        with mock.patch.object(budget.urllib.request, "build_opener", return_value=self.opener()):
+            budget.call_deepseek("paper")
+        before = self.path.read_bytes()
+        os.environ["LLM_MONTHLY_BUDGET_CNY"] = "10"
+        self.assertEqual(budget.get_budget_stats()["remaining_cny"], 9.994)
+        self.assertEqual(self.path.read_bytes(), before)
+        os.environ["LLM_MONTHLY_BUDGET_CNY"] = "0.005"
+        with mock.patch.object(budget.urllib.request, "build_opener") as opener:
+            with self.assertRaises(budget.BudgetError):
+                budget.call_deepseek("paper")
+            opener.assert_not_called()
+        self.assertEqual(self.path.read_bytes(), before)
+
+    def test_default_daily_ten_call_limit_blocks_eleventh_attempt(self):
+        opener = self.opener()
+        opener.open.side_effect = lambda *args, **kwargs: response()
+        with mock.patch.object(budget.urllib.request, "build_opener", return_value=opener) as builder:
+            for _ in range(10):
+                budget.call_deepseek("paper")
+            before = self.path.read_bytes()
+            with self.assertRaises(budget.BudgetError):
+                budget.call_deepseek("paper")
+        self.assertEqual(builder.call_count, 10)
+        self.assertEqual(self.path.read_bytes(), before)
 
     def test_remote_reservation_is_persisted_before_request(self):
         os.environ["BUDGET_PERSIST_GITHUB"] = "true"

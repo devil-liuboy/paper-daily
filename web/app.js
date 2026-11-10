@@ -252,7 +252,9 @@ function renderPaper(paper) {
 
   const revised = dateKey(paper.updated) && dateKey(paper.updated) !== dateKey(paper.published)
     ? ` · 修订 ${formatDate(paper.updated)}` : "";
-  setText(node, ".paper-date", `初发 ${formatDate(paper.published)}${revised} · 收录 ${formatDate(collectionTime(paper))}`);
+  const recommendation = paper.recommendation_kind === "historical" ? "历史论文 · "
+    : paper.recommendation_kind === "recent" ? "近期论文 · " : "";
+  setText(node, ".paper-date", `${recommendation}初发 ${formatDate(paper.published)}${revised} · 收录 ${formatDate(collectionTime(paper))}`);
   setText(node, ".paper-source", paper.source || "paper");
   setText(node, ".paper-title", paper.title);
   setText(node, ".paper-authors", (paper.authors || []).slice(0, 8).join(", "));
@@ -434,7 +436,7 @@ function updateUpdatedAt(message = "") {
   const data = activeData();
   const stats = data.stats || {};
   const mode = stats.collection_mode === "incremental" ? "增量" : "初始化";
-  const kind = state.filters.collection === "conference" ? "顶会精品" : "每日新论文";
+  const kind = state.filters.collection === "conference" ? "顶会精品" : "每日论文推荐";
   const papers = data.papers || [];
   const llmCount = Number(stats.llm_success_count ?? papers.filter((paper) => summaryStatusOf(paper) === "llm").length);
   const cachedCount = Number(stats.summary_cache_hit_count ?? papers.filter((paper) => summaryStatusOf(paper) === "cache").length);
