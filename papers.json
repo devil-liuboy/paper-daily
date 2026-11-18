@@ -1,12 +1,22 @@
 {
-  "generated_at": "Tue, 17 Nov 2026 08:57:05 +0000",
-  "generated_at_iso": "2026-11-17T08:57:05.623257+00:00",
+  "generated_at": "Wed, 18 Nov 2026 08:22:35 +0000",
+  "generated_at_iso": "2026-11-18T08:22:35.655608+00:00",
   "last_successful_collection_at": "2026-11-17T08:57:05.623257+00:00",
   "config_source": "file",
   "data_kind": "daily",
   "seen_paper_keys": [
     "2304.08485",
+    "2305.07019",
+    "2305.17118",
+    "2305.17530",
+    "2306.01879",
+    "2307.04087",
+    "2307.06945",
+    "2308.09568",
     "2308.10509",
+    "2308.11971",
+    "2308.13437",
+    "2310.02409",
     "2311.10081",
     "2405.13872",
     "2405.14366",
@@ -167,74 +177,74 @@
     "2611.21457"
   ],
   "daily_selection": {
-    "date": "2026-11-17",
+    "date": "2026-11-18",
     "papers": [
       {
-        "id": "2611.18715",
-        "published": "2026-11-08T01:23:58Z",
-        "best_match": {
-          "topic_id": "gui_agents"
-        }
-      },
-      {
-        "id": "2611.20505",
-        "published": "2026-11-16T04:18:25Z",
+        "id": "2308.11971",
+        "published": "2023-08-23T07:36:30Z",
         "best_match": {
           "topic_id": "vlm_efficiency"
         }
       },
       {
-        "id": "2611.18747",
-        "published": "2026-11-11T11:38:51Z",
+        "id": "2307.04087",
+        "published": "2023-07-09T03:25:14Z",
         "best_match": {
           "topic_id": "vlm_core"
         }
       },
       {
-        "id": "2611.20006",
-        "published": "2026-11-15T13:35:25Z",
-        "best_match": {
-          "topic_id": "vlm_efficiency"
-        }
-      },
-      {
-        "id": "2611.21457",
-        "published": "2026-11-16T17:42:12Z",
+        "id": "2308.13437",
+        "published": "2023-08-25T15:33:47Z",
         "best_match": {
           "topic_id": "vlm_core"
         }
       },
       {
-        "id": "2611.20936",
-        "published": "2026-11-16T11:46:36Z",
+        "id": "2305.17118",
+        "published": "2023-05-26T17:39:58Z",
+        "best_match": {
+          "topic_id": "context_kv"
+        }
+      },
+      {
+        "id": "2305.17530",
+        "published": "2023-05-27T17:16:27Z",
         "best_match": {
           "topic_id": "vlm_core"
         }
       },
       {
-        "id": "2609.11900",
-        "published": "2026-09-10T17:54:32Z",
+        "id": "2308.09568",
+        "published": "2023-08-18T14:01:37Z",
         "best_match": {
           "topic_id": "vlm_core"
         }
       },
       {
-        "id": "2410.05243",
-        "published": "2024-10-07T17:47:50Z",
+        "id": "2305.07019",
+        "published": "2023-05-11T17:57:49Z",
         "best_match": {
           "topic_id": "vlm_core"
         }
       },
       {
-        "id": "2407.21788",
-        "published": "2024-07-31T17:57:32Z",
+        "id": "2310.02409",
+        "published": "2023-10-03T20:07:06Z",
+        "best_match": {
+          "topic_id": "context_kv"
+        }
+      },
+      {
+        "id": "2306.01879",
+        "published": "2023-06-02T19:19:43Z",
         "best_match": {
           "topic_id": "vlm_core"
         }
       },
       {
-        "id": "2407.08892",
-        "published": "2024-07-11T23:34:32Z",
+        "id": "2307.06945",
+        "published": "2023-07-13T17:59:21Z",
         "best_match": {
           "topic_id": "context_kv"
         }
@@ -922,7 +932,7 @@
       },
       "first_seen_at": "2026-11-12T08:06:41.859407+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2304.08485v2",
@@ -1037,7 +1047,7 @@
         "llm_reason": "论文直接研究视觉指令微调与视觉语言对齐，属于 VLM 与多模态理解的核心训练方法；其数据生成与端到端训练机制可迁移到 GUI Agent 的多模态指令数据构建与评测，但摘要未涉及 GUI 场景或空间推理，需人工复核其方法在 GUI 任务上的适用性。"
       },
       "recommendation_kind": "historical",
-      "summary_status": "llm",
+      "summary_status": "cache",
       "summary_fingerprint": "55fb5c0309980a2a7d866309d59994b71187c5cce73f0c3e1544f889aafab2a0",
       "chinese_summary": {
         "problem": "多模态领域缺少类似纯文本 LLM 的指令微调方法，论文要解决如何用机器生成的视觉-语言指令数据训练通用视觉语言助手。",
@@ -1048,8 +1058,8 @@
         "why_relevant": "论文直接研究视觉指令微调与视觉语言对齐，属于 VLM 与多模态理解的核心训练方法；其数据生成与端到端训练机制可迁移到 GUI Agent 的多模态指令数据构建与评测，但摘要未涉及 GUI 场景或空间推理，需人工复核其方法在 GUI 任务上的适用性。"
       },
       "first_seen_at": "2026-11-13T07:42:49.398641+00:00",
-      "last_seen_at": "2026-11-13T07:42:49.398641+00:00",
-      "retained_from_previous_run": true
+      "last_seen_at": "2026-11-18T08:22:35.655608+00:00",
+      "retained_from_previous_run": false
     },
     {
       "id": "2507.13348v1",
@@ -2667,7 +2677,7 @@
       },
       "first_seen_at": "2026-11-17T08:57:05.623257+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2609.11900v2",
@@ -2801,7 +2811,7 @@
       },
       "first_seen_at": "2026-11-17T08:57:05.623257+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2509.26539v1",
@@ -3321,7 +3331,7 @@
       },
       "first_seen_at": "2026-11-12T08:06:41.859407+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2605.18421v3",
@@ -3585,7 +3595,7 @@
       },
       "first_seen_at": "2026-11-12T08:06:41.859407+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2611.12305v1",
@@ -3842,7 +3852,7 @@
       },
       "first_seen_at": "2026-11-12T08:06:41.859407+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2410.05243v3",
@@ -3972,7 +3982,7 @@
       },
       "first_seen_at": "2026-11-17T08:57:05.623257+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2610.08133v2",
@@ -4103,7 +4113,7 @@
       },
       "first_seen_at": "2026-11-13T07:42:49.398641+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2407.21788v1",
@@ -4234,7 +4244,7 @@
       },
       "first_seen_at": "2026-11-17T08:57:05.623257+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2407.08892v1",
@@ -4362,7 +4372,7 @@
       },
       "first_seen_at": "2026-11-17T08:57:05.623257+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2611.02780v1",
@@ -4622,7 +4632,7 @@
       },
       "first_seen_at": "2026-11-13T07:42:49.398641+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2611.14009v2",
@@ -4757,7 +4767,7 @@
       },
       "first_seen_at": "2026-11-11T07:38:42.511502+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2512.01707v4",
@@ -5148,7 +5158,7 @@
       },
       "first_seen_at": "2026-11-03T14:00:01.942467+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2308.10509v2",
@@ -5259,7 +5269,7 @@
         "llm_reason": "该论文直接研究视觉语言模型的组合性多模态理解与评测，涉及视觉语言对齐和视觉推理能力的可靠测量，属于研究方向的核心评测问题；其去偏基准与鲁棒性任务思路可能迁移到 GUI Agent 的多模态理解评测，但论文不涉及 GUI 场景、Agent 训练或视频理解，需人工判断迁移价值。"
       },
       "recommendation_kind": "historical",
-      "summary_status": "llm",
+      "summary_status": "cache",
       "summary_fingerprint": "1b4bf1a1829382dd974c7c2273afe60dc0f6230282ef63f418708a14fb7d6254",
       "chinese_summary": {
         "problem": "论文指出，当前用于评估生成式视觉语言模型（GVLM）多模态组合推理能力的评测指标（如 VisualGPTScore）和基准存在句法偏置，模型可借助语言能力利用该偏置，导致评测结果不能真实反映组合理解能力。",
@@ -5270,8 +5280,8 @@
         "why_relevant": "该论文直接研究视觉语言模型的组合性多模态理解与评测，涉及视觉语言对齐和视觉推理能力的可靠测量，属于研究方向的核心评测问题；其去偏基准与鲁棒性任务思路可能迁移到 GUI Agent 的多模态理解评测，但论文不涉及 GUI 场景、Agent 训练或视频理解，需人工判断迁移价值。"
       },
       "first_seen_at": "2026-11-13T07:42:49.398641+00:00",
-      "last_seen_at": "2026-11-13T07:42:49.398641+00:00",
-      "retained_from_previous_run": true
+      "last_seen_at": "2026-11-18T08:22:35.655608+00:00",
+      "retained_from_previous_run": false
     },
     {
       "id": "2611.05304v1",
@@ -5393,6 +5403,259 @@
       "first_seen_at": "2026-11-04T07:23:48.692602+00:00",
       "last_seen_at": "2026-11-05T07:49:08.934658+00:00",
       "retained_from_previous_run": true
+    },
+    {
+      "id": "2307.04087v3",
+      "source": "arXiv",
+      "title": "SVIT: Scaling up Visual Instruction Tuning",
+      "authors": [
+        "Bo Zhao",
+        "Boya Wu",
+        "Muyang He",
+        "Tiejun Huang"
+      ],
+      "summary": "Thanks to the emerging of foundation models, the large language and vision models are integrated to acquire the multimodal ability of visual captioning, question answering, etc. Although existing multimodal models present impressive performance of visual understanding and reasoning, their limits are still largely under-explored due to the scarcity of high-quality instruction tuning data. To push the limits of multimodal capability, we Scale up Visual Instruction Tuning (SVIT) by constructing a dataset of 4.2 million visual instruction tuning data including 1.6M conversation question-answer (QA) pairs, 1.6M complex reasoning QA pairs, 1.0M referring QA pairs and 106K detailed image descriptions. Besides the volume, the proposed dataset is also featured by the high quality and rich diversity, which is generated by prompting GPT-4 with the abundant manual annotations of images. We also propose a new data recipe to select subset with better diversity and balance, which evokes model's superior capabilities. Extensive experiments verify that SVIT-v1.5, trained on the proposed dataset, outperforms state-of-the-art Multimodal Large Language Models on popular benchmarks. The data and code are publicly available at https://github.com/BAAI-DCAI/Visual-Instruction-Tuning.",
+      "published": "2023-07-09T03:25:14Z",
+      "updated": "2023-12-28T16:01:36Z",
+      "paper_url": "http://arxiv.org/abs/2307.04087v3",
+      "pdf_url": "https://arxiv.org/pdf/2307.04087v3",
+      "categories": [
+        "cs.CV"
+      ],
+      "seed_topic": "vlm_core",
+      "matches": [
+        {
+          "topic_id": "vlm_core",
+          "topic_name": "VLM 与多模态理解",
+          "score": 0.508,
+          "level": "high",
+          "reason": "关键词命中：multimodal large language model、visual instruction tuning；arXiv 分类重合：cs.CV",
+          "keyword_hits": [
+            "multimodal large language model",
+            "visual instruction tuning"
+          ],
+          "priority": 1.6,
+          "ranking_score": 0.8128,
+          "llm_reason": "论文直接面向视觉语言模型与多模态大模型的视觉指令微调数据构建与训练，涉及视觉推理、指代理解和图像描述等任务，与研究方向中的视觉语言对齐、视觉推理和视觉指令微调高度契合；其数据配方与公开数据也可能迁移到 GUI Agent 的多模态指令训练与评测，但摘要未涉及 GUI 场景，需人工复核其数据与评测是否适用于该方向。"
+        },
+        {
+          "topic_id": "ai_exploration",
+          "topic_name": "跨领域 AI 探索",
+          "score": 0.3,
+          "level": "low",
+          "reason": "关键词命中：foundation model；arXiv 分类重合：cs.CV",
+          "keyword_hits": [
+            "foundation model"
+          ],
+          "priority": 0.65,
+          "ranking_score": 0.195
+        },
+        {
+          "topic_id": "vlm_efficiency",
+          "topic_name": "多模态推理效率与视觉 Token 压缩",
+          "score": 0.208,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CV",
+          "keyword_hits": [],
+          "priority": 1.8,
+          "ranking_score": 0.3744
+        },
+        {
+          "topic_id": "degraded_navigation",
+          "topic_name": "地下退化环境导航",
+          "score": 0.156,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CV",
+          "keyword_hits": [],
+          "priority": 0.25,
+          "ranking_score": 0.039
+        },
+        {
+          "topic_id": "gui_agents",
+          "topic_name": "GUI Agent 与计算机操作",
+          "score": 0.062,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CV",
+          "keyword_hits": [],
+          "priority": 2.0,
+          "ranking_score": 0.124
+        },
+        {
+          "topic_id": "context_kv",
+          "topic_name": "上下文与 KV Cache 压缩",
+          "score": 0.0,
+          "level": "low",
+          "reason": "文本语义与方向描述存在弱相关，需要人工复核。",
+          "keyword_hits": [],
+          "priority": 1.6,
+          "ranking_score": 0.0
+        },
+        {
+          "topic_id": "agent_memory",
+          "topic_name": "长任务压缩与 Agent 记忆",
+          "score": 0.0,
+          "level": "low",
+          "reason": "文本语义与方向描述存在弱相关，需要人工复核。",
+          "keyword_hits": [],
+          "priority": 1.6,
+          "ranking_score": 0.0
+        }
+      ],
+      "best_match": {
+        "topic_id": "vlm_core",
+        "topic_name": "VLM 与多模态理解",
+        "score": 0.508,
+        "level": "high",
+        "reason": "关键词命中：multimodal large language model、visual instruction tuning；arXiv 分类重合：cs.CV",
+        "keyword_hits": [
+          "multimodal large language model",
+          "visual instruction tuning"
+        ],
+        "priority": 1.6,
+        "ranking_score": 0.8128,
+        "llm_reason": "论文直接面向视觉语言模型与多模态大模型的视觉指令微调数据构建与训练，涉及视觉推理、指代理解和图像描述等任务，与研究方向中的视觉语言对齐、视觉推理和视觉指令微调高度契合；其数据配方与公开数据也可能迁移到 GUI Agent 的多模态指令训练与评测，但摘要未涉及 GUI 场景，需人工复核其数据与评测是否适用于该方向。"
+      },
+      "recommendation_kind": "historical",
+      "summary_status": "llm",
+      "summary_fingerprint": "437f9757555e455123915a096b222b96f90a1b03040308800c28b93408451704",
+      "chinese_summary": {
+        "problem": "现有视觉指令微调数据规模小、质量与多样性不足，限制了多模态大模型在视觉理解与推理上的能力上限，论文试图通过扩大并优化视觉指令数据来突破这一瓶颈。",
+        "method": "作者用 GPT-4 结合图像的人工标注，自动生成约 420 万条视觉指令数据，包括 160 万对话问答、160 万复杂推理问答、100 万指代问答和 10.6 万详细图像描述；并提出一种新的数据配方，用于筛选多样性更好、类别更均衡的子集来训练模型。",
+        "innovation": "一是构建了规模达 420 万条、覆盖对话、复杂推理、指代和详细描述等多任务类型的视觉指令微调数据集；二是利用 GPT-4 基于丰富人工标注生成数据，强调质量与多样性；三是提出以多样性和均衡性为目标的数据子集选择配方，并据此训练 SVIT-v1.5。",
+        "evidence": "作者报告称，在提出的数据集上训练的 SVIT-v1.5 在常用基准上优于当时先进的多模态大模型，但摘要未给出具体基准名称、指标数值、对比模型列表或消融结果，属于作者自述结论，需阅读全文核验；数据与代码已公开。",
+        "limitations": "摘要未说明数据生成中 GPT-4 可能引入的幻觉或噪声如何控制，也未给出具体评测指标、训练配置和与基线模型的定量对比；数据配方选择子集的具体准则与泛化性需阅读全文确认；性能提升幅度与可复现性需独立验证。",
+        "why_relevant": "论文直接面向视觉语言模型与多模态大模型的视觉指令微调数据构建与训练，涉及视觉推理、指代理解和图像描述等任务，与研究方向中的视觉语言对齐、视觉推理和视觉指令微调高度契合；其数据配方与公开数据也可能迁移到 GUI Agent 的多模态指令训练与评测，但摘要未涉及 GUI 场景，需人工复核其数据与评测是否适用于该方向。"
+      },
+      "first_seen_at": "2026-11-18T08:22:35.655608+00:00",
+      "last_seen_at": "2026-11-18T08:22:35.655608+00:00",
+      "retained_from_previous_run": false
+    },
+    {
+      "id": "2308.13437v2",
+      "source": "arXiv",
+      "title": "Position-Enhanced Visual Instruction Tuning for Multimodal Large Language Models",
+      "authors": [
+        "Chi Chen",
+        "Ruoyu Qin",
+        "Fuwen Luo",
+        "Xiaoyue Mi",
+        "Peng Li",
+        "Maosong Sun",
+        "Yang Liu"
+      ],
+      "summary": "Recently, Multimodal Large Language Models (MLLMs) that enable Large Language Models (LLMs) to interpret images through visual instruction tuning have achieved significant success. However, existing visual instruction tuning methods only utilize image-language instruction data to align the language and image modalities, lacking a more fine-grained cross-modal alignment. In this paper, we propose Position-enhanced Visual Instruction Tuning (PVIT), which extends the functionality of MLLMs by integrating an additional region-level vision encoder. This integration promotes a more detailed comprehension of images for the MLLM. In addition, to efficiently achieve a fine-grained alignment between the vision modules and the LLM, we design multiple data generation strategies to construct an image-region-language instruction dataset. Finally, we present both quantitative experiments and qualitative analysis that demonstrate the superiority of the proposed model. Code and data will be released at https://github.com/PVIT-official/PVIT.",
+      "published": "2023-08-25T15:33:47Z",
+      "updated": "2023-09-14T15:00:06Z",
+      "paper_url": "http://arxiv.org/abs/2308.13437v2",
+      "pdf_url": "https://arxiv.org/pdf/2308.13437v2",
+      "categories": [
+        "cs.CV"
+      ],
+      "seed_topic": "vlm_core",
+      "matches": [
+        {
+          "topic_id": "vlm_core",
+          "topic_name": "VLM 与多模态理解",
+          "score": 0.508,
+          "level": "medium",
+          "reason": "关键词命中：multimodal large language model、visual instruction tuning；arXiv 分类重合：cs.CV",
+          "keyword_hits": [
+            "multimodal large language model",
+            "visual instruction tuning"
+          ],
+          "priority": 1.6,
+          "ranking_score": 0.8128,
+          "llm_reason": "该工作直接针对视觉语言对齐与细粒度视觉理解，属于 VLM 训练方法范畴；区域级视觉编码与图像-区域-语言指令数据对需要定位界面元素的 GUI Agent 具有潜在迁移价值，但摘要未涉及 GUI 场景或评测，相关性需结合全文实验判断。"
+        },
+        {
+          "topic_id": "vlm_efficiency",
+          "topic_name": "多模态推理效率与视觉 Token 压缩",
+          "score": 0.208,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CV",
+          "keyword_hits": [],
+          "priority": 1.8,
+          "ranking_score": 0.3744
+        },
+        {
+          "topic_id": "ai_exploration",
+          "topic_name": "跨领域 AI 探索",
+          "score": 0.156,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CV",
+          "keyword_hits": [],
+          "priority": 0.65,
+          "ranking_score": 0.1014
+        },
+        {
+          "topic_id": "degraded_navigation",
+          "topic_name": "地下退化环境导航",
+          "score": 0.156,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CV",
+          "keyword_hits": [],
+          "priority": 0.25,
+          "ranking_score": 0.039
+        },
+        {
+          "topic_id": "gui_agents",
+          "topic_name": "GUI Agent 与计算机操作",
+          "score": 0.062,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CV",
+          "keyword_hits": [],
+          "priority": 2.0,
+          "ranking_score": 0.124
+        },
+        {
+          "topic_id": "context_kv",
+          "topic_name": "上下文与 KV Cache 压缩",
+          "score": 0.031,
+          "level": "low",
+          "reason": "文本语义与方向描述存在弱相关，需要人工复核。",
+          "keyword_hits": [],
+          "priority": 1.6,
+          "ranking_score": 0.0496
+        },
+        {
+          "topic_id": "agent_memory",
+          "topic_name": "长任务压缩与 Agent 记忆",
+          "score": 0.0,
+          "level": "low",
+          "reason": "文本语义与方向描述存在弱相关，需要人工复核。",
+          "keyword_hits": [],
+          "priority": 1.6,
+          "ranking_score": 0.0
+        }
+      ],
+      "best_match": {
+        "topic_id": "vlm_core",
+        "topic_name": "VLM 与多模态理解",
+        "score": 0.508,
+        "level": "medium",
+        "reason": "关键词命中：multimodal large language model、visual instruction tuning；arXiv 分类重合：cs.CV",
+        "keyword_hits": [
+          "multimodal large language model",
+          "visual instruction tuning"
+        ],
+        "priority": 1.6,
+        "ranking_score": 0.8128,
+        "llm_reason": "该工作直接针对视觉语言对齐与细粒度视觉理解，属于 VLM 训练方法范畴；区域级视觉编码与图像-区域-语言指令数据对需要定位界面元素的 GUI Agent 具有潜在迁移价值，但摘要未涉及 GUI 场景或评测，相关性需结合全文实验判断。"
+      },
+      "recommendation_kind": "historical",
+      "summary_status": "llm",
+      "summary_fingerprint": "a4b62bfe25370e2069346014c3492b8e4c44d1604a8086e0946e108cdc1d1b9c",
+      "chinese_summary": {
+        "problem": "现有视觉指令微调仅用图像-语言指令数据做模态对齐，缺少更细粒度的跨模态对齐，导致多模态大模型对图像区域级细节理解不足。",
+        "method": "提出 PVIT，在 MLLM 中额外接入一个区域级视觉编码器，使模型同时利用全局图像特征和区域特征；并设计多种数据生成策略，构建图像-区域-语言指令数据集，用于视觉模块与 LLM 的细粒度对齐训练。",
+        "innovation": "一是在视觉指令微调框架中引入独立的区域级视觉编码器以增强区域级图像理解；二是配套设计多种数据生成策略自动构造图像-区域-语言指令数据，以较低成本实现视觉模块与语言模型的细粒度对齐。",
+        "evidence": "摘要仅称进行了定量实验与定性分析并显示所提模型更优，未给出任何数据集、基线、指标或具体数值，属于作者报告且证据细节不足，需阅读全文核验。",
+        "limitations": "摘要未说明区域编码器与 LLM 的融合方式、区域标注来源与质量、数据生成策略的具体形式，也未报告参数量、训练成本及与基线的可比设置；定量结论缺少数字支撑，需全文确认实验严谨性与可复现性。",
+        "why_relevant": "该工作直接针对视觉语言对齐与细粒度视觉理解，属于 VLM 训练方法范畴；区域级视觉编码与图像-区域-语言指令数据对需要定位界面元素的 GUI Agent 具有潜在迁移价值，但摘要未涉及 GUI 场景或评测，相关性需结合全文实验判断。"
+      },
+      "first_seen_at": "2026-11-18T08:22:35.655608+00:00",
+      "last_seen_at": "2026-11-18T08:22:35.655608+00:00",
+      "retained_from_previous_run": false
     },
     {
       "id": "2611.13030v2",
@@ -5521,7 +5784,7 @@
       },
       "first_seen_at": "2026-11-11T07:38:42.511502+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2610.40943v1",
@@ -6159,6 +6422,133 @@
       "retained_from_previous_run": true
     },
     {
+      "id": "2305.17118v2",
+      "source": "arXiv",
+      "title": "Scissorhands: Exploiting the Persistence of Importance Hypothesis for LLM KV Cache Compression at Test Time",
+      "authors": [
+        "Zichang Liu",
+        "Aditya Desai",
+        "Fangshuo Liao",
+        "Weitao Wang",
+        "Victor Xie",
+        "Zhaozhuo Xu",
+        "Anastasios Kyrillidis",
+        "Anshumali Shrivastava"
+      ],
+      "summary": "Large language models(LLMs) have sparked a new wave of exciting AI applications. Hosting these models at scale requires significant memory resources. One crucial memory bottleneck for the deployment stems from the context window. It is commonly recognized that model weights are memory hungry; however, the size of key-value embedding stored during the generation process (KV cache) can easily surpass the model size. The enormous size of the KV cache puts constraints on the inference batch size, which is crucial for high throughput inference workload. Inspired by an interesting observation of the attention scores, we hypothesize the persistence of importance: only pivotal tokens, which had a substantial influence at one step, will significantly influence future generations. Based on our empirical verification and theoretical analysis around this hypothesis, we propose Scissorhands, a system that maintains the memory usage of the KV cache at a fixed budget without finetuning the model. In essence, Scissorhands manages the KV cache by storing the pivotal tokens with a higher probability. We validate that Scissorhands reduces the inference memory usage of the KV cache by up to 5X without compromising model quality. We further demonstrate that Scissorhands can be combined with 4-bit quantization, traditionally used to compress model weights, to achieve up to 20X compression.",
+      "published": "2023-05-26T17:39:58Z",
+      "updated": "2023-08-28T22:48:46Z",
+      "paper_url": "http://arxiv.org/abs/2305.17118v2",
+      "pdf_url": "https://arxiv.org/pdf/2305.17118v2",
+      "categories": [
+        "cs.LG",
+        "cs.CL"
+      ],
+      "seed_topic": "context_kv",
+      "matches": [
+        {
+          "topic_id": "context_kv",
+          "topic_name": "上下文与 KV Cache 压缩",
+          "score": 0.492,
+          "level": "high",
+          "reason": "关键词命中：KV cache compression；arXiv 分类重合：cs.CL、cs.LG",
+          "keyword_hits": [
+            "KV cache compression"
+          ],
+          "priority": 1.6,
+          "ranking_score": 0.7872,
+          "llm_reason": "该论文直接研究 KV cache 压缩与淘汰，属于研究方向的核心主题；其按重要性保留关键 token 的固定预算策略与 KV cache eviction 高度相关，且可与量化结合，对长上下文推理的内存约束有直接参考价值。"
+        },
+        {
+          "topic_id": "ai_exploration",
+          "topic_name": "跨领域 AI 探索",
+          "score": 0.281,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CL、cs.LG",
+          "keyword_hits": [],
+          "priority": 0.65,
+          "ranking_score": 0.18265
+        },
+        {
+          "topic_id": "vlm_efficiency",
+          "topic_name": "多模态推理效率与视觉 Token 压缩",
+          "score": 0.26,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CL、cs.LG",
+          "keyword_hits": [],
+          "priority": 1.8,
+          "ranking_score": 0.468
+        },
+        {
+          "topic_id": "agent_memory",
+          "topic_name": "长任务压缩与 Agent 记忆",
+          "score": 0.26,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CL、cs.LG",
+          "keyword_hits": [],
+          "priority": 1.6,
+          "ranking_score": 0.416
+        },
+        {
+          "topic_id": "vlm_core",
+          "topic_name": "VLM 与多模态理解",
+          "score": 0.177,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CL",
+          "keyword_hits": [],
+          "priority": 1.6,
+          "ranking_score": 0.2832
+        },
+        {
+          "topic_id": "gui_agents",
+          "topic_name": "GUI Agent 与计算机操作",
+          "score": 0.062,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CL",
+          "keyword_hits": [],
+          "priority": 2.0,
+          "ranking_score": 0.124
+        },
+        {
+          "topic_id": "degraded_navigation",
+          "topic_name": "地下退化环境导航",
+          "score": 0.0,
+          "level": "low",
+          "reason": "文本语义与方向描述存在弱相关，需要人工复核。",
+          "keyword_hits": [],
+          "priority": 0.25,
+          "ranking_score": 0.0
+        }
+      ],
+      "best_match": {
+        "topic_id": "context_kv",
+        "topic_name": "上下文与 KV Cache 压缩",
+        "score": 0.492,
+        "level": "high",
+        "reason": "关键词命中：KV cache compression；arXiv 分类重合：cs.CL、cs.LG",
+        "keyword_hits": [
+          "KV cache compression"
+        ],
+        "priority": 1.6,
+        "ranking_score": 0.7872,
+        "llm_reason": "该论文直接研究 KV cache 压缩与淘汰，属于研究方向的核心主题；其按重要性保留关键 token 的固定预算策略与 KV cache eviction 高度相关，且可与量化结合，对长上下文推理的内存约束有直接参考价值。"
+      },
+      "recommendation_kind": "historical",
+      "summary_status": "llm",
+      "summary_fingerprint": "e0f796734696883d22797224dcc7892d17570046e412af56f1a20c404cb71290",
+      "chinese_summary": {
+        "problem": "论文要解决 LLM 推理时 KV cache 随上下文增长而膨胀、其内存占用甚至超过模型权重、进而限制推理批大小和吞吐的问题。",
+        "method": "作者从注意力分数观察出发提出“重要性持久性”假设：在某一步影响大的关键 token 会持续影响后续生成。Scissorhands 无需微调，在固定内存预算下管理 KV cache，以更高概率保留这些关键 token，从而控制缓存规模。",
+        "innovation": "提出并围绕“重要性持久性”假设做经验验证与理论分析；据此设计无需微调的测试时 KV cache 固定预算压缩机制；并展示该方法可与 4-bit 量化叠加使用。",
+        "evidence": "作者报告 Scissorhands 可将 KV cache 推理内存最多降低 5X 而不损害模型质量，与 4-bit 量化结合可达最多 20X 压缩；摘要未给出具体任务、数据集、质量指标数值或端到端延迟测量，证据细节不足，需阅读全文确认。",
+        "limitations": "摘要未说明质量评估的具体任务与指标、压缩比与质量之间的权衡曲线、不同模型和上下文长度下的稳健性，也未报告实际端到端延迟或吞吐收益；5X/20X 为作者报告的内存压缩数字，需全文核实测量口径。",
+        "why_relevant": "该论文直接研究 KV cache 压缩与淘汰，属于研究方向的核心主题；其按重要性保留关键 token 的固定预算策略与 KV cache eviction 高度相关，且可与量化结合，对长上下文推理的内存约束有直接参考价值。"
+      },
+      "first_seen_at": "2026-11-18T08:22:35.655608+00:00",
+      "last_seen_at": "2026-11-18T08:22:35.655608+00:00",
+      "retained_from_previous_run": false
+    },
+    {
       "id": "2611.04313v1",
       "source": "arXiv",
       "title": "Coarse Semantic Blocks for Efficient Training-Free Sparse Attention",
@@ -6405,7 +6795,7 @@
       },
       "first_seen_at": "2026-11-13T07:42:49.398641+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2611.14113v1",
@@ -6910,6 +7300,258 @@
       }
     },
     {
+      "id": "2305.17530v1",
+      "source": "arXiv",
+      "title": "PuMer: Pruning and Merging Tokens for Efficient Vision Language Models",
+      "authors": [
+        "Qingqing Cao",
+        "Bhargavi Paranjape",
+        "Hannaneh Hajishirzi"
+      ],
+      "summary": "Large-scale vision language (VL) models use Transformers to perform cross-modal interactions between the input text and image. These cross-modal interactions are computationally expensive and memory-intensive due to the quadratic complexity of processing the input image and text. We present PuMer: a token reduction framework that uses text-informed Pruning and modality-aware Merging strategies to progressively reduce the tokens of input image and text, improving model inference speed and reducing memory footprint. PuMer learns to keep salient image tokens related to the input text and merges similar textual and visual tokens by adding lightweight token reducer modules at several cross-modal layers in the VL model. Training PuMer is mostly the same as finetuning the original VL model but faster. Our evaluation for two vision language models on four downstream VL tasks shows PuMer increases inference throughput by up to 2x and reduces memory footprint by over 50% while incurring less than a 1% accuracy drop.",
+      "published": "2023-05-27T17:16:27Z",
+      "updated": "2023-05-27T17:16:27Z",
+      "paper_url": "http://arxiv.org/abs/2305.17530v1",
+      "pdf_url": "https://arxiv.org/pdf/2305.17530v1",
+      "categories": [
+        "cs.CV",
+        "cs.AI",
+        "cs.CL"
+      ],
+      "seed_topic": "vlm_core",
+      "matches": [
+        {
+          "topic_id": "vlm_core",
+          "topic_name": "VLM 与多模态理解",
+          "score": 0.481,
+          "level": "medium",
+          "reason": "关键词命中：vision language model；arXiv 分类重合：cs.AI、cs.CL、cs.CV",
+          "keyword_hits": [
+            "vision language model"
+          ],
+          "priority": 1.6,
+          "ranking_score": 0.7696,
+          "llm_reason": "论文研究视觉语言模型的高效推理与跨模态 token 交互，属于 VLM 机制与训练方法范畴，其文本引导的视觉 token 选择与模态对齐式合并思路可能迁移到 GUI Agent 的多模态输入压缩与推理加速；但论文聚焦效率而非视觉推理、空间理解或 GUI 场景评测，与研究方向为部分相关，需人工复核其精度保持是否覆盖细粒度视觉理解任务。"
+        },
+        {
+          "topic_id": "vlm_efficiency",
+          "topic_name": "多模态推理效率与视觉 Token 压缩",
+          "score": 0.385,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CL、cs.CV",
+          "keyword_hits": [],
+          "priority": 1.8,
+          "ranking_score": 0.693
+        },
+        {
+          "topic_id": "ai_exploration",
+          "topic_name": "跨领域 AI 探索",
+          "score": 0.312,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.AI、cs.CL、cs.CV",
+          "keyword_hits": [],
+          "priority": 0.65,
+          "ranking_score": 0.2028
+        },
+        {
+          "topic_id": "context_kv",
+          "topic_name": "上下文与 KV Cache 压缩",
+          "score": 0.26,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.AI、cs.CL",
+          "keyword_hits": [],
+          "priority": 1.6,
+          "ranking_score": 0.416
+        },
+        {
+          "topic_id": "gui_agents",
+          "topic_name": "GUI Agent 与计算机操作",
+          "score": 0.219,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.AI、cs.CL、cs.CV",
+          "keyword_hits": [],
+          "priority": 2.0,
+          "ranking_score": 0.438
+        },
+        {
+          "topic_id": "agent_memory",
+          "topic_name": "长任务压缩与 Agent 记忆",
+          "score": 0.198,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.AI、cs.CL",
+          "keyword_hits": [],
+          "priority": 1.6,
+          "ranking_score": 0.3168
+        },
+        {
+          "topic_id": "degraded_navigation",
+          "topic_name": "地下退化环境导航",
+          "score": 0.188,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CV",
+          "keyword_hits": [],
+          "priority": 0.25,
+          "ranking_score": 0.047
+        }
+      ],
+      "best_match": {
+        "topic_id": "vlm_core",
+        "topic_name": "VLM 与多模态理解",
+        "score": 0.481,
+        "level": "medium",
+        "reason": "关键词命中：vision language model；arXiv 分类重合：cs.AI、cs.CL、cs.CV",
+        "keyword_hits": [
+          "vision language model"
+        ],
+        "priority": 1.6,
+        "ranking_score": 0.7696,
+        "llm_reason": "论文研究视觉语言模型的高效推理与跨模态 token 交互，属于 VLM 机制与训练方法范畴，其文本引导的视觉 token 选择与模态对齐式合并思路可能迁移到 GUI Agent 的多模态输入压缩与推理加速；但论文聚焦效率而非视觉推理、空间理解或 GUI 场景评测，与研究方向为部分相关，需人工复核其精度保持是否覆盖细粒度视觉理解任务。"
+      },
+      "recommendation_kind": "historical",
+      "summary_status": "llm",
+      "summary_fingerprint": "a61c1939c0ebb28bc2e68530500fd8e7bf4af47fcfce2955650b2863bff488e3",
+      "chinese_summary": {
+        "problem": "大型视觉语言模型在跨模态交互中因图像与文本 token 的二次复杂度而计算昂贵、显存占用高，论文要解决的是在不显著损失下游任务精度的前提下降低推理成本。",
+        "method": "提出 PuMer 框架，在 VL 模型的多个跨模态层插入轻量 token reducer 模块，采用文本引导的剪枝保留与输入文本相关的显著图像 token，并用模态感知的合并策略合并相似的文本与视觉 token，从而逐步减少图像和文本 token 数量；训练方式基本等同于微调原 VL 模型但更快。",
+        "innovation": "将文本信息用于指导图像 token 剪枝，使保留的视觉 token 与输入文本相关；采用模态感知的合并策略同时处理文本与视觉 token；以轻量模块插入多个跨模态层实现渐进式 token 缩减，而非一次性固定裁剪。",
+        "evidence": "作者报告在两个视觉语言模型和四个下游 VL 任务上评估，推理吞吐最高提升 2 倍、显存占用降低超过 50%，精度下降小于 1%；这些均为作者报告结果，摘要未给出具体模型、数据集、测量配置与逐任务数字，需阅读全文核验，尚无独立验证。",
+        "limitations": "摘要未说明精度下降在不同任务和模型间的分布、剪枝与合并比例如何设定、是否影响生成式任务或细粒度空间推理；吞吐与显存收益的测量条件（批大小、硬件、序列长度）未给出；token reducer 模块的额外训练成本与可迁移性需全文确认。",
+        "why_relevant": "论文研究视觉语言模型的高效推理与跨模态 token 交互，属于 VLM 机制与训练方法范畴，其文本引导的视觉 token 选择与模态对齐式合并思路可能迁移到 GUI Agent 的多模态输入压缩与推理加速；但论文聚焦效率而非视觉推理、空间理解或 GUI 场景评测，与研究方向为部分相关，需人工复核其精度保持是否覆盖细粒度视觉理解任务。"
+      },
+      "first_seen_at": "2026-11-18T08:22:35.655608+00:00",
+      "last_seen_at": "2026-11-18T08:22:35.655608+00:00",
+      "retained_from_previous_run": false
+    },
+    {
+      "id": "2308.09568v2",
+      "source": "arXiv",
+      "title": "PUMGPT: A Large Vision-Language Model for Product Understanding",
+      "authors": [
+        "Wei Xue",
+        "Zongyi Guo",
+        "Baoliang Cui",
+        "Zheng Xing",
+        "Xiaoyi Zeng",
+        "Xiufei Wang",
+        "Shuhui Wu",
+        "Weiming Lu"
+      ],
+      "summary": "E-commerce platforms benefit from accurate product understanding to enhance user experience and operational efficiency. Traditional methods often focus on isolated tasks such as attribute extraction or categorization, posing adaptability issues to evolving tasks and leading to usability challenges with noisy data from the internet. Current Large Vision Language Models (LVLMs) lack domain-specific fine-tuning, thus falling short in precision and instruction following. To address these issues, we introduce PumGPT, the first e-commerce specialized LVLM designed for multi-modal product understanding tasks. We collected and curated a dataset of over one million products from AliExpress, filtering out non-inferable attributes using a universal hallucination detection framework, resulting in 663k high-quality data samples. PumGPT focuses on five essential tasks aimed at enhancing workflows for e-commerce platforms and retailers. We also introduce PumBench, a benchmark to evaluate product understanding across LVLMs. Our experiments show that PumGPT outperforms five other open-source LVLMs and GPT-4V in product understanding tasks. We also conduct extensive analytical experiments to delve deeply into the superiority of PumGPT, demonstrating the necessity for a specialized model in the e-commerce domain.",
+      "published": "2023-08-18T14:01:37Z",
+      "updated": "2024-06-16T10:08:03Z",
+      "paper_url": "http://arxiv.org/abs/2308.09568v2",
+      "pdf_url": "https://arxiv.org/pdf/2308.09568v2",
+      "categories": [
+        "cs.CV",
+        "cs.CL"
+      ],
+      "seed_topic": "vlm_core",
+      "matches": [
+        {
+          "topic_id": "vlm_core",
+          "topic_name": "VLM 与多模态理解",
+          "score": 0.479,
+          "level": "medium",
+          "reason": "关键词命中：vision-language model、vision language model；arXiv 分类重合：cs.CL、cs.CV",
+          "keyword_hits": [
+            "vision-language model",
+            "vision language model"
+          ],
+          "priority": 1.6,
+          "ranking_score": 0.7664,
+          "llm_reason": "论文涉及视觉语言模型的领域微调、多模态商品理解与基准构建，与视觉语言模型和多模态理解方向直接相关；其数据清洗、指令微调和评测设计可能迁移到 GUI Agent 的多模态理解与评测，但场景是电商商品而非 GUI 交互，空间理解和视觉推理机制未在摘要中体现，需人工复核方法细节后再决定是否精读。"
+        },
+        {
+          "topic_id": "vlm_efficiency",
+          "topic_name": "多模态推理效率与视觉 Token 压缩",
+          "score": 0.229,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CL、cs.CV",
+          "keyword_hits": [],
+          "priority": 1.8,
+          "ranking_score": 0.4122
+        },
+        {
+          "topic_id": "ai_exploration",
+          "topic_name": "跨领域 AI 探索",
+          "score": 0.219,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CL、cs.CV",
+          "keyword_hits": [],
+          "priority": 0.65,
+          "ranking_score": 0.14235
+        },
+        {
+          "topic_id": "gui_agents",
+          "topic_name": "GUI Agent 与计算机操作",
+          "score": 0.125,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CL、cs.CV",
+          "keyword_hits": [],
+          "priority": 2.0,
+          "ranking_score": 0.25
+        },
+        {
+          "topic_id": "degraded_navigation",
+          "topic_name": "地下退化环境导航",
+          "score": 0.125,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CV",
+          "keyword_hits": [],
+          "priority": 0.25,
+          "ranking_score": 0.03125
+        },
+        {
+          "topic_id": "context_kv",
+          "topic_name": "上下文与 KV Cache 压缩",
+          "score": 0.083,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CL",
+          "keyword_hits": [],
+          "priority": 1.6,
+          "ranking_score": 0.1328
+        },
+        {
+          "topic_id": "agent_memory",
+          "topic_name": "长任务压缩与 Agent 记忆",
+          "score": 0.083,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CL",
+          "keyword_hits": [],
+          "priority": 1.6,
+          "ranking_score": 0.1328
+        }
+      ],
+      "best_match": {
+        "topic_id": "vlm_core",
+        "topic_name": "VLM 与多模态理解",
+        "score": 0.479,
+        "level": "medium",
+        "reason": "关键词命中：vision-language model、vision language model；arXiv 分类重合：cs.CL、cs.CV",
+        "keyword_hits": [
+          "vision-language model",
+          "vision language model"
+        ],
+        "priority": 1.6,
+        "ranking_score": 0.7664,
+        "llm_reason": "论文涉及视觉语言模型的领域微调、多模态商品理解与基准构建，与视觉语言模型和多模态理解方向直接相关；其数据清洗、指令微调和评测设计可能迁移到 GUI Agent 的多模态理解与评测，但场景是电商商品而非 GUI 交互，空间理解和视觉推理机制未在摘要中体现，需人工复核方法细节后再决定是否精读。"
+      },
+      "recommendation_kind": "historical",
+      "summary_status": "llm",
+      "summary_fingerprint": "93b9c9f67e2007d40ea3f90ca00fb36f187ea1c6c4f7288d51e6b38a508be2d7",
+      "chinese_summary": {
+        "problem": "电商平台需要准确的多模态商品理解，但传统方法只针对属性抽取或分类等孤立任务，难以适应新任务和互联网噪声数据；现有大型视觉语言模型缺乏电商领域微调，在精度和指令遵循上不足。",
+        "method": "作者构建了从 AliExpress 采集的百万级商品数据集，并用通用幻觉检测框架过滤不可推断属性，得到 663k 高质量样本；在此基础上对 LVLM 进行电商领域微调，形成 PumGPT，覆盖五项商品理解任务，并提出 PumBench 基准用于评测。",
+        "innovation": "一是面向电商商品理解构建并清洗大规模领域数据，用幻觉检测过滤不可推断属性；二是提出面向多模态商品理解任务的领域专用 LVLM；三是提出 PumBench 基准，用于跨 LVLM 的商品理解评测。",
+        "evidence": "作者报告 PumGPT 在商品理解任务上优于五个开源 LVLM 和 GPT-4V，并进行了分析实验；但摘要未给出具体指标、任务定义细节、对比设置和统计显著性，证据细节需阅读全文核验，独立验证情况不明。",
+        "limitations": "摘要未说明五项任务的具体定义、PumBench 的规模与评测协议、基线模型版本与提示设置，也未报告具体数值和误差；数据仅来自 AliExpress，跨平台泛化性未知；幻觉检测框架的过滤效果和可能引入的偏差需全文确认。",
+        "why_relevant": "论文涉及视觉语言模型的领域微调、多模态商品理解与基准构建，与视觉语言模型和多模态理解方向直接相关；其数据清洗、指令微调和评测设计可能迁移到 GUI Agent 的多模态理解与评测，但场景是电商商品而非 GUI 交互，空间理解和视觉推理机制未在摘要中体现，需人工复核方法细节后再决定是否精读。"
+      },
+      "first_seen_at": "2026-11-18T08:22:35.655608+00:00",
+      "last_seen_at": "2026-11-18T08:22:35.655608+00:00",
+      "retained_from_previous_run": false
+    },
+    {
       "id": "2611.15809v1",
       "source": "arXiv",
       "title": "Fine-Grained Generative Hallucination Detection and Correction for Aerial Image Captioning",
@@ -7160,7 +7802,7 @@
       },
       "first_seen_at": "2026-11-17T08:57:05.623257+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2610.13263v1",
@@ -7287,7 +7929,7 @@
       },
       "first_seen_at": "2026-11-14T07:29:06.594779+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2609.24894v2",
@@ -7539,6 +8181,138 @@
       "first_seen_at": "2026-11-05T07:49:08.934658+00:00",
       "last_seen_at": "2026-11-05T07:49:08.934658+00:00",
       "retained_from_previous_run": true
+    },
+    {
+      "id": "2305.07019v2",
+      "source": "arXiv",
+      "title": "Musketeer: Joint Training for Multi-task Vision Language Model with Task Explanation Prompts",
+      "authors": [
+        "Zhaoyang Zhang",
+        "Yantao Shen",
+        "Kunyu Shi",
+        "Zhaowei Cai",
+        "Jun Fang",
+        "Siqi Deng",
+        "Hao Yang",
+        "Davide Modolo",
+        "Zhuowen Tu",
+        "Stefano Soatto"
+      ],
+      "summary": "We present a vision-language model whose parameters are jointly trained on all tasks and fully shared among multiple heterogeneous tasks which may interfere with each other, resulting in a single model which we named Musketeer. The integration of knowledge across heterogeneous tasks is enabled by a novel feature called Task Explanation Prompt (TEP). With rich and structured information such as task input/output format, TEP reduces interference among tasks, allowing the model to focus on their shared structure. With a single model, Musketeer achieves results comparable to or better than strong baselines trained on single tasks, almost uniformly across multiple tasks.",
+      "published": "2023-05-11T17:57:49Z",
+      "updated": "2024-03-14T20:30:52Z",
+      "paper_url": "http://arxiv.org/abs/2305.07019v2",
+      "pdf_url": "https://arxiv.org/pdf/2305.07019v2",
+      "categories": [
+        "cs.CV",
+        "cs.AI",
+        "cs.CL"
+      ],
+      "seed_topic": "vlm_core",
+      "matches": [
+        {
+          "topic_id": "vlm_core",
+          "topic_name": "VLM 与多模态理解",
+          "score": 0.469,
+          "level": "medium",
+          "reason": "关键词命中：vision-language model、vision language model；arXiv 分类重合：cs.AI、cs.CL、cs.CV",
+          "keyword_hits": [
+            "vision-language model",
+            "vision language model"
+          ],
+          "priority": 1.6,
+          "ranking_score": 0.7504,
+          "llm_reason": "论文研究视觉语言模型的多任务联合训练与参数共享，TEP 通过结构化任务说明缓解任务干扰，这一机制可能迁移到 GUI Agent 的多任务指令理解与跨任务泛化；但摘要未涉及 GUI、空间理解或视觉推理评测，相关性偏方法层面，需人工复核其任务类型与实验设置是否适用于你的方向。"
+        },
+        {
+          "topic_id": "ai_exploration",
+          "topic_name": "跨领域 AI 探索",
+          "score": 0.281,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.AI、cs.CL、cs.CV",
+          "keyword_hits": [],
+          "priority": 0.65,
+          "ranking_score": 0.18265
+        },
+        {
+          "topic_id": "vlm_efficiency",
+          "topic_name": "多模态推理效率与视觉 Token 压缩",
+          "score": 0.229,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CL、cs.CV",
+          "keyword_hits": [],
+          "priority": 1.8,
+          "ranking_score": 0.4122
+        },
+        {
+          "topic_id": "context_kv",
+          "topic_name": "上下文与 KV Cache 压缩",
+          "score": 0.198,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.AI、cs.CL",
+          "keyword_hits": [],
+          "priority": 1.6,
+          "ranking_score": 0.3168
+        },
+        {
+          "topic_id": "gui_agents",
+          "topic_name": "GUI Agent 与计算机操作",
+          "score": 0.188,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.AI、cs.CL、cs.CV",
+          "keyword_hits": [],
+          "priority": 2.0,
+          "ranking_score": 0.376
+        },
+        {
+          "topic_id": "agent_memory",
+          "topic_name": "长任务压缩与 Agent 记忆",
+          "score": 0.167,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.AI、cs.CL",
+          "keyword_hits": [],
+          "priority": 1.6,
+          "ranking_score": 0.2672
+        },
+        {
+          "topic_id": "degraded_navigation",
+          "topic_name": "地下退化环境导航",
+          "score": 0.125,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CV",
+          "keyword_hits": [],
+          "priority": 0.25,
+          "ranking_score": 0.03125
+        }
+      ],
+      "best_match": {
+        "topic_id": "vlm_core",
+        "topic_name": "VLM 与多模态理解",
+        "score": 0.469,
+        "level": "medium",
+        "reason": "关键词命中：vision-language model、vision language model；arXiv 分类重合：cs.AI、cs.CL、cs.CV",
+        "keyword_hits": [
+          "vision-language model",
+          "vision language model"
+        ],
+        "priority": 1.6,
+        "ranking_score": 0.7504,
+        "llm_reason": "论文研究视觉语言模型的多任务联合训练与参数共享，TEP 通过结构化任务说明缓解任务干扰，这一机制可能迁移到 GUI Agent 的多任务指令理解与跨任务泛化；但摘要未涉及 GUI、空间理解或视觉推理评测，相关性偏方法层面，需人工复核其任务类型与实验设置是否适用于你的方向。"
+      },
+      "recommendation_kind": "historical",
+      "summary_status": "llm",
+      "summary_fingerprint": "4690ad37fe7d9defb4c11f6a78bc5af30e6b5656462bf790d9bf93649daeb40a",
+      "chinese_summary": {
+        "problem": "论文要解决多任务视觉语言模型联合训练时异构任务相互干扰、难以在单一共享参数模型中同时取得好效果的问题。",
+        "method": "提出 Task Explanation Prompt（TEP），把任务输入/输出格式等结构化信息作为提示输入模型，以降低任务间干扰并让模型聚焦共享结构；所有任务参数联合训练且完全共享，得到单一模型 Musketeer。",
+        "innovation": "用结构化任务解释提示显式编码任务格式信息，以缓解异构多任务联合训练中的干扰；在完全共享参数的单一模型中整合多任务知识，而非为每个任务单独训练模型。",
+        "evidence": "作者报告称，单一 Musketeer 模型在多个任务上取得与强单任务基线相当或更好的结果，且这种表现“几乎一致”地覆盖多个任务；摘要未给出具体数据集、指标数值或统计细节，属于作者报告，需阅读全文核验。",
+        "limitations": "摘要未说明任务集合、评测基准、具体指标和对比数值，也未报告训练成本、TEP 设计消融及任务干扰的定量分析；‘几乎一致’的结论需全文确认，且未涉及 GUI 场景或视觉推理专项评测。",
+        "why_relevant": "论文研究视觉语言模型的多任务联合训练与参数共享，TEP 通过结构化任务说明缓解任务干扰，这一机制可能迁移到 GUI Agent 的多任务指令理解与跨任务泛化；但摘要未涉及 GUI、空间理解或视觉推理评测，相关性偏方法层面，需人工复核其任务类型与实验设置是否适用于你的方向。"
+      },
+      "first_seen_at": "2026-11-18T08:22:35.655608+00:00",
+      "last_seen_at": "2026-11-18T08:22:35.655608+00:00",
+      "retained_from_previous_run": false
     },
     {
       "id": "2611.03007v1",
@@ -7797,7 +8571,7 @@
       },
       "first_seen_at": "2026-11-14T07:29:06.594779+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2610.18654v3",
@@ -7950,7 +8724,7 @@
       },
       "first_seen_at": "2026-11-10T08:08:58.448906+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2611.16345v1",
@@ -8077,7 +8851,7 @@
       },
       "first_seen_at": "2026-11-13T07:42:49.398641+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2611.13596v1",
@@ -8334,6 +9108,384 @@
       "retained_from_previous_run": true
     },
     {
+      "id": "2310.02409v2",
+      "source": "arXiv",
+      "title": "Dodo: Dynamic Contextual Compression for Decoder-only LMs",
+      "authors": [
+        "Guanghui Qin",
+        "Corby Rosset",
+        "Ethan C. Chau",
+        "Nikhil Rao",
+        "Benjamin Van Durme"
+      ],
+      "summary": "Transformer-based language models (LMs) are inefficient in long contexts. We propose Dodo, a solution for context compression. Instead of one vector per token in a standard transformer model, Dodo represents text with a dynamic number of hidden states at each layer, reducing the cost of self-attention to a fraction of typical time and space. Moreover, off-the-shelf models such as LLaMA can be adapted to Dodo by efficient parameter tuning methods such as LoRA. In use, Dodo can act as either an autoregressive LM or a context compressor for downstream tasks. We demonstrate through experiments in language modeling, question answering, and summarization that Dodo retains capabilities in these tasks, while drastically reducing the overhead during decoding. For example, in the autoencoding task, Dodo shrinks context at a 20x compression ratio with a BLEU score of 98% for reconstruction, achieving nearly lossless encoding.",
+      "published": "2023-10-03T20:07:06Z",
+      "updated": "2024-06-13T15:19:24Z",
+      "paper_url": "http://arxiv.org/abs/2310.02409v2",
+      "pdf_url": "https://arxiv.org/pdf/2310.02409v2",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "seed_topic": "context_kv",
+      "matches": [
+        {
+          "topic_id": "context_kv",
+          "topic_name": "上下文与 KV Cache 压缩",
+          "score": 0.456,
+          "level": "high",
+          "reason": "关键词命中：context compression；arXiv 分类重合：cs.AI、cs.CL、cs.LG",
+          "keyword_hits": [
+            "context compression"
+          ],
+          "priority": 1.6,
+          "ranking_score": 0.7296,
+          "llm_reason": "论文直接针对长上下文推理中的上下文压缩，属于 prompt/context 压缩方向，且以解码开销为优化目标，与研究方向高度重合；但其压缩对象是逐层隐状态而非 KV cache 淘汰或量化，摘要也未给出端到端延迟或内存测量，因此与 KV cache 压缩子方向只是部分相关，需人工复核其实际效率证据。"
+        },
+        {
+          "topic_id": "agent_memory",
+          "topic_name": "长任务压缩与 Agent 记忆",
+          "score": 0.344,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.AI、cs.CL、cs.LG",
+          "keyword_hits": [],
+          "priority": 1.6,
+          "ranking_score": 0.5504
+        },
+        {
+          "topic_id": "ai_exploration",
+          "topic_name": "跨领域 AI 探索",
+          "score": 0.344,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.AI、cs.CL、cs.LG",
+          "keyword_hits": [],
+          "priority": 0.65,
+          "ranking_score": 0.2236
+        },
+        {
+          "topic_id": "vlm_efficiency",
+          "topic_name": "多模态推理效率与视觉 Token 压缩",
+          "score": 0.292,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CL、cs.LG",
+          "keyword_hits": [],
+          "priority": 1.8,
+          "ranking_score": 0.5256
+        },
+        {
+          "topic_id": "vlm_core",
+          "topic_name": "VLM 与多模态理解",
+          "score": 0.26,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.AI、cs.CL",
+          "keyword_hits": [],
+          "priority": 1.6,
+          "ranking_score": 0.416
+        },
+        {
+          "topic_id": "gui_agents",
+          "topic_name": "GUI Agent 与计算机操作",
+          "score": 0.156,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.AI、cs.CL",
+          "keyword_hits": [],
+          "priority": 2.0,
+          "ranking_score": 0.312
+        },
+        {
+          "topic_id": "degraded_navigation",
+          "topic_name": "地下退化环境导航",
+          "score": 0.0,
+          "level": "low",
+          "reason": "文本语义与方向描述存在弱相关，需要人工复核。",
+          "keyword_hits": [],
+          "priority": 0.25,
+          "ranking_score": 0.0
+        }
+      ],
+      "best_match": {
+        "topic_id": "context_kv",
+        "topic_name": "上下文与 KV Cache 压缩",
+        "score": 0.456,
+        "level": "high",
+        "reason": "关键词命中：context compression；arXiv 分类重合：cs.AI、cs.CL、cs.LG",
+        "keyword_hits": [
+          "context compression"
+        ],
+        "priority": 1.6,
+        "ranking_score": 0.7296,
+        "llm_reason": "论文直接针对长上下文推理中的上下文压缩，属于 prompt/context 压缩方向，且以解码开销为优化目标，与研究方向高度重合；但其压缩对象是逐层隐状态而非 KV cache 淘汰或量化，摘要也未给出端到端延迟或内存测量，因此与 KV cache 压缩子方向只是部分相关，需人工复核其实际效率证据。"
+      },
+      "recommendation_kind": "historical",
+      "summary_status": "llm",
+      "summary_fingerprint": "c80ca1713bc9677f2cbd1a85b8a81e6a0e4f1d71bc23b41e720f873c45b37837",
+      "chinese_summary": {
+        "problem": "长上下文下 Transformer 语言模型的自注意力计算与存储开销过高，论文要降低解码阶段处理长文本的成本。",
+        "method": "提出 Dodo 上下文压缩方案：不再为每个 token 固定保留一个隐状态，而是在每一层用动态数量的隐状态表示文本，从而减少自注意力的时间和空间开销；现成模型（如 LLaMA）可通过 LoRA 等高效参数微调适配；使用时既可作自回归语言模型，也可作下游任务的上下文压缩器。",
+        "innovation": "一是把上下文压缩从输入 token 层面推进到逐层隐状态层面，用动态数量的隐状态替代固定每 token 一向量；二是通过 LoRA 等参数高效微调把已有解码器模型改造成压缩模型，而非从头训练；三是同一模型兼具自回归生成与上下文压缩两种使用模式。",
+        "evidence": "作者报告在语言建模、问答和摘要任务上实验，称模型保留这些任务能力，同时大幅降低解码开销；并举例在自编码任务中实现 20 倍上下文压缩、重建 BLEU 为 98%，称接近无损编码。上述均为作者报告，摘要未给出延迟、显存、吞吐的具体测量数值，也未说明基线设置与评测细节，需读全文核实。",
+        "limitations": "摘要未报告端到端延迟、显存占用或吞吐的实测数字，20 倍压缩比与 BLEU 98% 仅针对自编码重建任务，不能直接等同于下游任务质量或实际加速；动态隐状态数量如何决定、压缩后信息损失对长上下文推理的影响、与 KV cache 淘汰或量化的对比均需全文确认。",
+        "why_relevant": "论文直接针对长上下文推理中的上下文压缩，属于 prompt/context 压缩方向，且以解码开销为优化目标，与研究方向高度重合；但其压缩对象是逐层隐状态而非 KV cache 淘汰或量化，摘要也未给出端到端延迟或内存测量，因此与 KV cache 压缩子方向只是部分相关，需人工复核其实际效率证据。"
+      },
+      "first_seen_at": "2026-11-18T08:22:35.655608+00:00",
+      "last_seen_at": "2026-11-18T08:22:35.655608+00:00",
+      "retained_from_previous_run": false
+    },
+    {
+      "id": "2306.01879v4",
+      "source": "arXiv",
+      "title": "Revisiting the Role of Language Priors in Vision-Language Models",
+      "authors": [
+        "Zhiqiu Lin",
+        "Xinyue Chen",
+        "Deepak Pathak",
+        "Pengchuan Zhang",
+        "Deva Ramanan"
+      ],
+      "summary": "Vision-language models (VLMs) are impactful in part because they can be applied to a variety of visual understanding tasks in a zero-shot fashion, without any fine-tuning. We study $\\textit{generative VLMs}$ that are trained for next-word generation given an image. We explore their zero-shot performance on the illustrative task of image-text retrieval across 8 popular vision-language benchmarks. Our first observation is that they can be repurposed for discriminative tasks (such as image-text retrieval) by simply computing the match score of generating a particular text string given an image. We call this probabilistic score the $\\textit{Visual Generative Pre-Training Score}$ (VisualGPTScore). While the VisualGPTScore produces near-perfect accuracy on some retrieval benchmarks, it yields poor accuracy on others. We analyze this behavior through a probabilistic lens, pointing out that some benchmarks inadvertently capture unnatural language distributions by creating adversarial but unlikely text captions. In fact, we demonstrate that even a \"blind\" language model that ignores any image evidence can sometimes outperform all prior art, reminiscent of similar challenges faced by the visual-question answering (VQA) community many years ago. We derive a probabilistic post-processing scheme that controls for the amount of linguistic bias in generative VLMs at test time without having to retrain or fine-tune the model. We show that the VisualGPTScore, when appropriately debiased, is a strong zero-shot baseline for vision-language understanding, oftentimes producing state-of-the-art accuracy.",
+      "published": "2023-06-02T19:19:43Z",
+      "updated": "2024-05-15T07:15:05Z",
+      "paper_url": "http://arxiv.org/abs/2306.01879v4",
+      "pdf_url": "https://arxiv.org/pdf/2306.01879v4",
+      "categories": [
+        "cs.CV",
+        "cs.AI",
+        "cs.CL"
+      ],
+      "seed_topic": "vlm_core",
+      "matches": [
+        {
+          "topic_id": "vlm_core",
+          "topic_name": "VLM 与多模态理解",
+          "score": 0.456,
+          "level": "medium",
+          "reason": "关键词命中：vision-language model；arXiv 分类重合：cs.AI、cs.CL、cs.CV",
+          "keyword_hits": [
+            "vision-language model"
+          ],
+          "priority": 1.6,
+          "ranking_score": 0.7296,
+          "llm_reason": "论文直接研究视觉语言模型的零样本评测机制与语言先验偏差，属于 VLM 理解与视觉语言对齐的核心议题；其揭示的“语言先验可能压过视觉证据”问题对视觉推理、空间理解和多模态评测设计有迁移价值，也提醒在构建 GUI Agent 的视觉语言评测时需控制文本偏置。但论文任务集中在图像-文本检索，未涉及视频理解、视觉指令微调或 GUI Agent 机制，与我的方向为方法层面的间接相关，需人工复核其去偏方案能否迁移到生成式多模态推理任务。"
+        },
+        {
+          "topic_id": "ai_exploration",
+          "topic_name": "跨领域 AI 探索",
+          "score": 0.344,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.AI、cs.CL、cs.CV",
+          "keyword_hits": [],
+          "priority": 0.65,
+          "ranking_score": 0.2236
+        },
+        {
+          "topic_id": "vlm_efficiency",
+          "topic_name": "多模态推理效率与视觉 Token 压缩",
+          "score": 0.26,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CL、cs.CV",
+          "keyword_hits": [],
+          "priority": 1.8,
+          "ranking_score": 0.468
+        },
+        {
+          "topic_id": "gui_agents",
+          "topic_name": "GUI Agent 与计算机操作",
+          "score": 0.188,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.AI、cs.CL、cs.CV",
+          "keyword_hits": [],
+          "priority": 2.0,
+          "ranking_score": 0.376
+        },
+        {
+          "topic_id": "context_kv",
+          "topic_name": "上下文与 KV Cache 压缩",
+          "score": 0.167,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.AI、cs.CL",
+          "keyword_hits": [],
+          "priority": 1.6,
+          "ranking_score": 0.2672
+        },
+        {
+          "topic_id": "agent_memory",
+          "topic_name": "长任务压缩与 Agent 记忆",
+          "score": 0.167,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.AI、cs.CL",
+          "keyword_hits": [],
+          "priority": 1.6,
+          "ranking_score": 0.2672
+        },
+        {
+          "topic_id": "degraded_navigation",
+          "topic_name": "地下退化环境导航",
+          "score": 0.156,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CV",
+          "keyword_hits": [],
+          "priority": 0.25,
+          "ranking_score": 0.039
+        }
+      ],
+      "best_match": {
+        "topic_id": "vlm_core",
+        "topic_name": "VLM 与多模态理解",
+        "score": 0.456,
+        "level": "medium",
+        "reason": "关键词命中：vision-language model；arXiv 分类重合：cs.AI、cs.CL、cs.CV",
+        "keyword_hits": [
+          "vision-language model"
+        ],
+        "priority": 1.6,
+        "ranking_score": 0.7296,
+        "llm_reason": "论文直接研究视觉语言模型的零样本评测机制与语言先验偏差，属于 VLM 理解与视觉语言对齐的核心议题；其揭示的“语言先验可能压过视觉证据”问题对视觉推理、空间理解和多模态评测设计有迁移价值，也提醒在构建 GUI Agent 的视觉语言评测时需控制文本偏置。但论文任务集中在图像-文本检索，未涉及视频理解、视觉指令微调或 GUI Agent 机制，与我的方向为方法层面的间接相关，需人工复核其去偏方案能否迁移到生成式多模态推理任务。"
+      },
+      "recommendation_kind": "historical",
+      "summary_status": "llm",
+      "summary_fingerprint": "20c178f55bde80fc23c430c05dcd4cac006f9fd7e74c55b485f64db75cc5c474",
+      "chinese_summary": {
+        "problem": "生成式视觉语言模型（VLM）在零样本图像-文本检索等判别任务上的表现为何在不同基准上差异巨大，以及语言先验（文本分布偏差）在多大程度上影响其零样本评测结果。",
+        "method": "作者提出用生成给定图像下文本字符串的概率作为匹配分数，称为 VisualGPTScore，从而把生成式 VLM 直接用于检索等判别任务；随后从概率角度分析基准中的语言分布偏差，并推导出一种测试时后处理去偏方案，在不重训练、不微调模型的情况下控制语言偏置。",
+        "innovation": "一是把生成式 VLM 的下一词概率重新解释为可用于判别任务的匹配分数（VisualGPTScore）；二是从概率视角指出部分检索基准通过构造不自然、低概率的对抗文本而无意中放大了语言分布偏差；三是提出无需训练或微调的测试时概率后处理去偏方法，并展示去偏后的分数可作为强零样本基线。",
+        "evidence": "作者报告在 8 个常用视觉语言基准上评估零样本图像-文本检索，VisualGPTScore 在部分基准上接近完美准确率、在另一些基准上表现较差；作者还报告一个忽略图像证据的“盲”语言模型有时能超过此前方法，并称去偏后的 VisualGPTScore 常常达到当时最优准确率。上述均为作者在摘要中的报告，摘要未给出具体数据集名称、数值、对比方法与统计细节，需阅读全文核验；去偏方案的有效性也缺少独立验证。",
+        "limitations": "摘要未提供各基准的具体准确率、盲语言模型与完整模型的对比数字、去偏超参数设置及计算开销，因此收益幅度与稳健性需读全文确认；方法主要围绕图像-文本检索这一判别式改写，能否推广到视觉推理、空间理解或 GUI 场景尚不明确；去偏依赖对语言分布偏差的建模假设，在真实分布与基准分布不一致时可能失效。",
+        "why_relevant": "论文直接研究视觉语言模型的零样本评测机制与语言先验偏差，属于 VLM 理解与视觉语言对齐的核心议题；其揭示的“语言先验可能压过视觉证据”问题对视觉推理、空间理解和多模态评测设计有迁移价值，也提醒在构建 GUI Agent 的视觉语言评测时需控制文本偏置。但论文任务集中在图像-文本检索，未涉及视频理解、视觉指令微调或 GUI Agent 机制，与我的方向为方法层面的间接相关，需人工复核其去偏方案能否迁移到生成式多模态推理任务。"
+      },
+      "first_seen_at": "2026-11-18T08:22:35.655608+00:00",
+      "last_seen_at": "2026-11-18T08:22:35.655608+00:00",
+      "retained_from_previous_run": false
+    },
+    {
+      "id": "2307.06945v4",
+      "source": "arXiv",
+      "title": "In-context Autoencoder for Context Compression in a Large Language Model",
+      "authors": [
+        "Tao Ge",
+        "Jing Hu",
+        "Lei Wang",
+        "Xun Wang",
+        "Si-Qing Chen",
+        "Furu Wei"
+      ],
+      "summary": "We propose the In-context Autoencoder (ICAE), leveraging the power of a large language model (LLM) to compress a long context into short compact memory slots that can be directly conditioned on by the LLM for various purposes. ICAE is first pretrained using both autoencoding and language modeling objectives on massive text data, enabling it to generate memory slots that accurately and comprehensively represent the original context. Then, it is fine-tuned on instruction data for producing desirable responses to various prompts. Experiments demonstrate that our lightweight ICAE, introducing about 1% additional parameters, effectively achieves $4\\times$ context compression based on Llama, offering advantages in both improved latency and GPU memory cost during inference, and showing an interesting insight in memorization as well as potential for scalability. These promising results imply a novel perspective on the connection between working memory in cognitive science and representation learning in LLMs, revealing ICAE's significant implications in addressing the long context problem and suggesting further research in LLM context management. Our data, code and models are available at https://github.com/getao/icae.",
+      "published": "2023-07-13T17:59:21Z",
+      "updated": "2024-05-08T18:16:09Z",
+      "paper_url": "http://arxiv.org/abs/2307.06945v4",
+      "pdf_url": "https://arxiv.org/pdf/2307.06945v4",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "seed_topic": "context_kv",
+      "matches": [
+        {
+          "topic_id": "context_kv",
+          "topic_name": "上下文与 KV Cache 压缩",
+          "score": 0.456,
+          "level": "high",
+          "reason": "关键词命中：context compression；arXiv 分类重合：cs.AI、cs.CL、cs.LG",
+          "keyword_hits": [
+            "context compression"
+          ],
+          "priority": 1.6,
+          "ranking_score": 0.7296,
+          "llm_reason": "该论文直接针对 prompt/context 压缩：将长上下文编码为短记忆槽供 LLM 条件化，属于输入侧上下文压缩而非 KV cache 淘汰或量化，与我的上下文压缩方向高度相关；作者报告了端到端延迟和 GPU 内存收益，符合我优先关注实际效率证据的取向。但需注意其节省来自输入上下文缩短，不能与 KV cache 压缩或权重量化的节省比例混用；具体任务质量与效率数据需全文复核。"
+        },
+        {
+          "topic_id": "agent_memory",
+          "topic_name": "长任务压缩与 Agent 记忆",
+          "score": 0.456,
+          "level": "medium",
+          "reason": "关键词命中：context management；arXiv 分类重合：cs.AI、cs.CL、cs.LG",
+          "keyword_hits": [
+            "context management"
+          ],
+          "priority": 1.6,
+          "ranking_score": 0.7296
+        },
+        {
+          "topic_id": "ai_exploration",
+          "topic_name": "跨领域 AI 探索",
+          "score": 0.312,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.AI、cs.CL、cs.LG",
+          "keyword_hits": [],
+          "priority": 0.65,
+          "ranking_score": 0.2028
+        },
+        {
+          "topic_id": "vlm_core",
+          "topic_name": "VLM 与多模态理解",
+          "score": 0.292,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.AI、cs.CL",
+          "keyword_hits": [],
+          "priority": 1.6,
+          "ranking_score": 0.4672
+        },
+        {
+          "topic_id": "vlm_efficiency",
+          "topic_name": "多模态推理效率与视觉 Token 压缩",
+          "score": 0.229,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CL、cs.LG",
+          "keyword_hits": [],
+          "priority": 1.8,
+          "ranking_score": 0.4122
+        },
+        {
+          "topic_id": "gui_agents",
+          "topic_name": "GUI Agent 与计算机操作",
+          "score": 0.125,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.AI、cs.CL",
+          "keyword_hits": [],
+          "priority": 2.0,
+          "ranking_score": 0.25
+        },
+        {
+          "topic_id": "degraded_navigation",
+          "topic_name": "地下退化环境导航",
+          "score": 0.0,
+          "level": "low",
+          "reason": "文本语义与方向描述存在弱相关，需要人工复核。",
+          "keyword_hits": [],
+          "priority": 0.25,
+          "ranking_score": 0.0
+        }
+      ],
+      "best_match": {
+        "topic_id": "context_kv",
+        "topic_name": "上下文与 KV Cache 压缩",
+        "score": 0.456,
+        "level": "high",
+        "reason": "关键词命中：context compression；arXiv 分类重合：cs.AI、cs.CL、cs.LG",
+        "keyword_hits": [
+          "context compression"
+        ],
+        "priority": 1.6,
+        "ranking_score": 0.7296,
+        "llm_reason": "该论文直接针对 prompt/context 压缩：将长上下文编码为短记忆槽供 LLM 条件化，属于输入侧上下文压缩而非 KV cache 淘汰或量化，与我的上下文压缩方向高度相关；作者报告了端到端延迟和 GPU 内存收益，符合我优先关注实际效率证据的取向。但需注意其节省来自输入上下文缩短，不能与 KV cache 压缩或权重量化的节省比例混用；具体任务质量与效率数据需全文复核。"
+      },
+      "recommendation_kind": "historical",
+      "summary_status": "llm",
+      "summary_fingerprint": "6ff517c2701c38b7518b51fbc187242b4b3da19fdd4c5ea74c3c490aca4f39b1",
+      "chinese_summary": {
+        "problem": "论文要解决长上下文给大语言模型带来的推理开销问题：把长上下文压缩成少量紧凑的记忆槽，使模型能直接以这些槽为条件，而不必处理原始长文本。",
+        "method": "提出 In-context Autoencoder（ICAE）：先在大规模文本上用自编码与语言建模双目标预训练，使模型生成能准确、全面表示原上下文的记忆槽；再在指令数据上微调，以针对不同提示产生期望回答。ICAE 作为轻量模块接入 LLM，约增加 1% 参数。",
+        "innovation": "将长上下文压缩表述为可由 LLM 直接条件化的“记忆槽”自编码问题，并用自编码+语言建模联合预训练获得上下文表示；以约 1% 额外参数的轻量模块实现压缩，而非仅做 token 级裁剪；作者还讨论了记忆现象及可扩展性。",
+        "evidence": "作者报告：基于 Llama 实现 4 倍上下文压缩，推理时在延迟和 GPU 内存开销上均有优势，并称观察到关于记忆的有趣现象及可扩展潜力。摘要未给出具体延迟、显存、任务成功率数值或基线对比细节，因此这些收益为作者报告，需阅读全文核实；独立验证证据不足。",
+        "limitations": "摘要未说明压缩后任务质量下降幅度、评测任务与基线、延迟和显存测量的具体设置；4 倍压缩是否在不同上下文长度和模型规模上稳定未知；约 1% 额外参数的具体构成与训练成本未交代；记忆槽的可解释性与信息丢失边界需全文确认。",
+        "why_relevant": "该论文直接针对 prompt/context 压缩：将长上下文编码为短记忆槽供 LLM 条件化，属于输入侧上下文压缩而非 KV cache 淘汰或量化，与我的上下文压缩方向高度相关；作者报告了端到端延迟和 GPU 内存收益，符合我优先关注实际效率证据的取向。但需注意其节省来自输入上下文缩短，不能与 KV cache 压缩或权重量化的节省比例混用；具体任务质量与效率数据需全文复核。"
+      },
+      "first_seen_at": "2026-11-18T08:22:35.655608+00:00",
+      "last_seen_at": "2026-11-18T08:22:35.655608+00:00",
+      "retained_from_previous_run": false
+    },
+    {
       "id": "2611.14469v1",
       "source": "arXiv",
       "title": "C$^2$-Routing: Complementary Cropping and Compression for Efficient Vision-Language Inference",
@@ -8454,7 +9606,7 @@
       },
       "first_seen_at": "2026-11-12T08:06:41.859407+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2611.15449v1",
@@ -8703,7 +9855,7 @@
       },
       "first_seen_at": "2026-11-17T08:57:05.623257+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2607.22864v2",
@@ -9211,7 +10363,7 @@
       },
       "first_seen_at": "2026-11-13T07:42:49.398641+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2611.02306v1",
@@ -9469,7 +10621,7 @@
       },
       "first_seen_at": "2026-11-12T08:06:41.859407+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2611.07232v1",
@@ -9719,7 +10871,7 @@
       },
       "first_seen_at": "2026-11-13T07:42:49.398641+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2606.15920v3",
@@ -10355,7 +11507,7 @@
       },
       "first_seen_at": "2026-11-17T08:57:05.623257+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2611.15069v1",
@@ -10484,7 +11636,7 @@
       },
       "first_seen_at": "2026-11-14T07:29:06.594779+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2611.21457v1",
@@ -10609,7 +11761,7 @@
       },
       "first_seen_at": "2026-11-17T08:57:05.623257+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2611.20936v1",
@@ -10735,7 +11887,7 @@
       },
       "first_seen_at": "2026-11-17T08:57:05.623257+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2611.18417v1",
@@ -11108,7 +12260,7 @@
       },
       "first_seen_at": "2026-11-12T08:06:41.859407+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2611.07408v1",
@@ -11482,7 +12634,7 @@
       },
       "first_seen_at": "2026-11-12T08:06:41.859407+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2611.07605v1",
@@ -12110,7 +13262,7 @@
       },
       "first_seen_at": "2026-11-10T08:08:58.448906+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2611.07256v1",
@@ -12353,7 +13505,7 @@
       },
       "first_seen_at": "2026-11-05T07:49:08.934658+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2611.11319v1",
@@ -12476,7 +13628,7 @@
       },
       "first_seen_at": "2026-11-10T08:08:58.448906+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2611.03377v1",
@@ -13259,7 +14411,7 @@
       },
       "first_seen_at": "2026-11-14T07:29:06.594779+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2611.06748v2",
@@ -14899,7 +16051,7 @@
       },
       "first_seen_at": "2026-11-05T07:49:08.934658+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2608.00232v2",
@@ -15027,7 +16179,7 @@
       },
       "first_seen_at": "2026-11-04T07:23:48.692602+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2608.25230v3",
@@ -16276,7 +17428,7 @@
       },
       "first_seen_at": "2026-11-14T07:29:06.594779+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2602.13804v2",
@@ -16397,7 +17549,7 @@
       },
       "first_seen_at": "2026-11-10T08:08:58.448906+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2611.08054v1",
@@ -16776,7 +17928,7 @@
       },
       "first_seen_at": "2026-11-04T07:23:48.692602+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2611.02581v1",
@@ -17038,7 +18190,7 @@
       },
       "first_seen_at": "2026-11-10T08:08:58.448906+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2509.24314v2",
@@ -17666,7 +18818,7 @@
       },
       "first_seen_at": "2026-11-15T07:42:55.461046+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2611.02102v3",
@@ -17935,7 +19087,7 @@
       },
       "first_seen_at": "2026-11-15T07:42:55.461046+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2611.16419v1",
@@ -18313,7 +19465,7 @@
       },
       "first_seen_at": "2026-11-15T07:42:55.461046+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
-      "retained_from_previous_run": false
+      "retained_from_previous_run": true
     },
     {
       "id": "2606.10944v5",
@@ -18439,6 +19591,139 @@
       },
       "first_seen_at": "2026-11-10T08:08:58.448906+00:00",
       "last_seen_at": "2026-11-17T08:57:05.623257+00:00",
+      "retained_from_previous_run": true
+    },
+    {
+      "id": "2308.11971v2",
+      "source": "arXiv",
+      "title": "EVE: Efficient Vision-Language Pre-training with Masked Prediction and Modality-Aware MoE",
+      "authors": [
+        "Junyi Chen",
+        "Longteng Guo",
+        "Jia Sun",
+        "Shuai Shao",
+        "Zehuan Yuan",
+        "Liang Lin",
+        "Dongyu Zhang"
+      ],
+      "summary": "Building scalable vision-language models to learn from diverse, multimodal data remains an open challenge. In this paper, we introduce an Efficient Vision-languagE foundation model, namely EVE, which is one unified multimodal Transformer pre-trained solely by one unified pre-training task. Specifically, EVE encodes both vision and language within a shared Transformer network integrated with modality-aware sparse Mixture-of-Experts (MoE) modules, which capture modality-specific information by selectively switching to different experts. To unify pre-training tasks of vision and language, EVE performs masked signal modeling on image-text pairs to reconstruct masked signals, i.e., image pixels and text tokens, given visible signals. This simple yet effective pre-training objective accelerates training by 3.5x compared to the model pre-trained with Image-Text Contrastive and Image-Text Matching losses. Owing to the combination of the unified architecture and pre-training task, EVE is easy to scale up, enabling better downstream performance with fewer resources and faster training speed. Despite its simplicity, EVE achieves state-of-the-art performance on various vision-language downstream tasks, including visual question answering, visual reasoning, and image-text retrieval.",
+      "published": "2023-08-23T07:36:30Z",
+      "updated": "2024-03-01T11:22:54Z",
+      "paper_url": "http://arxiv.org/abs/2308.11971v2",
+      "pdf_url": "https://arxiv.org/pdf/2308.11971v2",
+      "categories": [
+        "cs.CV",
+        "cs.CL",
+        "cs.LG",
+        "cs.MM"
+      ],
+      "seed_topic": "vlm_efficiency",
+      "matches": [
+        {
+          "topic_id": "vlm_efficiency",
+          "topic_name": "多模态推理效率与视觉 Token 压缩",
+          "score": 0.306,
+          "level": "low",
+          "reason": "关键词命中：efficient vision-language；arXiv 分类重合：cs.CL、cs.CV、cs.LG",
+          "keyword_hits": [
+            "efficient vision-language"
+          ],
+          "priority": 1.8,
+          "ranking_score": 0.5508,
+          "llm_reason": "论文涉及高效视觉-语言基础模型与多模态 Transformer 训练加速，与“多模态推理效率”所在的大方向有联系，其模态感知 MoE 和统一架构可能影响后续 VLM 推理的参数量与计算路径。但论文核心是预训练任务与训练效率，不是视觉 token 裁剪、选择、合并、动态分辨率或多模态缓存，也未报告端到端推理延迟、KV 规模或整卡显存，因此与“视觉 Token 压缩”这一核心方向仅为泛化相关，需要人工复核其推理效率数据是否可用。"
+        },
+        {
+          "topic_id": "ai_exploration",
+          "topic_name": "跨领域 AI 探索",
+          "score": 0.456,
+          "level": "medium",
+          "reason": "关键词命中：foundation model；arXiv 分类重合：cs.CL、cs.CV、cs.LG",
+          "keyword_hits": [
+            "foundation model"
+          ],
+          "priority": 0.65,
+          "ranking_score": 0.2964
+        },
+        {
+          "topic_id": "vlm_core",
+          "topic_name": "VLM 与多模态理解",
+          "score": 0.454,
+          "level": "medium",
+          "reason": "关键词命中：vision-language model、visual reasoning；arXiv 分类重合：cs.CL、cs.CV",
+          "keyword_hits": [
+            "vision-language model",
+            "visual reasoning"
+          ],
+          "priority": 1.6,
+          "ranking_score": 0.7264
+        },
+        {
+          "topic_id": "context_kv",
+          "topic_name": "上下文与 KV Cache 压缩",
+          "score": 0.198,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CL、cs.LG",
+          "keyword_hits": [],
+          "priority": 1.6,
+          "ranking_score": 0.3168
+        },
+        {
+          "topic_id": "degraded_navigation",
+          "topic_name": "地下退化环境导航",
+          "score": 0.188,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CV",
+          "keyword_hits": [],
+          "priority": 0.25,
+          "ranking_score": 0.047
+        },
+        {
+          "topic_id": "agent_memory",
+          "topic_name": "长任务压缩与 Agent 记忆",
+          "score": 0.167,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CL、cs.LG",
+          "keyword_hits": [],
+          "priority": 1.6,
+          "ranking_score": 0.2672
+        },
+        {
+          "topic_id": "gui_agents",
+          "topic_name": "GUI Agent 与计算机操作",
+          "score": 0.125,
+          "level": "low",
+          "reason": "arXiv 分类重合：cs.CL、cs.CV",
+          "keyword_hits": [],
+          "priority": 2.0,
+          "ranking_score": 0.25
+        }
+      ],
+      "best_match": {
+        "topic_id": "vlm_efficiency",
+        "topic_name": "多模态推理效率与视觉 Token 压缩",
+        "score": 0.306,
+        "level": "low",
+        "reason": "关键词命中：efficient vision-language；arXiv 分类重合：cs.CL、cs.CV、cs.LG",
+        "keyword_hits": [
+          "efficient vision-language"
+        ],
+        "priority": 1.8,
+        "ranking_score": 0.5508,
+        "llm_reason": "论文涉及高效视觉-语言基础模型与多模态 Transformer 训练加速，与“多模态推理效率”所在的大方向有联系，其模态感知 MoE 和统一架构可能影响后续 VLM 推理的参数量与计算路径。但论文核心是预训练任务与训练效率，不是视觉 token 裁剪、选择、合并、动态分辨率或多模态缓存，也未报告端到端推理延迟、KV 规模或整卡显存，因此与“视觉 Token 压缩”这一核心方向仅为泛化相关，需要人工复核其推理效率数据是否可用。"
+      },
+      "recommendation_kind": "historical",
+      "summary_status": "llm",
+      "summary_fingerprint": "8ec94f660e79bd2b0d3788c5312ece5d54e112fd21695f398bb2262de8145b37",
+      "chinese_summary": {
+        "problem": "论文要解决的是视觉-语言基础模型预训练中任务不统一、训练成本高且难以扩展的问题，目标是构建一个用单一预训练任务、在共享 Transformer 中同时处理图像和文本的高效多模态基础模型。",
+        "method": "EVE 使用一个统一的 Transformer 网络编码视觉和语言，并插入模态感知的稀疏 Mixture-of-Experts（MoE）模块，通过为不同模态选择不同专家来捕获模态特定信息。预训练采用统一的掩码信号建模：在图像-文本对上，根据可见信号重建被掩码的图像像素和文本 token。该架构与预训练目标结合后便于扩展，作者称可用更少资源和更快训练获得下游性能。",
+        "innovation": "将视觉与语言统一到一个共享 Transformer 中，并用模态感知稀疏 MoE 区分模态专家；用单一的掩码信号建模任务同时重建图像像素和文本 token，替代常见的图文对比与匹配多任务预训练；强调该组合带来的可扩展性和训练效率。",
+        "evidence": "作者报告：相比使用 Image-Text Contrastive 和 Image-Text Matching 损失预训练的模型，EVE 的训练速度提升 3.5 倍；并在视觉问答、视觉推理和图文检索等下游任务上取得 state-of-the-art 性能。上述均为作者在摘要中的报告，摘要未给出具体数据集、评测设置、绝对指标、延迟或显存测量，也未提供独立验证，因此证据细节不足。",
+        "limitations": "摘要未说明 3.5 倍加速的测量条件（硬件、batch size、基线配置）、是否包含数据加载与通信开销，也未报告推理阶段延迟、吞吐或显存。MoE 的专家数量、路由开销、参数量与激活参数量未给出，可能影响实际部署效率。下游 state-of-the-art 的具体任务、数据集和与同等规模基线的公平比较需阅读全文确认。此外，该工作聚焦预训练效率，而非推理阶段的视觉 token 压缩。",
+        "why_relevant": "论文涉及高效视觉-语言基础模型与多模态 Transformer 训练加速，与“多模态推理效率”所在的大方向有联系，其模态感知 MoE 和统一架构可能影响后续 VLM 推理的参数量与计算路径。但论文核心是预训练任务与训练效率，不是视觉 token 裁剪、选择、合并、动态分辨率或多模态缓存，也未报告端到端推理延迟、KV 规模或整卡显存，因此与“视觉 Token 压缩”这一核心方向仅为泛化相关，需要人工复核其推理效率数据是否可用。"
+      },
+      "first_seen_at": "2026-11-18T08:22:35.655608+00:00",
+      "last_seen_at": "2026-11-18T08:22:35.655608+00:00",
       "retained_from_previous_run": false
     },
     {
@@ -20779,31 +22064,31 @@
     }
   ],
   "stats": {
-    "candidate_paper_count": 574,
-    "daily_candidate_paper_count": 574,
+    "candidate_paper_count": 237,
+    "daily_candidate_paper_count": 237,
     "conference_candidate_paper_count": 0,
-    "raw_daily_candidate_count": 638,
-    "daily_outside_cutoff_count": 19,
+    "raw_daily_candidate_count": 277,
+    "daily_outside_cutoff_count": 0,
     "future_filtered_count": 0,
-    "daily_new_candidate_count": 539,
-    "daily_known_candidate_count": 35,
+    "daily_new_candidate_count": 235,
+    "daily_known_candidate_count": 2,
     "daily_backfill_days": 14,
     "daily_backfill_candidate_count": 0,
     "daily_backfill_added_count": 0,
     "min_daily_papers": 0,
-    "filtered_low_relevance_count": 45,
+    "filtered_low_relevance_count": 40,
     "days": 2,
     "collection_mode": "incremental",
-    "collection_cutoff_iso": "2026-11-15T07:48:00.177307+00:00",
+    "collection_cutoff_iso": "2026-11-16T08:57:05.623257+00:00",
     "max_per_topic": 50,
     "max_new_papers": 10,
     "historical_daily_target": 4,
-    "historical_new_count": 4,
-    "recent_new_count": 6,
+    "historical_new_count": 10,
+    "recent_new_count": 0,
     "already_collected_today": 0,
     "historical_query_window": [
-      "2023-10-19T08:57:05.623257+00:00",
-      "2024-10-18T08:57:05.623257+00:00"
+      "2022-10-20T08:22:35.655608+00:00",
+      "2023-10-20T08:22:35.655608+00:00"
     ],
     "max_new_conference_papers": 50,
     "sources": [
@@ -20820,8 +22105,9 @@
     "source_stats": {
       "arXiv": {
         "type": "arxiv",
-        "successful_fetches": 7,
-        "failed_fetches": 0
+        "successful_fetches": 0,
+        "failed_fetches": 7,
+        "last_error": "HTTP Error 503: Service Unavailable"
       },
       "arXiv history": {
         "type": "arxiv",
@@ -20833,12 +22119,12 @@
     "llm_attempt_count": 10,
     "llm_success_count": 10,
     "llm_failure_count": 0,
-    "summary_cache_hit_count": 33,
-    "summary_fallback_count": 2,
+    "summary_cache_hit_count": 2,
+    "summary_fallback_count": 0,
     "llm_concurrency": 2,
     "recent_history_days": 60,
-    "successful_fetches": 14,
-    "failed_fetches": 0,
+    "successful_fetches": 7,
+    "failed_fetches": 7,
     "successful_conference_fetches": 0,
     "failed_conference_fetches": 0,
     "skipped_cached_conference_years": 0,
@@ -20863,25 +22149,25 @@
       "budget_month": "2026-11",
       "budget_timezone": "Asia/Shanghai",
       "monthly_budget_cny": 10.0,
-      "accounted_cny": 0.961334,
-      "successful_calls_estimated_cny": 0.961334,
+      "accounted_cny": 1.014518,
+      "successful_calls_estimated_cny": 1.014518,
       "uncertain_reserved_cny": 0.0,
-      "remaining_cny": 9.038666,
+      "remaining_cny": 8.985482,
       "daily_attempts": 10,
       "daily_attempt_limit": 10,
-      "monthly_attempts": 160,
+      "monthly_attempts": 170,
       "price_basis": "configured peak uncached prices; cache/off-peak discounts ignored",
       "model": "deepseek-flash"
     },
-    "paper_count": 160,
+    "paper_count": 170,
     "new_paper_count": 10,
-    "refreshed_paper_count": 35,
-    "retained_paper_count": 115,
+    "refreshed_paper_count": 2,
+    "retained_paper_count": 158,
     "retained_recent_low_count": 7,
     "dropped_low_relevance_count": 0,
     "max_stored_papers": 900,
     "max_data_bytes": 8388608,
-    "data_bytes": 1387935,
+    "data_bytes": 1467751,
     "storage_trimmed_count": 0,
     "storage_trimmed_by_level": {
       "high": 0,
