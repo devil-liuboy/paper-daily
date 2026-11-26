@@ -4100,13 +4100,15 @@
         "day": "2026-11-26",
         "started_at": "2026-11-26T17:21:59.078502+08:00",
         "model": "deepseek-flash",
-        "status": "reserved",
+        "status": "failed",
         "reserved_micros": 31348,
         "charged_micros": 31348,
         "input_token_bound": 8474,
         "max_output_tokens": 1800,
         "input_cny_per_million": "2",
-        "output_cny_per_million": "8"
+        "output_cny_per_million": "8",
+        "finished_at": "2026-11-26T17:22:02.817767+08:00",
+        "outcome": "http_402"
       }
     ]
   }
