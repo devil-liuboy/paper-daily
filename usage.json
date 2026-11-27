@@ -4272,6 +4272,19 @@
         "max_output_tokens": 1800,
         "input_cny_per_million": "2",
         "output_cny_per_million": "8"
+      },
+      {
+        "id": "5a615dc4025b4628bb4fa1b4bee1778a",
+        "day": "2026-11-27",
+        "started_at": "2026-11-27T17:37:20.624793+08:00",
+        "model": "deepseek-flash",
+        "status": "reserved",
+        "reserved_micros": 31174,
+        "charged_micros": 31174,
+        "input_token_bound": 8387,
+        "max_output_tokens": 1800,
+        "input_cny_per_million": "2",
+        "output_cny_per_million": "8"
       }
     ]
   }
