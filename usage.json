@@ -4325,13 +4325,15 @@
         "day": "2026-11-27",
         "started_at": "2026-11-27T17:37:30.110655+08:00",
         "model": "deepseek-flash",
-        "status": "reserved",
+        "status": "failed",
         "reserved_micros": 32114,
         "charged_micros": 32114,
         "input_token_bound": 8857,
         "max_output_tokens": 1800,
         "input_cny_per_million": "2",
-        "output_cny_per_million": "8"
+        "output_cny_per_million": "8",
+        "finished_at": "2026-11-27T17:37:34.367159+08:00",
+        "outcome": "http_402"
       },
       {
         "id": "0887c066fa7f414b857000d3542c98f0",
